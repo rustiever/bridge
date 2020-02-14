@@ -2,6 +2,9 @@
 
 A new Flutter project.
 
+This project gives you an ability of interaction with others in college mates.
+Bridge will give an oppurtunity to provide and get the help from others
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
