@@ -1,6 +1,5 @@
+import 'package:bridge/pages/signUp/In/loginPage.dart';
 import 'package:flutter/material.dart';
-
-import 'package:bridge/pages/loginPage.dart' show LoginPage;
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
