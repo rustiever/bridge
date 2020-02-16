@@ -1,4 +1,4 @@
-import 'package:bridge/pages/signUp/In/loginPage.dart';
+import 'package:bridge/Routes/RouteConstants.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,14 +16,14 @@ class _HomePageState extends State<HomePage> {
     MediaQueryData sd = MediaQuery.of(context);
     print('${sd.size}');
     return Scaffold(
-      backgroundColor: Color.fromRGBO(21,32,43, 1.0),
+      backgroundColor: Color.fromRGBO(21, 32, 43, 1.0),
       appBar: AppBar(
         centerTitle: true,
         title: Text(widget.title),
       ),
-     
+
       body: Container(
-        color: Colors.greenAccent,
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -38,8 +38,8 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  'You have pushed the button this many times:',
-                  style: TextStyle(color: Colors.white),
+                  'Coming Soon',
+                  style: TextStyle(color: Colors.white, fontSize: 45),
                 ),
                 // Text(
                 //   '_counter',
@@ -52,12 +52,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => LoginPage(),
-            ),
-          );
+          Navigator.pushNamed(context, LoginViewRoute);
         },
         tooltip: 'Lock Page',
         child: Icon(Icons.lock),

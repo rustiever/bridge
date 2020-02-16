@@ -1,4 +1,5 @@
-import 'package:bridge/pages/HomePage.dart';
+import 'package:bridge/Routes/RouteConstants.dart';
+import 'package:bridge/Routes/Router.dart' as router;
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -10,10 +11,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Bridge',
+      onGenerateRoute: router.generateRoute,
+      initialRoute: LoginViewRoute,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        
       ),
-      home: HomePage(title: 'Bridge',),
     );
   }
 }
