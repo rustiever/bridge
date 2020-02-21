@@ -1,9 +1,12 @@
-import 'package:bridge/Routes/RouteConstants.dart';
 import 'package:bridge/pages/HomePage.dart';
 import 'package:bridge/pages/SignIn/LoginPage.dart';
 import 'package:bridge/pages/SignIn/SignupPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+const String HomeViewRoute = '/';
+const String LoginViewRoute = 'login';
+const String SignupViewRoute = 'signup';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   print(settings.name);
