@@ -1,4 +1,3 @@
-import 'package:bridge/Routes/RouteConstants.dart';
 import 'package:bridge/Routes/Router.dart' as router;
 import 'package:flutter/material.dart';
 
@@ -12,12 +11,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Bridge',
       onGenerateRoute: router.generateRoute,
-      initialRoute: LoginViewRoute,
+      initialRoute: router.LoginViewRoute,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        
       ),
     );
   }
 }
-
