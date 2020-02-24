@@ -1,4 +1,4 @@
-import 'package:bridge/pages/HomePage.dart';
+import 'package:bridge/pages/HomePage/HomePage.dart';
 import 'package:bridge/pages/SignIn/LoginPage.dart';
 import 'package:bridge/pages/SignIn/SignupPage.dart';
 import 'package:flutter/cupertino.dart';

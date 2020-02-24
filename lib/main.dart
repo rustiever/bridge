@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Bridge',
       onGenerateRoute: router.generateRoute,
-      initialRoute: router.LoginViewRoute,
+      initialRoute: router.HomeViewRoute,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
