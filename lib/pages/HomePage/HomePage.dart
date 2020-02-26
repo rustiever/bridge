@@ -15,6 +15,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  static const YELLOW = Color(0xfffbed96);
+  static const GREEN = Color(0xffc7e5b4);
+
   var items = [
     TabItem(icon: Icons.device_hub, title: 'Share'),
     TabItem(icon: Icons.sort, title: 'Request'),
@@ -40,6 +43,7 @@ class _HomePageState extends State<HomePage> {
           activeColor: Colors.indigoAccent,
           color: Colors.indigo,
           curve: Curves.fastLinearToSlowEaseIn,
+          gradient: LinearGradient(colors: [YELLOW, GREEN]),
           elevation: 0.0,
           items: items,
           initialActiveIndex: 2,

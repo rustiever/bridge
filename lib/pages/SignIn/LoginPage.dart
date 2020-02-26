@@ -13,6 +13,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final LocalAuthentication _localAuthentication = LocalAuthentication();
 
+  TextEditingController _username = TextEditingController();
+  TextEditingController _password = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -58,194 +61,249 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  static const MAIN_COLOR = Color(0xFF303030);
+  static const SIGNUP_LIGHT_RED = Color(0xffffc2a1);
+  static const SIGNUP_RED = Color(0xffffb1bb);
+  static const YELLOW = Color(0xff373b44);
+  static const BLUE = Color(0xff4286f4);
+
+  static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
+    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
+    // Add one stop for each color. Stops should increase from 0 to 1
+    stops: [0.1, 0.9],
+    colors: [
+      Color(0xff859398),
+      Color(0xff283040),
+    ],
+  );
+
+  static const LinearGradient SIGNUP_CARD_BACKGROUND = LinearGradient(
+    tileMode: TileMode.clamp,
+    begin: FractionalOffset.centerLeft,
+    end: FractionalOffset.centerRight,
+    stops: [0.1, 1.0],
+    colors: [
+      Color(0xffFBC6B6),
+      Color(0xffF79B83),
+    ],
+  );
+
+  static const LinearGradient SIGNUP_CIRCLE_BUTTON_BACKGROUND = LinearGradient(
+    tileMode: TileMode.clamp,
+    begin: FractionalOffset.centerLeft,
+    end: FractionalOffset.centerRight,
+    // Add one stop for each color. Stops should increase from 0 to 1
+    stops: [0.4, 1],
+    colors: [Colors.black, Colors.black54],
+  );
+
   @override
   Widget build(BuildContext context) {
+    final _media = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
+        height: double.infinity,
+        width: double.infinity,
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment(1.0, 0.0),
-            colors: [Color(0xFF444152), Color(0xFF6F6C7d)],
-            tileMode: TileMode.repeated,
-          ),
+          gradient: SIGNUP_BACKGROUND,
         ),
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(
-                top: 30.0,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 60.0, horizontal: 40),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Center(
+                        //   child: Image.asset(
+                        //     SignUpImagePath.SignUpLogo,
+                        //     height: _media.height / 7,
+                        //   ),
+                        // ),
+                        Center(
+                          child: FlutterLogo(),
+                          heightFactor: 2,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "WELCOME BACK!",
+                          style: TextStyle(
+                            letterSpacing: 4,
+                            fontFamily: "Montserrat",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Text(
+                          'Log in',
+                          style: TextStyle(
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w200,
+                              fontSize: 40),
+                        ),
+                        Text(
+                          'to continue.',
+                          style: TextStyle(
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w200,
+                              fontSize: 40),
+                        ),
+                        SizedBox(
+                          height: 50,
+                        ),
+                        Container(
+                          height: _media.height / 3.8,
+                          decoration: BoxDecoration(
+                            gradient: SIGNUP_CARD_BACKGROUND,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 15,
+                                spreadRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Column(
+                              children: <Widget>[
+                                Expanded(
+                                  child: inputText("USERNAME",
+                                      'hristov123@gmail.com', _username, false),
+                                ),
+                                Divider(
+                                  color: Colors.black,
+                                ),
+                                Expanded(
+                                    child: inputText(
+                                        "PASSWORD", '******', _password, true)),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Don't have an account?",
+                        style: TextStyle(color: MAIN_COLOR),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      GestureDetector(
+                        onTap: () => print("Sign Up Tapped"),
+                        child: Text('Sign Up'),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 50,
+                  )
+                ],
               ),
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      height: 128.0,
-                      width: 128.0,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        foregroundColor: Colors.white,
-                        radius: 100.0,
-                        backgroundImage:
-                            AssetImage('assets/DummyIcons/man.png'),
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 3.0,
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 7),
-                      child: Text(
-                        'Sharan',
-                        style: GoogleFonts.quicksand(
-                            textStyle:
-                                TextStyle(color: Colors.white, fontSize: 20)),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                              color: Colors.white,
-                              width: 0.5,
-                              style: BorderStyle.solid),
-                        ),
-                      ),
-                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 00.0),
-                            child: Icon(
-                              Icons.person,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Email/USN',
-                                hintStyle: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 10.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                              color: Colors.white,
-                              width: 0.5,
-                              style: BorderStyle.solid),
-                        ),
-                      ),
-                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 00.0),
-                            child: Icon(
-                              Icons.lock_open,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              obscureText: true,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Password',
-                                hintStyle: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 30.0),
-                      alignment: Alignment.center,
-                      child: new Row(
-                        children: <Widget>[
-                          new Expanded(
-                            child: new FlatButton(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 20.0),
-                              color: Colors.pink,
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                    context, HomeViewRoute);
-                              },
-                              child: Text(
-                                "Log In",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 10.0, bottom: 20.0),
-                      alignment: Alignment.center,
-                      child: new Row(
-                        children: <Widget>[
-                          new Expanded(
-                            child: new FlatButton(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20.0, horizontal: 20.0),
-                              color: Colors.transparent,
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(
-                                    context, SignupViewRoute);
-                              },
-                              child: Text(
-                                "Don't have an account? Create One",
-                                style: TextStyle(
-                                    color: Colors.white.withOpacity(0.5)),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+              Positioned(
+                bottom: _media.height / 6.3,
+                right: 15,
+                child: SignUpArrowButton(
+                  // icon: IconData(0xe901, fontFamily: 'Icons'),
+                  iconSize: 20,
+                  onTap: () => print("SignIn Tapped"),
                 ),
               ),
-            )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget inputText(
+    String fieldName,
+    String hintText,
+    TextEditingController controller,
+    bool obSecure,
+  ) {
+    return TextField(
+      style: TextStyle(height: 1.3),
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        labelText: fieldName,
+        labelStyle: TextStyle(
+          fontSize: 22.0,
+          fontFamily: "Montserrat",
+          fontWeight: FontWeight.w400,
+          letterSpacing: 1,
+          height: 0,
+        ),
+        border: InputBorder.none,
+      ),
+      obscureText: obSecure,
+    );
+  }
+}
+
+class SignUpArrowButton extends StatelessWidget {
+  // final IconData icon;
+  final Function onTap;
+  final double iconSize;
+  final double height;
+  final double width;
+  final Color iconColor;
+
+  SignUpArrowButton({
+    // this.icon,
+    this.iconSize,
+    this.onTap,
+    this.height = 50.0,
+    this.width = 50.0,
+    this.iconColor = const Color(0xFFdbedb0),
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black12,
+                blurRadius: 15,
+                spreadRadius: 0,
+                offset: Offset(0.0, 16.0)),
           ],
+          gradient: LinearGradient(begin: FractionalOffset.centerLeft,
+// Add one stop for each color. Stops should increase from 0 to 1
+              stops: [
+                0.2,
+                1
+              ], colors: [
+            Color(0xff000000),
+            Color(0xff434343),
+          ]),
+        ),
+        child: Icon(
+          Icons.arrow_forward_ios,
+          size: iconSize,
+          color: iconColor,
         ),
       ),
     );
