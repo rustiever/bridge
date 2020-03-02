@@ -1,3 +1,4 @@
+import 'package:bridge/Routes/Router.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/fa_icon.dart';
@@ -57,14 +58,34 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        controller: _controller,
-        // itemExtent: 2,
-        itemCount: list.length + 1,
-        itemBuilder: (context, i) {
-          if (i == list.length) return CupertinoActivityIndicator();
-          return FeedChild();
-        },
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor: Colors.transparent,
+            title: Text('Feeds'),
+            floating: true,
+            actions: <Widget>[
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginViewRoute);
+                },
+                icon: FaIcon(
+                  FontAwesomeIcons.lock,
+                  color: Colors.white70,
+                ),
+              ),
+            ],
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index == list.length) return CupertinoActivityIndicator();
+                return FeedChild();
+              },
+              childCount: list.length + 1,
+            ),
+          )
+        ],
       ),
     );
   }
@@ -87,7 +108,6 @@ class FeedChild extends StatefulWidget {
 }
 
 class _FeedChildState extends State<FeedChild> {
-
   bool heart = true;
   bool comment = true;
   bool bookmark = true;
@@ -100,12 +120,6 @@ class _FeedChildState extends State<FeedChild> {
       margin: EdgeInsets.all(15.0),
       elevation: 5,
       child: Container(
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(
-        //     colors: [YELLOW, GREEN],
-        //   ),
-        // ),
-        // height: 600,
         child: Column(
           children: <Widget>[
             Padding(
@@ -165,17 +179,25 @@ class _FeedChildState extends State<FeedChild> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                buildIconButton(icon: FontAwesomeIcons.solidEye,),
+                buildIconButton(
+                  icon: FontAwesomeIcons.solidEye,
+                ),
                 Text('521m'),
                 buildIconButton(
-                    icon: heart ? FontAwesomeIcons.heart : FontAwesomeIcons.solidHeart, ontap: () {
+                    icon: heart
+                        ? FontAwesomeIcons.heart
+                        : FontAwesomeIcons.solidHeart,
+                    ontap: () {
                       setState(() {
                         heart = !heart;
                       });
                     }),
                 Text('123k'),
                 buildIconButton(
-                    icon: comment ? FontAwesomeIcons.commentDots : FontAwesomeIcons.solidCommentDots, ontap: () {
+                    icon: comment
+                        ? FontAwesomeIcons.commentDots
+                        : FontAwesomeIcons.solidCommentDots,
+                    ontap: () {
                       setState(() {
                         comment = !comment;
                       });
@@ -184,7 +206,10 @@ class _FeedChildState extends State<FeedChild> {
                 buildIconButton(
                     icon: FontAwesomeIcons.locationArrow, ontap: () {}),
                 buildIconButton(
-                    icon: bookmark ?  FontAwesomeIcons.bookmark : FontAwesomeIcons.solidBookmark, ontap: () {
+                    icon: bookmark
+                        ? FontAwesomeIcons.bookmark
+                        : FontAwesomeIcons.solidBookmark,
+                    ontap: () {
                       setState(() {
                         bookmark = !bookmark;
                       });
