@@ -1,6 +1,5 @@
 import 'package:bridge/Routes/Router.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
@@ -11,6 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+
   final LocalAuthentication _localAuthentication = LocalAuthentication();
 
   TextEditingController _username = TextEditingController();
@@ -174,19 +175,27 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(30.0),
-                            child: Column(
-                              children: <Widget>[
-                                Expanded(
-                                  child: inputText("USERNAME",
-                                      'hristov123@gmail.com', _username, false),
-                                ),
-                                Divider(
-                                  color: Colors.black,
-                                ),
-                                Expanded(
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: <Widget>[
+                                  Expanded(
                                     child: inputText(
-                                        "PASSWORD", '******', _password, true)),
-                              ],
+                                        "USERNAME",
+                                        'mite@mite.com/4MT17CS000',
+                                        _username,
+                                        false,
+                                        true),
+                                  ),
+                                  Divider(
+                                    color: Colors.black,
+                                  ),
+                                  Expanded(
+                                    child: inputText("PASSWORD", '******',
+                                        _password, true, false),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -205,7 +214,9 @@ class _LoginPageState extends State<LoginPage> {
                         width: 5,
                       ),
                       GestureDetector(
-                        onTap: () => print("Sign Up Tapped"),
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, SignupViewRoute);
+                        },
                         child: Text('Sign Up'),
                       ),
                     ],
@@ -216,14 +227,43 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               Positioned(
-                bottom: _media.height / 6.3,
-                right: 15,
-                child: SignUpArrowButton(
-                  // icon: IconData(0xe901, fontFamily: 'Icons'),
-                  iconSize: 20,
-                  onTap: () => print("SignIn Tapped"),
-                ),
-              ),
+                  bottom: _media.height / 6.3,
+                  right: 15,
+                  child: InkWell(
+                    onTap: () {
+                      print('tap');
+                      if (_formKey.currentState.validate())
+                        Navigator.pushReplacementNamed(context, HomeViewRoute);
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 15,
+                            spreadRadius: 0,
+                            offset: Offset(0.0, 16.0),
+                          ),
+                        ],
+                        gradient: LinearGradient(
+                          begin: FractionalOffset.centerLeft,
+                          stops: [0.2, 1],
+                          colors: [
+                            Color(0xff000000),
+                            Color(0xff434343),
+                          ],
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                        color: Color(0xFFdbedb0),
+                      ),
+                    ),
+                  )),
             ],
           ),
         ),
@@ -231,13 +271,16 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget inputText(
-    String fieldName,
-    String hintText,
-    TextEditingController controller,
-    bool obSecure,
-  ) {
-    return TextField(
+  Widget inputText(String fieldName, String hintText,
+      TextEditingController controller, bool obSecure, bool autoCorrect) {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) return "can't send blank line";
+        return 'fine';
+      },
+      textAlign: TextAlign.center,
+      keyboardType: TextInputType.text,
+      autocorrect: autoCorrect,
       style: TextStyle(height: 1.3),
       controller: controller,
       decoration: InputDecoration(
@@ -277,7 +320,7 @@ class SignUpArrowButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: () {},
       child: Container(
         height: height,
         width: width,
@@ -285,20 +328,21 @@ class SignUpArrowButton extends StatelessWidget {
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-                color: Colors.black12,
-                blurRadius: 15,
-                spreadRadius: 0,
-                offset: Offset(0.0, 16.0)),
+              color: Colors.black12,
+              blurRadius: 15,
+              spreadRadius: 0,
+              offset: Offset(0.0, 16.0),
+            ),
           ],
-          gradient: LinearGradient(begin: FractionalOffset.centerLeft,
+          gradient: LinearGradient(
+            begin: FractionalOffset.centerLeft,
 // Add one stop for each color. Stops should increase from 0 to 1
-              stops: [
-                0.2,
-                1
-              ], colors: [
-            Color(0xff000000),
-            Color(0xff434343),
-          ]),
+            stops: [0.2, 1],
+            colors: [
+              Color(0xff000000),
+              Color(0xff434343),
+            ],
+          ),
         ),
         child: Icon(
           Icons.arrow_forward_ios,

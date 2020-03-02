@@ -87,6 +87,11 @@ class FeedChild extends StatefulWidget {
 }
 
 class _FeedChildState extends State<FeedChild> {
+
+  bool heart = true;
+  bool comment = true;
+  bool bookmark = true;
+
   static const YELLOW = Color(0xfffbed96);
   static const GREEN = Color(0xffc7e5b4);
   @override
@@ -95,8 +100,11 @@ class _FeedChildState extends State<FeedChild> {
       margin: EdgeInsets.all(15.0),
       elevation: 5,
       child: Container(
-        decoration:
-            BoxDecoration(gradient: LinearGradient(colors: [YELLOW, GREEN])),
+        // decoration: BoxDecoration(
+        //   gradient: LinearGradient(
+        //     colors: [YELLOW, GREEN],
+        //   ),
+        // ),
         // height: 600,
         child: Column(
           children: <Widget>[
@@ -157,40 +165,44 @@ class _FeedChildState extends State<FeedChild> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                FaIcon(
-                  FontAwesomeIcons.eye,
-                  color: Colors.blueAccent,
-                ),
+                buildIconButton(icon: FontAwesomeIcons.solidEye,),
                 Text('521m'),
-                FaIcon(
-                  FontAwesomeIcons.heart,
-                  color: Colors.blueAccent,
-                ),
+                buildIconButton(
+                    icon: heart ? FontAwesomeIcons.heart : FontAwesomeIcons.solidHeart, ontap: () {
+                      setState(() {
+                        heart = !heart;
+                      });
+                    }),
                 Text('123k'),
-                FaIcon(
-                  FontAwesomeIcons.comments,
-                  color: Colors.blueAccent,
-                ),
+                buildIconButton(
+                    icon: comment ? FontAwesomeIcons.commentDots : FontAwesomeIcons.solidCommentDots, ontap: () {
+                      setState(() {
+                        comment = !comment;
+                      });
+                    }),
                 Text('123m'),
-                SizedBox(
-                  width: 10,
-                ),
-                FaIcon(
-                  FontAwesomeIcons.shareSquare,
-                  color: Colors.blueAccent,
-                ),
-                IconButton(
-                  icon: FaIcon(
-                    FontAwesomeIcons.bookmark,
-                    color: Colors.blueAccent,
-                  ),
-                  onPressed: () {},
-                  iconSize: 25,
-                )
+                buildIconButton(
+                    icon: FontAwesomeIcons.locationArrow, ontap: () {}),
+                buildIconButton(
+                    icon: bookmark ?  FontAwesomeIcons.bookmark : FontAwesomeIcons.solidBookmark, ontap: () {
+                      setState(() {
+                        bookmark = !bookmark;
+                      });
+                    }),
               ],
             )
           ],
         ),
+      ),
+    );
+  }
+
+  IconButton buildIconButton({@required icon, ontap}) {
+    return IconButton(
+      onPressed: ontap,
+      icon: FaIcon(
+        icon,
+        color: Colors.white70,
       ),
     );
   }

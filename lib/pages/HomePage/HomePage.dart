@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             activeColor: Colors.indigoAccent,
             color: Colors.indigo,
             curve: Curves.fastLinearToSlowEaseIn,
-            gradient: LinearGradient(colors: [YELLOW, GREEN]),
+           // gradient: LinearGradient(colors: [YELLOW, GREEN]),
             elevation: 0.0,
             items: items,
             initialActiveIndex: 2,
