@@ -1,4 +1,3 @@
-import 'package:bridge/Routes/Router.dart';
 import 'package:bridge/pages/HomePage/Drawer.dart';
 import 'package:bridge/pages/HomePage/TabPage.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  static const YELLOW = Color(0xfffbed96);
+  static const GREEN = Color(0xffc7e5b4);
 
   var items = [
     TabItem(icon: Icons.device_hub, title: 'Share'),
@@ -29,37 +30,30 @@ class _HomePageState extends State<HomePage> {
     return DefaultTabController(
       length: 5,
       initialIndex: 2,
-      child: Scaffold(
-        bottomNavigationBar: ConvexAppBar(
-          // {   // badges
-          //   // 0: '99+',
-          //   // 1: b1,
-          // },
-          // curveSize: 120,
-          backgroundColor: Colors.grey,
-          activeColor: Colors.indigoAccent,
-          color: Colors.indigo,
-          curve: Curves.fastLinearToSlowEaseIn,
-          elevation: 0.0,
-          items: items,
-          initialActiveIndex: 2,
-          onTap: (int i) { print('click index=$i');
-          },
-        ),
-        backgroundColor: Color.fromRGBO(21, 32, 43, 1.0),
-        extendBodyBehindAppBar: true,
-        drawer: AppDrawer(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(widget.title),
-        ),
-        body: TabPages(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, LoginViewRoute);
-          },
-          tooltip: 'Lock Page',
-          child: Icon(Icons.lock),
+      child: SafeArea(
+        child: Scaffold(
+          bottomNavigationBar: ConvexAppBar(
+            // {   // badges
+            //   // 0: '99+',
+            //   // 1: b1,
+            // },
+            // curveSize: 120,
+            // backgroundColor: Colors.transparent,
+            // activeColor: Colors.indigoAccent,
+            // color: Colors.indigo,
+            curve: Curves.fastLinearToSlowEaseIn,
+            gradient: LinearGradient(colors: [YELLOW, GREEN]),
+            elevation: 0.0,
+            items: items,
+            initialActiveIndex: 2,
+            onTap: (int i) {
+              print('click index=$i');
+            },
+          ),
+          backgroundColor: Color.fromRGBO(21, 32, 43, 1.0),
+          extendBodyBehindAppBar: true,
+          drawer: AppDrawer(),
+          body: TabPages(),
         ),
       ),
     );
