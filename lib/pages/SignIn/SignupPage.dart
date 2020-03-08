@@ -7,244 +7,304 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final _formKey = GlobalKey<FormState>();
+
+  TextEditingController _usn = TextEditingController();
+  TextEditingController _email = TextEditingController();
+  TextEditingController _pass1 = TextEditingController();
+  TextEditingController _pass2 = TextEditingController();
+
+  static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
+    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
+    // Add one stop for each color. Stops should increase from 0 to 1
+    stops: [0.1, 0.9],
+    colors: [Color.fromRGBO(17, 29, 94, 1), Color.fromRGBO(178, 31, 102, 1)],
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment(1.0, 0.0),
-            colors: [Color(0xFF444152), Color(0xFF6F6C7d)],
-            tileMode: TileMode.repeated,
-          ),
-        ),
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(
-                top: 30.0,
-              ),
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 40,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                              color: Colors.white,
-                              width: 0.5,
-                              style: BorderStyle.solid),
+      body: Form(
+        key: _formKey,
+        child: Container(
+          decoration: BoxDecoration(gradient: SIGNUP_BACKGROUND),
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(
+                  top: 30.0,
+                ),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(left: 40.0, right: 40.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                                color: Colors.white,
+                                width: 0.5,
+                                style: BorderStyle.solid),
+                          ),
+                        ),
+                        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10.0, bottom: 10.0, right: 00.0),
+                              child: Icon(
+                                Icons.person_outline,
+                                color: Colors.white,
+                              ),
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _usn,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'USN',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                ),
+                                validator: validateUsn,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 00.0),
-                            child: Icon(
-                              Icons.person_outline,
-                              color: Colors.white,
-                            ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(left: 40.0, right: 40.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                                color: Colors.white,
+                                width: 0.5,
+                                style: BorderStyle.solid),
                           ),
-                          Expanded(
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'USN',
-                                hintStyle: TextStyle(color: Colors.white),
+                        ),
+                        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10.0, bottom: 10.0, right: 00.0),
+                              child: Icon(
+                                Icons.email,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                              color: Colors.white,
-                              width: 0.5,
-                              style: BorderStyle.solid),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _email,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Email',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                ),
+                                validator: emailValidator,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 00.0),
-                            child: Icon(
-                              Icons.email,
-                              color: Colors.white,
-                            ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            left: 40.0, right: 40.0, top: 10.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                                color: Colors.white,
+                                width: 0.5,
+                                style: BorderStyle.solid),
                           ),
-                          Expanded(
-                            child: TextField(
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Email',
-                                hintStyle: TextStyle(color: Colors.white),
+                        ),
+                        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10.0, bottom: 10.0, right: 00.0),
+                              child: Icon(
+                                Icons.lock,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 10.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                              color: Colors.white,
-                              width: 0.5,
-                              style: BorderStyle.solid),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _pass1,
+                                obscureText: true,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Password',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                ),
+                                validator: validatePassword,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 00.0),
-                            child: Icon(
-                              Icons.lock,
-                              color: Colors.white,
-                            ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            left: 40.0, right: 40.0, top: 10.0),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                                color: Colors.white,
+                                width: 0.5,
+                                style: BorderStyle.solid),
                           ),
-                          Expanded(
-                            child: TextField(
-                              obscureText: true,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Password',
-                                hintStyle: TextStyle(color: Colors.white),
+                        ),
+                        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10.0, bottom: 10.0, right: 00.0),
+                              child: Icon(
+                                Icons.lock_open,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 10.0),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                              color: Colors.white,
-                              width: 0.5,
-                              style: BorderStyle.solid),
+                            Expanded(
+                              child: TextFormField(
+                                controller: _pass2,
+                                obscureText: true,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Retype Password',
+                                  hintStyle: TextStyle(color: Colors.white),
+                                ),
+                                validator: revalidatePassword,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.only(
-                                top: 10.0, bottom: 10.0, right: 00.0),
-                            child: Icon(
-                              Icons.lock_open,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Expanded(
-                            child: TextField(
-                              obscureText: true,
-                              textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: 'Retype Password',
-                                hintStyle: TextStyle(color: Colors.white),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            left: 40.0, right: 40.0, top: 30.0),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: FlatButton(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15.0, horizontal: 20.0),
+                                color: Colors.pink,
+                                onPressed: () {
+                                  if (_formKey.currentState.validate()) {
+                                    _formKey.currentState.save();
+                                    Navigator.pushReplacementNamed(
+                                        context, LoginViewRoute);
+                                  }
+                                },
+                                child: Text(
+                                  "Sign Up",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin: const EdgeInsets.only(
-                          left: 40.0, right: 40.0, top: 30.0),
-                      alignment: Alignment.center,
-                      child: new Row(
-                        children: <Widget>[
-                          new Expanded(
-                            child: new FlatButton(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 15.0, horizontal: 20.0),
-                              color: Colors.pink,
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(context, LoginViewRoute);
-                              },
-                              child: Text(
-                                "Sign Up",
-                                style: TextStyle(color: Colors.white),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.only(
+                            left: 40.0, right: 40.0, top: 10.0, bottom: 20.0),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: FlatButton(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 20.0, horizontal: 20.0),
+                                color: Colors.transparent,
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, LoginViewRoute);
+                                },
+                                child: Text(
+                                  "Already have an account?? Log In",
+                                  style: TextStyle(
+                                      color: Colors.white.withOpacity(0.5)),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-            width: MediaQuery.of(context).size.width,
-            margin: const EdgeInsets.only(left: 40.0, right: 40.0, top: 10.0, bottom: 20.0),
-            alignment: Alignment.center,
-            child: new Row(
-              children: <Widget>[
-                new Expanded(
-                  child: new FlatButton(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 20.0),
-                    color: Colors.transparent,
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, LoginViewRoute);
-                    },
-                    child: Text(
-                      "Already have an account?? Log In",
-                      style: TextStyle(color: Colors.white.withOpacity(0.5)),
-                    ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              )
+            ],
           ),
-                  ],
-                ),
-              ),
-            )
-          ],
         ),
       ),
-    )
-    ;
+    );
   }
+
+  String validatePassword(String value) {
+    Pattern pattern =
+        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
+    RegExp regex = new RegExp(pattern);
+    print(value);
+    if (value.isEmpty) {
+      return "can't send blank line";
+    } else {
+      if (!regex.hasMatch(value))
+        return 'Enter valid password';
+      else
+        return null;
+    }
+  }
+
+  String emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    // if (value.isEmpty) return '*Required';
+    if (value.isEmpty) return "can't send blank line";
+    if (!regex.hasMatch(value))
+      return '*Enter a valid email';
+    else
+      return null;
+  }
+
+  String revalidatePassword(String value) {
+    if (_pass2.text != _pass1.text)
+      return 'no match to what you have been written as password';
+    else
+      return null;
+  }
+
+  String validateUsn(String value) {}
 }

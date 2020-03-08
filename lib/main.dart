@@ -6,19 +6,18 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Bridge',
       onGenerateRoute: router.generateRoute,
-      initialRoute: router.HomeViewRoute,
+      initialRoute: router.HomeViewRoute, // change to LoginViewRoute
       theme: ThemeData(
         primarySwatch: Colors.grey,
         primaryColor: Colors.black,
         brightness: Brightness.dark,
-        backgroundColor: const Color(0xFF212121),
+        backgroundColor: const Color(0xFF121212),
         accentColor: Colors.white,
         accentIconTheme: IconThemeData(color: Colors.black),
         dividerColor: Colors.black12,

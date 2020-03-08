@@ -1,4 +1,5 @@
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/antry/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/fa_icon.dart';
@@ -10,18 +11,15 @@ class TabPages extends StatefulWidget {
 }
 
 class _TabPagesState extends State<TabPages> {
-  static var feed = Icon(Icons.new_releases);
   @override
   Widget build(BuildContext context) {
     return TabBarView(
       children: [
-        Row(
-          children: <Widget>[Icon(Icons.directions_car), feed],
-        ),
-        Icon(Icons.directions_bike),
+        Text('coming soon'),
+        Text('coming soon'),
         FeedPage(),
-        Icon(Icons.directions_bike),
-        Icon(Icons.directions_bike),
+        Text('coming soon'),
+        Text('coming soon'),
       ],
     );
   }
@@ -33,13 +31,10 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  static const YELLOW = Color(0xfffbed96);
-  static const GREEN = Color(0xffc7e5b4);
-
   static const TEXT_BLACK_LIGHT = Color(0xFF34323D);
   static const TEXT_SMALL_2_SIZE = 22.0;
 
-  var curmax = 10;
+  var curmax = 2;
 
   var list = List.generate(15, (i) => 'i');
 
@@ -61,17 +56,36 @@ class _FeedPageState extends State<FeedPage> {
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
+            elevation: 0.0,
             backgroundColor: Colors.transparent,
-            title: Text('Feeds'),
+            // title: Text('Bridge'),
+            centerTitle: true,
             floating: true,
+            leading: IconButton(
+              icon: FaIcon(FontAwesomeIcons.plus),
+              onPressed: () {},
+              iconSize: 35,
+              splashColor: Colors.lightBlueAccent,
+            ),
             actions: <Widget>[
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, LoginViewRoute);
+                  Navigator.pushReplacementNamed(context, HomeViewRoute);
+                },
+                icon: FaIcon(
+                  FontAwesomeIcons.filter,
+                  // color: Colors.white70,
+                ),
+                splashColor: Colors.lightBlueAccent,
+              ),
+              IconButton(
+                onPressed: () {
+                  //Navigator.pushNamed(context, LoginViewRoute);
+                  AuthService().signOut();
                 },
                 icon: FaIcon(
                   FontAwesomeIcons.lock,
-                  color: Colors.white70,
+                  // color: Colors.white70,
                 ),
               ),
             ],
@@ -148,7 +162,7 @@ class _FeedChildState extends State<FeedChild> {
                         TextSpan(
                           text: ' 25mins ago',
                           style: TextStyle(
-                              color: Colors.black45,
+                              // color: Colors.black45,
                               fontSize: 15,
                               fontStyle: FontStyle.italic),
                         ),

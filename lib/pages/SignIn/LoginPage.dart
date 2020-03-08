@@ -1,4 +1,6 @@
+import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,6 +13,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  String errorMsg = "";
+
+  var _auth = AuthService();
 
   final LocalAuthentication _localAuthentication = LocalAuthentication();
 
@@ -19,8 +25,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    _username = TextEditingController();
+    _password = TextEditingController();
     super.initState();
-    _authCheck();
+    // _authCheck();
   }
 
   Future<void> _authCheck() async {
@@ -63,19 +71,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   static const MAIN_COLOR = Color(0xFF303030);
-  static const SIGNUP_LIGHT_RED = Color(0xffffc2a1);
-  static const SIGNUP_RED = Color(0xffffb1bb);
-  static const YELLOW = Color(0xff373b44);
-  static const BLUE = Color(0xff4286f4);
 
   static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
     begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
     // Add one stop for each color. Stops should increase from 0 to 1
     stops: [0.1, 0.9],
-    colors: [
-      Color(0xff859398),
-      Color(0xff283040),
-    ],
+    colors: [Color.fromRGBO(17, 29, 94, 1), Color.fromRGBO(178, 31, 102, 1)],
   );
 
   static const LinearGradient SIGNUP_CARD_BACKGROUND = LinearGradient(
@@ -84,8 +85,9 @@ class _LoginPageState extends State<LoginPage> {
     end: FractionalOffset.centerRight,
     stops: [0.1, 1.0],
     colors: [
-      Color(0xffFBC6B6),
-      Color(0xffF79B83),
+      // Color(0xffFBC6B6),
+      // Color(0xffF79B83),
+      Color.fromRGBO(134, 209, 228, 1), Color.fromRGBO(60, 80, 115, 1),
     ],
   );
 
@@ -118,20 +120,11 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 60.0, horizontal: 40),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        // Center(
-                        //   child: Image.asset(
-                        //     SignUpImagePath.SignUpLogo,
-                        //     height: _media.height / 7,
-                        //   ),
-                        // ),
-                        Center(
-                          child: FlutterLogo(),
-                          heightFactor: 2,
-                        ),
                         SizedBox(
-                          height: 30,
+                          height: 50,
                         ),
                         Text(
                           "WELCOME BACK!",
@@ -181,18 +174,24 @@ class _LoginPageState extends State<LoginPage> {
                                 children: <Widget>[
                                   Expanded(
                                     child: inputText(
-                                        "USERNAME",
-                                        'mite@mite.com/4MT17CS000',
-                                        _username,
-                                        false,
-                                        true),
+                                        fieldName: "USERNAME",
+                                        hintText: 'mite@mite.com/4MT17CS000',
+                                        controller: _username,
+                                        obSecure: false,
+                                        autoCorrect: true,
+                                        validator: emailValidator),
                                   ),
                                   Divider(
                                     color: Colors.black,
                                   ),
                                   Expanded(
-                                    child: inputText("PASSWORD", '******',
-                                        _password, true, false),
+                                    child: inputText(
+                                        fieldName: "PASSWORD",
+                                        hintText: '**********',
+                                        controller: _password,
+                                        obSecure: true,
+                                        autoCorrect: false,
+                                        validator: passValidator),
                                   ),
                                 ],
                               ),
@@ -231,10 +230,44 @@ class _LoginPageState extends State<LoginPage> {
                   bottom: _media.height / 6.3,
                   right: 15,
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async {
                       print('tap');
-                      if (_formKey.currentState.validate())
-                        Navigator.pushReplacementNamed(context, HomeViewRoute);
+                      if (_formKey.currentState.validate()) {
+                        _formKey.currentState.save();
+                        try {
+                          AuthResult res = await FirebaseAuth.instance
+                              .signInWithEmailAndPassword(
+                                  email: _username.text,
+                                  password: _password.text);
+                          if (res != null) {
+                            Navigator.of(context)
+                                .pushReplacementNamed(HomeViewRoute);
+                          }
+                        } catch (e) {
+                          print(e);
+                          switch (e.code) {
+                            case "ERROR_USER_NOT_FOUND":
+                              {
+                                print(e);
+                                _ackAlert(context, 'User not found');
+                              }
+                              break;
+                            case "ERROR_WRONG_PASSWORD":
+                              {
+                                print(e);
+                                _ackAlert(context, 'wrong password');
+                              }
+                              break;
+                            default:
+                              {
+                                print(e);
+                                _ackAlert(context, 'we also dont know');
+                              }
+                          }
+                        }
+                      }
+                      print('taaaaaaap');
+                      print(_username.text);
                     },
                     child: Container(
                       height: 50,
@@ -272,13 +305,52 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget inputText(String fieldName, String hintText,
-      TextEditingController controller, bool obSecure, bool autoCorrect) {
-    return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) return "can't send blank line";
-        return 'fine';
+  Future<void> _ackAlert(BuildContext context, String error) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(error),
+          // content: const Text('This item is no longer available'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
       },
+    );
+  }
+
+  String passValidator(String val) {
+    if (val.isEmpty) return "can't send blank line";
+    return null;
+  }
+
+  String emailValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    // if (value.isEmpty) return '*Required';
+    if (value.isEmpty) return "can't send blank line";
+    if (!regex.hasMatch(value))
+      return '*Enter a valid email';
+    else
+      return null;
+  }
+
+  Widget inputText(
+      {String fieldName,
+      String hintText,
+      TextEditingController controller,
+      bool obSecure,
+      bool autoCorrect,
+      String Function(String) validator}) {
+    return TextFormField(
+      validator: validator,
       textAlign: TextAlign.center,
       keyboardType: TextInputType.text,
       autocorrect: autoCorrect,
