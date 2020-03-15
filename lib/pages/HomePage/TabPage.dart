@@ -1,5 +1,5 @@
+import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
-import 'package:bridge/antry/auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/fa_icon.dart';
@@ -85,6 +85,16 @@ class _FeedPageState extends State<FeedPage> {
                 },
                 icon: FaIcon(
                   FontAwesomeIcons.lock,
+                  // color: Colors.white70,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  //Navigator.pushNamed(context, LoginViewRoute);
+                  AuthService().signOutGoogle();
+                },
+                icon: FaIcon(
+                  FontAwesomeIcons.userMinus,
                   // color: Colors.white70,
                 ),
               ),

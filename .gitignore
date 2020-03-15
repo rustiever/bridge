@@ -8,6 +8,13 @@
 .buildlog/
 .history
 .svn/
+.vscode
+Session.vim
+plsgod/
+antry/
+.undodir/
+google-services.json
+
 
 # IntelliJ related
 *.iml

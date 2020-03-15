@@ -1,6 +1,5 @@
 import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,16 +11,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final LocalAuthentication _localAuthentication = LocalAuthentication();
+  AuthService _auth = AuthService();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   String errorMsg = "";
 
-  var _auth = AuthService();
-
-  final LocalAuthentication _localAuthentication = LocalAuthentication();
+  // final GoogleSignIn googleSignIn = GoogleSignIn();
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
+
+  String user;
 
   @override
   void initState() {
@@ -70,13 +72,18 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
-  static const MAIN_COLOR = Color(0xFF303030);
-
   static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
     begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
     // Add one stop for each color. Stops should increase from 0 to 1
     stops: [0.1, 0.9],
     colors: [Color.fromRGBO(17, 29, 94, 1), Color.fromRGBO(178, 31, 102, 1)],
+  );
+
+  static const LinearGradient SIGNUP_BACKGROUN = LinearGradient(
+    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
+    // Add one stop for each color. Stops should increase from 0 to 1
+    stops: [0.1, 0.9],
+    colors: [Color.fromRGBO(178, 31, 102, 1), Color.fromRGBO(17, 29, 94, 1)],
   );
 
   static const LinearGradient SIGNUP_CARD_BACKGROUND = LinearGradient(
@@ -201,13 +208,47 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
+                  InkWell(
+                    onTap: () async {
+                      user = await _auth.signInWithGoogle();
+                      print(user);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          // color: Color.fromRGBO(17, 29, 94, 1)
+                          gradient: SIGNUP_BACKGROUN),
+                      width: 300.0,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/DummyIcons/google.png',
+                              width: 40.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.0),
+                              child: Text(
+                                'Sign In with Google',
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 150,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
                         "Don't have an account?",
-                        style: TextStyle(color: MAIN_COLOR),
+                        style: TextStyle(
+                          color: Color(0xFF303030),
+                        ),
                       ),
                       SizedBox(
                         width: 5,
@@ -227,43 +268,47 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               Positioned(
-                  bottom: _media.height / 6.3,
+                  bottom: _media.height / 2.6,
                   right: 15,
                   child: InkWell(
                     onTap: () async {
                       print('tap');
                       if (_formKey.currentState.validate()) {
                         _formKey.currentState.save();
-                        try {
-                          AuthResult res = await FirebaseAuth.instance
-                              .signInWithEmailAndPassword(
-                                  email: _username.text,
-                                  password: _password.text);
-                          if (res != null) {
-                            Navigator.of(context)
-                                .pushReplacementNamed(HomeViewRoute);
-                          }
-                        } catch (e) {
-                          print(e);
-                          switch (e.code) {
-                            case "ERROR_USER_NOT_FOUND":
-                              {
-                                print(e);
-                                _ackAlert(context, 'User not found');
-                              }
-                              break;
-                            case "ERROR_WRONG_PASSWORD":
-                              {
-                                print(e);
-                                _ackAlert(context, 'wrong password');
-                              }
-                              break;
-                            default:
-                              {
-                                print(e);
-                                _ackAlert(context, 'we also dont know');
-                              }
-                          }
+                        String status = await _auth.signInWithEmail(
+                            email: _username.text, pass: _password.text);
+                        switch (status) {
+                          case '400':
+                            {
+                              _ackAlert(context, 'wrong password');
+                              print(status);
+                            }
+                            break;
+                          case '402':
+                            {
+                              print(status);
+                              _ackAlert(context, 'we also dont know');
+                            }
+
+                            break;
+                          case '403':
+                            {
+                              print(status);
+                              _ackAlert(context, 'email not verified');
+                            }
+
+                            break;
+                          case '404':
+                            {
+                              _ackAlert(context, 'User not found');
+                              print(status);
+                            }
+                            break;
+                          default:
+                            {
+                              Navigator.of(context)
+                                  .popAndPushNamed(HomeViewRoute);
+                            }
                         }
                       }
                       print('taaaaaaap');
@@ -369,60 +414,6 @@ class _LoginPageState extends State<LoginPage> {
         border: InputBorder.none,
       ),
       obscureText: obSecure,
-    );
-  }
-}
-
-class SignUpArrowButton extends StatelessWidget {
-  // final IconData icon;
-  final Function onTap;
-  final double iconSize;
-  final double height;
-  final double width;
-  final Color iconColor;
-
-  SignUpArrowButton({
-    // this.icon,
-    this.iconSize,
-    this.onTap,
-    this.height = 50.0,
-    this.width = 50.0,
-    this.iconColor = const Color(0xFFdbedb0),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 15,
-              spreadRadius: 0,
-              offset: Offset(0.0, 16.0),
-            ),
-          ],
-          gradient: LinearGradient(
-            begin: FractionalOffset.centerLeft,
-// Add one stop for each color. Stops should increase from 0 to 1
-            stops: [0.2, 1],
-            colors: [
-              Color(0xff000000),
-              Color(0xff434343),
-            ],
-          ),
-        ),
-        child: Icon(
-          Icons.arrow_forward_ios,
-          size: iconSize,
-          color: iconColor,
-        ),
-      ),
     );
   }
 }
