@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "763923089347-76bb0uv63a0sk3s1v97tgn11jel4hb0o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bridge",
+            "certificate_hash": "3d1e3d1203b6f29240c7bff7681f8b0f59bd697b"
+          }
+        },
+        {
           "client_id": "763923089347-e2okotvo8dm4idlb0nnjgetafdjlqsao.apps.googleusercontent.com",
           "client_type": 3
         }

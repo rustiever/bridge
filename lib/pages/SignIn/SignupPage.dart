@@ -1,3 +1,4 @@
+import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   final _formKey = GlobalKey<FormState>();
+  AuthService _auth = AuthService();
 
   TextEditingController _usn = TextEditingController();
   TextEditingController _email = TextEditingController();
@@ -219,13 +221,7 @@ class _SignUpState extends State<SignUp> {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 15.0, horizontal: 20.0),
                                 color: Colors.pink,
-                                onPressed: () {
-                                  if (_formKey.currentState.validate()) {
-                                    _formKey.currentState.save();
-                                    Navigator.pushReplacementNamed(
-                                        context, LoginViewRoute);
-                                  }
-                                },
+                                onPressed: firesignpakka,
                                 child: Text(
                                   "Sign Up",
                                   style: TextStyle(color: Colors.white),
@@ -270,6 +266,16 @@ class _SignUpState extends State<SignUp> {
         ),
       ),
     );
+  }
+
+  void firesignpakka() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      String res = await _auth.signUp(_usn.text, _email.text, _pass2.text);
+      if (res != null && res != 'error') {
+        Navigator.of(context).popAndPushNamed(LoginViewRoute);
+      }
+    }
   }
 
   String validatePassword(String value) {
