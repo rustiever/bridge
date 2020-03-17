@@ -1,4 +1,3 @@
-import 'package:bridge/Routes/Router.dart';
 import 'package:flutter/material.dart';
 
 import 'auth.dart';
