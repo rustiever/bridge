@@ -1,9 +1,10 @@
 import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/Ui/commonUi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/services.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,101 +12,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final LocalAuthentication _localAuthentication = LocalAuthentication();
   AuthService _auth = AuthService();
+  final LocalAuthentication _localAuthentication = LocalAuthentication();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  // final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  String errorMsg = "";
-
-  // final GoogleSignIn googleSignIn = GoogleSignIn();
-  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
 
   String user;
-
-  @override
-  void initState() {
-    _username = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-    // _authCheck();
-  }
-
-  Future<void> _authCheck() async {
-    var prefs = await SharedPreferences.getInstance();
-    prefs.setString('user_name', 'Sharan');
-    var name = prefs.getString('user_name') ?? 'none';
-    if (name != 'none') {
-      _authorizeNow();
-    }
-  }
-
-  Future<void> _authorizeNow() async {
-    bool isAuthorized = false;
-    try {
-      if (await _localAuthentication.canCheckBiometrics) {
-        try {
-          isAuthorized = await _localAuthentication.authenticateWithBiometrics(
-            localizedReason: "Authenticate to Login",
-            useErrorDialogs: false,
-            stickyAuth: true,
-          );
-        } on PlatformException catch (e) {
-          print(e);
-        }
-      }
-    } on PlatformException catch (e) {
-      print(e);
-    }
-
-    if (!mounted) return;
-
-    setState(() {
-      if (isAuthorized) {
-        // _authorizedOrNot = "Authorized";
-        Navigator.pushReplacementNamed(context, HomeViewRoute);
-      } else {
-        // _authorizedOrNot = "Not Authorized";
-      }
-    });
-  }
-
-  static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
-    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.1, 0.9],
-    colors: [Color.fromRGBO(17, 29, 94, 1), Color.fromRGBO(178, 31, 102, 1)],
-  );
-
-  static const LinearGradient SIGNUP_BACKGROUN = LinearGradient(
-    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.1, 0.9],
-    colors: [Color.fromRGBO(178, 31, 102, 1), Color.fromRGBO(17, 29, 94, 1)],
-  );
-
-  static const LinearGradient SIGNUP_CARD_BACKGROUND = LinearGradient(
-    tileMode: TileMode.clamp,
-    begin: FractionalOffset.centerLeft,
-    end: FractionalOffset.centerRight,
-    stops: [0.1, 1.0],
-    colors: [
-      // Color(0xffFBC6B6),
-      // Color(0xffF79B83),
-      Color.fromRGBO(134, 209, 228, 1), Color.fromRGBO(60, 80, 115, 1),
-    ],
-  );
-
-  static const LinearGradient SIGNUP_CIRCLE_BUTTON_BACKGROUND = LinearGradient(
-    tileMode: TileMode.clamp,
-    begin: FractionalOffset.centerLeft,
-    end: FractionalOffset.centerRight,
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.4, 1],
-    colors: [Colors.black, Colors.black54],
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +41,6 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 60.0, horizontal: 40),
                     child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         SizedBox(
                           height: 50,
@@ -211,12 +123,15 @@ class _LoginPageState extends State<LoginPage> {
                   InkWell(
                     onTap: () async {
                       user = await _auth.signInWithGoogle();
+                      if (user != null) {
+                        Navigator.of(context).popAndPushNamed(GoogleLoginRoute);
+                      }
                       print(user);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                           // color: Color.fromRGBO(17, 29, 94, 1)
-                          gradient: SIGNUP_BACKGROUN),
+                          gradient: auth_bg),
                       width: 300.0,
                       child: Center(
                         child: Row(
@@ -238,7 +153,38 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(
-                    height: 150,
+                    height: 20.0,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _showSnackbar(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          // color: Color.fromRGBO(17, 29, 94, 1)
+                          gradient: auth_bg),
+                      width: 300.0,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Image.asset(
+                              'assets/DummyIcons/fb.png',
+                              width: 40.0,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.0),
+                              child: Text(
+                                'Sign In with FaceBook',
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -262,13 +208,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 50,
-                  )
+                  // SizedBox(
+                  //   height: 10,
+                  // )
                 ],
               ),
               Positioned(
-                  bottom: _media.height / 2.6,
+                  bottom: _media.height / 2.9,
                   right: 15,
                   child: InkWell(
                     onTap: () async {
@@ -291,20 +237,13 @@ class _LoginPageState extends State<LoginPage> {
                             }
 
                             break;
-                          case '403':
-                            {
-                              print(status);
-                              _ackAlert(context, 'email not verified');
-                            }
-
-                            break;
                           case '404':
                             {
                               _ackAlert(context, 'User not found');
                               print(status);
                             }
                             break;
-                          default:
+                          case '200':
                             {
                               Navigator.of(context)
                                   .popAndPushNamed(HomeViewRoute);
@@ -350,31 +289,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _ackAlert(BuildContext context, String error) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(error),
-          // content: const Text('This item is no longer available'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  String passValidator(String val) {
-    if (val.isEmpty) return "can't send blank line";
-    return null;
-  }
-
   String emailValidator(String value) {
     Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -385,6 +299,14 @@ class _LoginPageState extends State<LoginPage> {
       return '*Enter a valid email';
     else
       return null;
+  }
+
+  @override
+  void initState() {
+    _username = TextEditingController();
+    _password = TextEditingController();
+    super.initState();
+    // _authCheck();
   }
 
   Widget inputText(
@@ -415,5 +337,84 @@ class _LoginPageState extends State<LoginPage> {
       ),
       obscureText: obSecure,
     );
+  }
+
+  String passValidator(String val) {
+    if (val.isEmpty) return "can't send blank line";
+    return null;
+  }
+
+  Future<void> _ackAlert(BuildContext context, String error) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(error),
+          // content: const Text('This item is no longer available'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _authCheck() async {
+    var prefs = await SharedPreferences.getInstance();
+    prefs.setString('user_name', 'Sharan');
+    var name = prefs.getString('user_name') ?? 'none';
+    if (name != 'none') {
+      _authorizeNow();
+    }
+  }
+
+  Future<void> _authorizeNow() async {
+    bool isAuthorized = false;
+    try {
+      if (await _localAuthentication.canCheckBiometrics) {
+        try {
+          isAuthorized = await _localAuthentication.authenticateWithBiometrics(
+            localizedReason: "Authenticate to Login",
+            useErrorDialogs: false,
+            stickyAuth: true,
+          );
+        } on PlatformException catch (e) {
+          print(e);
+        }
+      }
+    } on PlatformException catch (e) {
+      print(e);
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      if (isAuthorized) {
+        // _authorizedOrNot = "Authorized";
+        Navigator.pushReplacementNamed(context, HomeViewRoute);
+      } else {
+        // _authorizedOrNot = "Not Authorized";
+      }
+    });
+  }
+
+  void _showSnackbar(BuildContext context) {
+    final scaff = Scaffold.of(context);
+    scaff.showSnackBar(SnackBar(
+      content: Text(
+        "you discovered a premium feature",
+        textAlign: TextAlign.center,
+      ),
+      backgroundColor: Color.fromRGBO(178, 31, 102, 1),
+      duration: Duration(seconds: 3),
+      // action: SnackBarAction(
+      //    label: 'UNDO', onPressed: scaff.hideCurrentSnackBar,
+      // ),
+    ));
   }
 }

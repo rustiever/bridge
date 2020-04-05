@@ -1,32 +1,44 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/services.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
+  final _db = Firestore.instance;
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<String> signUp(String username, String email, String password) async {
-    AuthResult res = await _auth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    var user = res.user;
+  Future<String> signUp({
+    String username,
+    String email,
+    String password,
+    String usn,
+  }) async {
     try {
-      await user.sendEmailVerification();
-      return user.uid.toString();
-    } catch (e) {
-      print("An error occured while trying to send email verification");
-      print(e.message);
-      return 'error';
+      AuthResult res = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      _db.collection('users').document(res.user.uid).setData({
+        'uid': res.user.uid,
+        'email': email,
+        'USN': usn,
+        'username': username
+      });
+      print(_auth.currentUser());
+      UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
+      userUpdateInfo.displayName = username;
+      return '200';
+    } catch (error) {
+      return '404';
     }
   }
 
   Future<String> signInWithEmail({String email, String pass}) async {
     try {
-      FirebaseUser user = (await _auth.signInWithEmailAndPassword(
-          email: email, password: pass)) as FirebaseUser;
+      AuthResult user = await _auth.signInWithEmailAndPassword(
+          email: email, password: pass);
       print(user.toString());
-      if (user.isEmailVerified) return user.toString();
+      if (user != null) return '200';
       return '403';
     } catch (e) {
       // return e;
@@ -54,8 +66,6 @@ class AuthService {
     }
   }
 
-  invocation() => invocation;
-
   Future<String> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleSignInAccount =
@@ -79,11 +89,11 @@ class AuthService {
       assert(user.uid == currentUser.uid);
 
       return 'signInWithGoogle succeeded: $user';
-    }on PlatformException catch (err) {
+    } on PlatformException catch (err) {
       print(err);
       return err.toString();
-  // Handle err
-} catch (e) {
+      // Handle err
+    } catch (e) {
       if (e.code == 'sign_in_canceled') return 'gotcha';
       print(e.toString());
       return e;
