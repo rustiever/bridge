@@ -1,5 +1,6 @@
 import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/Ui/commonUi.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -11,45 +12,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
-    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.1, 0.9],
-    colors: [Color.fromRGBO(17, 29, 94, 1), Color.fromRGBO(178, 31, 102, 1)],
-  );
-  static const LinearGradient SIGNUP_BACKGROUN = LinearGradient(
-    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.1, 0.9],
-    colors: [Color.fromRGBO(178, 31, 102, 1), Color.fromRGBO(17, 29, 94, 1)],
-  );
-  static const LinearGradient SIGNUP_CARD_BACKGROUND = LinearGradient(
-    tileMode: TileMode.clamp,
-    begin: FractionalOffset.centerLeft,
-    end: FractionalOffset.centerRight,
-    stops: [0.1, 1.0],
-    colors: [
-      // Color(0xffFBC6B6),
-      // Color(0xffF79B83),
-      Color.fromRGBO(134, 209, 228, 1), Color.fromRGBO(60, 80, 115, 1),
-    ],
-  );
-
-  static const LinearGradient SIGNUP_CIRCLE_BUTTON_BACKGROUND = LinearGradient(
-    tileMode: TileMode.clamp,
-    begin: FractionalOffset.centerLeft,
-    end: FractionalOffset.centerRight,
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.4, 1],
-    colors: [Colors.black, Colors.black54],
-  );
-  final LocalAuthentication _localAuthentication = LocalAuthentication();
-
   AuthService _auth = AuthService();
+  final LocalAuthentication _localAuthentication = LocalAuthentication();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController _username = TextEditingController();
-
   TextEditingController _password = TextEditingController();
 
   String user;
@@ -74,8 +41,6 @@ class _LoginPageState extends State<LoginPage> {
                     padding: const EdgeInsets.symmetric(
                         vertical: 60.0, horizontal: 40),
                     child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
                         SizedBox(
                           height: 50,
@@ -158,12 +123,15 @@ class _LoginPageState extends State<LoginPage> {
                   InkWell(
                     onTap: () async {
                       user = await _auth.signInWithGoogle();
+                      if (user != null) {
+                        Navigator.of(context).popAndPushNamed(GoogleLoginRoute);
+                      }
                       print(user);
                     },
                     child: Container(
                       decoration: BoxDecoration(
                           // color: Color.fromRGBO(17, 29, 94, 1)
-                          gradient: SIGNUP_BACKGROUN),
+                          gradient: auth_bg),
                       width: 300.0,
                       child: Center(
                         child: Row(
@@ -194,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Container(
                       decoration: BoxDecoration(
                           // color: Color.fromRGBO(17, 29, 94, 1)
-                          gradient: SIGNUP_BACKGROUN),
+                          gradient: auth_bg),
                       width: 300.0,
                       child: Center(
                         child: Row(
@@ -438,7 +406,10 @@ class _LoginPageState extends State<LoginPage> {
   void _showSnackbar(BuildContext context) {
     final scaff = Scaffold.of(context);
     scaff.showSnackBar(SnackBar(
-      content: Text("you discovered a premium feature", textAlign: TextAlign.center,),
+      content: Text(
+        "you discovered a premium feature",
+        textAlign: TextAlign.center,
+      ),
       backgroundColor: Color.fromRGBO(178, 31, 102, 1),
       duration: Duration(seconds: 3),
       // action: SnackBarAction(

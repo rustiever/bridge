@@ -1,5 +1,6 @@
 import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/Ui/commonUi.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -9,13 +10,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  static const LinearGradient SIGNUP_BACKGROUND = LinearGradient(
-    begin: FractionalOffset(0.0, 0.4), end: FractionalOffset(0.9, 0.7),
-    // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.1, 0.9],
-    colors: [Color.fromRGBO(17, 29, 94, 1), Color.fromRGBO(178, 31, 102, 1)],
-  );
-  final _formKey = GlobalKey<FormState>();
+  static final _formKey = GlobalKey<FormState>();
 
   AuthService _auth = AuthService();
   TextEditingController _userName = TextEditingController();
@@ -274,31 +269,30 @@ class _SignUpState extends State<SignUp> {
                           ],
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(
-                            left: 40.0, right: 40.0, top: 10.0, bottom: 20.0),
-                        alignment: Alignment.center,
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: FlatButton(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 20.0, horizontal: 20.0),
-                                color: Colors.transparent,
-                                onPressed: () {
-                                  Navigator.pushReplacementNamed(
-                                      context, LoginViewRoute);
-                                },
-                                child: Text(
-                                  "Already have an account?? Log In",
-                                  style: TextStyle(
-                                      color: Colors.white.withOpacity(0.5)),
-                                ),
-                              ),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Already have an account??",
+                            style: TextStyle(
+                              color: Color(0xFF303030),
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(
+                                  context, LoginViewRoute);
+                            },
+                            child: Text('Log In'),
+                          ),
+                        ],
                       ),
                     ],
                   ),
