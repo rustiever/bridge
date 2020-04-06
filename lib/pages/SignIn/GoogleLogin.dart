@@ -15,98 +15,98 @@ class _GoogleLoginState extends State<GoogleLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          body: Container(
+      body: Container(
         height: double.infinity,
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: SIGNUP_BACKGROUND,
         ),
-          child: Form(
+        child: Form(
             key: _formKey,
             child: Column(
-            children: <Widget>[
-              Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                                color: Colors.white,
-                                width: 0.5,
-                                style: BorderStyle.solid),
-                          ),
-                        ),
-                        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 10.0, bottom: 10.0, right: 00.0),
-                              child: FaIcon(
-                                FontAwesomeIcons.userCircle,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _userName,
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'User Name',
-                                  hintStyle: TextStyle(color: Colors.white),
-                                ),
-                                // validator: ,
-                              ),
-                            ),
-                          ],
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.only(left: 40.0, right: 40.0),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                          color: Colors.white,
+                          width: 0.5,
+                          style: BorderStyle.solid),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 10.0, right: 00.0),
+                        child: FaIcon(
+                          FontAwesomeIcons.userCircle,
+                          color: Colors.white,
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        margin: const EdgeInsets.only(left: 40.0, right: 40.0),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                                color: Colors.white,
-                                width: 0.5,
-                                style: BorderStyle.solid),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _userName,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'User Name',
+                            hintStyle: TextStyle(color: Colors.white),
                           ),
-                        ),
-                        padding: const EdgeInsets.only(left: 0.0, right: 10.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: 10.0, bottom: 10.0, right: 00.0),
-                              child: FaIcon(
-                                FontAwesomeIcons.idBadge,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Expanded(
-                              child: TextFormField(
-                                controller: _usn,
-                                textAlign: TextAlign.center,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'USN',
-                                  hintStyle: TextStyle(color: Colors.white),
-                                ),
-                                validator: validateUSN,
-                              ),
-                            ),
-                          ],
+                          // validator: ,
                         ),
                       ),
-            ],
-          )),
+                    ],
+                  ),
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  margin: const EdgeInsets.only(left: 40.0, right: 40.0),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                          color: Colors.white,
+                          width: 0.5,
+                          style: BorderStyle.solid),
+                    ),
+                  ),
+                  padding: const EdgeInsets.only(left: 0.0, right: 10.0),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.0, bottom: 10.0, right: 00.0),
+                        child: FaIcon(
+                          FontAwesomeIcons.idBadge,
+                          color: Colors.white,
+                        ),
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          controller: _usn,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'USN',
+                            hintStyle: TextStyle(color: Colors.white),
+                          ),
+                          validator: validateUSN,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }

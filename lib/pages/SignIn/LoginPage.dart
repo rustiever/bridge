@@ -120,67 +120,40 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  InkWell(
-                    onTap: () async {
-                      user = await _auth.signInWithGoogle();
-                      if (user != null) {
-                        Navigator.of(context).popAndPushNamed(GoogleLoginRoute);
-                      }
-                      print(user);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // color: Color.fromRGBO(17, 29, 94, 1)
-                          gradient: auth_bg),
-                      width: 300.0,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                              'assets/DummyIcons/google.png',
-                              width: 40.0,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 5.0),
-                              child: Text(
-                                'Sign In with Google',
-                              ),
-                            )
-                          ],
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () async {
+                            user = await _auth.signInWithGoogle();
+                            if (user != null) {
+                              Navigator.of(context)
+                                  .popAndPushNamed(GoogleLoginRoute);
+                            }
+                            print(user);
+                          },
+                          child: Image.asset(
+                            'assets/icons/google.png',
+                            width: 100,
+                            height: 80,
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _showSnackbar(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          // color: Color.fromRGBO(17, 29, 94, 1)
-                          gradient: auth_bg),
-                      width: 300.0,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                              'assets/DummyIcons/fb.png',
-                              width: 40.0,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 5.0),
-                              child: Text(
-                                'Sign In with FaceBook',
-                              ),
-                            )
-                          ],
+                        SizedBox(
+                          width: 50,
                         ),
-                      ),
+                        InkWell(
+                          onTap: () {
+                            _showSnackbar(context);
+                          },
+                          child: Image.asset(
+                            'assets/icons/fb.png',
+                            height: 100,
+                            width: 80,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   SizedBox(

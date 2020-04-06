@@ -31,7 +31,8 @@ class _LoginRegisterState extends State<LoginRegister> {
     //GO logo widget
     Widget logo() {
       return Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 220,
@@ -142,8 +143,10 @@ class _LoginRegisterState extends State<LoginRegister> {
         });
         try {
           FirebaseUser user = (await FirebaseAuth.instance
-              .signInWithEmailAndPassword(email: _email, password: _password)) as FirebaseUser;
+              .signInWithEmailAndPassword(
+                  email: _email, password: _password)) as FirebaseUser;
           Navigator.of(context).pushReplacementNamed('/home');
+          print(user);
         } catch (error) {
           switch (error.code) {
             case "ERROR_USER_NOT_FOUND":
@@ -269,7 +272,7 @@ class _LoginRegisterState extends State<LoginRegister> {
         });
       }
     }
-   
+
     String emailValidator(String value) {
       Pattern pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -579,14 +582,16 @@ class _LoginRegisterState extends State<LoginRegister> {
     }
 
     return SafeArea(
-          child: Scaffold(
+      child: Scaffold(
           resizeToAvoidBottomPadding: false,
           key: _scaffoldKey,
           backgroundColor: Theme.of(context).primaryColor,
           body: Column(
             children: <Widget>[
               logo(),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.05,),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
               Padding(
                 child: Container(
                   child: filledButton("LOGIN", primaryColor, Colors.white,

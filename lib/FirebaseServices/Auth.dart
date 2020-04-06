@@ -35,8 +35,8 @@ class AuthService {
 
   Future<String> signInWithEmail({String email, String pass}) async {
     try {
-      AuthResult user = await _auth.signInWithEmailAndPassword(
-          email: email, password: pass);
+      AuthResult user =
+          await _auth.signInWithEmailAndPassword(email: email, password: pass);
       print(user.toString());
       if (user != null) return '200';
       return '403';
