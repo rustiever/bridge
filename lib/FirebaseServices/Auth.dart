@@ -9,27 +9,83 @@ class AuthService {
 
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<String> signUp({
+  Future<void> signUp({
     String username,
-    String email,
-    String password,
     String usn,
   }) async {
-    try {
-      AuthResult res = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      _db.collection('users').document(res.user.uid).setData({
-        'uid': res.user.uid,
-        'email': email,
+    FirebaseUser user = await signInWithGoogle();
+    _db.collection('users').document(user.uid).setData(
+      {
+        'uid': user.uid,
         'USN': usn,
-        'username': username
-      });
-      print(_auth.currentUser());
-      UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
-      userUpdateInfo.displayName = username;
-      return '200';
-    } catch (error) {
-      return '404';
+        'username': username,
+        'email': user.email,
+        'photoUrl': user.photoUrl,
+        'createdAt': DateTime.now().millisecondsSinceEpoch.toString()
+      },
+    );
+    print(user.providerData.toString());
+    // UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
+    // userUpdateInfo.displayName = username;
+  }
+
+  Future<FirebaseUser> signInWithGoogle() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final AuthResult authResult = await _auth.signInWithCredential(credential);
+    final FirebaseUser user = authResult.user;
+
+    assert(!user.isAnonymous);
+    assert(await user.getIdToken() != null);
+
+    final FirebaseUser currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    final QuerySnapshot result = await Firestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: user.uid)
+        .getDocuments();
+    final List<DocumentSnapshot> documents = result.documents;
+    if (documents.length == 0) {
+      // Update data to server if new user
+      Firestore.instance.collection('users').document(user.uid).setData(
+        {
+          'userName': user.displayName,
+          'email': user.email,
+          'usn': null,
+          'photoUrl': user.photoUrl,
+          'uid': user.uid,
+          'createdAt': DateTime.now(),
+        },
+      );
+      print(user.providerData.toString());
+    }
+
+    return user;
+  }
+
+  Future signOutGoogle() async {
+    try {
+      print("User Sign Out");
+      await googleSignIn.signOut();
+      return await _auth.signOut();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future signOut() async {
+    try {
+      return await _auth.signOut();
+    } catch (e) {
+      print('error signout');
     }
   }
 
@@ -63,58 +119,6 @@ class AuthService {
             return '402';
           }
       }
-    }
-  }
-
-  Future<String> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount googleSignInAccount =
-          await googleSignIn.signIn();
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.getCredential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      final AuthResult authResult =
-          await _auth.signInWithCredential(credential);
-      final FirebaseUser user = authResult.user;
-
-      assert(!user.isAnonymous);
-      assert(await user.getIdToken() != null);
-
-      final FirebaseUser currentUser = await _auth.currentUser();
-      assert(user.uid == currentUser.uid);
-
-      return 'signInWithGoogle succeeded: $user';
-    } on PlatformException catch (err) {
-      print(err);
-      return err.toString();
-      // Handle err
-    } catch (e) {
-      if (e.code == 'sign_in_canceled') return 'gotcha';
-      print(e.toString());
-      return e;
-    }
-  }
-
-  Future signOutGoogle() async {
-    try {
-      print("User Sign Out");
-      await googleSignIn.signOut();
-      return await _auth.signOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print('error signout');
     }
   }
 

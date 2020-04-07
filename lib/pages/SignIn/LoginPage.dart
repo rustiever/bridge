@@ -1,6 +1,7 @@
 import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
 import 'package:bridge/Ui/commonUi.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/local_auth.dart';
@@ -19,7 +20,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _username = TextEditingController();
   TextEditingController _password = TextEditingController();
 
-  String user;
+  FirebaseUser user;
+  @override
+  void initState() {
+    _username = TextEditingController();
+    _password = TextEditingController();
+    super.initState();
+    // _authCheck();   //enable fingerprintUnlock
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -132,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                               Navigator.of(context)
                                   .popAndPushNamed(GoogleLoginRoute);
                             }
-                            print(user);
+                            // print(user);
                           },
                           child: Image.asset(
                             'assets/icons/google.png',
@@ -143,118 +151,84 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           width: 50,
                         ),
-                        InkWell(
-                          onTap: () {
-                            _showSnackbar(context);
-                          },
-                          child: Image.asset(
-                            'assets/icons/fb.png',
-                            height: 100,
-                            width: 80,
-                          ),
-                        ),
                       ],
                     ),
                   ),
                   SizedBox(
                     height: 100,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Don't have an account?",
-                        style: TextStyle(
-                          color: Color(0xFF303030),
-                        ),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacementNamed(
-                              context, SignupViewRoute);
-                        },
-                        child: Text('Sign Up'),
-                      ),
-                    ],
-                  ),
-                  // SizedBox(
-                  //   height: 10,
-                  // )
                 ],
               ),
               Positioned(
-                  bottom: _media.height / 2.9,
-                  right: 15,
-                  child: InkWell(
-                    onTap: () async {
-                      print('tap');
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        String status = await _auth.signInWithEmail(
-                            email: _username.text, pass: _password.text);
-                        switch (status) {
-                          case '400':
-                            {
-                              _ackAlert(context, 'wrong password');
-                              print(status);
-                            }
-                            break;
-                          case '402':
-                            {
-                              print(status);
-                              _ackAlert(context, 'we also dont know');
-                            }
+                bottom: _media.height / 2.9,
+                right: 15,
+                child: InkWell(
+                  onTap: () async {
+                    print('tap');
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      String status = await _auth.signInWithEmail(
+                          email: _username.text, pass: _password.text);
+                      switch (status) {
+                        case '400':
+                          {
+                            _ackAlert(context, 'wrong password');
+                            print(status);
+                          }
+                          break;
+                        case '402':
+                          {
+                            print(status);
+                            _ackAlert(context, 'we also dont know');
+                          }
 
-                            break;
-                          case '404':
-                            {
-                              _ackAlert(context, 'User not found');
-                              print(status);
-                            }
-                            break;
-                          case '200':
-                            {
-                              Navigator.of(context)
-                                  .popAndPushNamed(HomeViewRoute);
-                            }
-                        }
+                          break;
+                        case '404':
+                          {
+                            _ackAlert(context, 'User not found');
+                            print(status);
+                          }
+                          break;
+                        case '200':
+                          {
+                            Navigator.of(context)
+                                .popAndPushNamed(HomeViewRoute);
+                          }
                       }
-                      print('taaaaaaap');
-                      print(_username.text);
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 15,
-                            spreadRadius: 0,
-                            offset: Offset(0.0, 16.0),
-                          ),
-                        ],
-                        gradient: LinearGradient(
-                          begin: FractionalOffset.centerLeft,
-                          stops: [0.2, 1],
-                          colors: [
-                            Color(0xff000000),
-                            Color(0xff434343),
-                          ],
+                    }
+                    print('taaaaaaap');
+                    print(_username.text);
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 15,
+                          spreadRadius: 0,
+                          offset: Offset(0.0, 16.0),
                         ),
-                      ),
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        size: 20,
-                        color: Color(0xFFdbedb0),
+                      ],
+                      gradient: LinearGradient(
+                        begin: FractionalOffset.centerLeft,
+                        stops: [0.2, 1],
+                        colors: [
+                          Color(0xff000000),
+                          Color(0xff434343),
+                        ],
                       ),
                     ),
-                  )),
+                    child: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 20,
+                      color: Color(0xFFdbedb0),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -272,14 +246,6 @@ class _LoginPageState extends State<LoginPage> {
       return '*Enter a valid email';
     else
       return null;
-  }
-
-  @override
-  void initState() {
-    _username = TextEditingController();
-    _password = TextEditingController();
-    super.initState();
-    // _authCheck();
   }
 
   Widget inputText(
@@ -375,19 +341,43 @@ class _LoginPageState extends State<LoginPage> {
       }
     });
   }
+}
 
-  void _showSnackbar(BuildContext context) {
-    final scaff = Scaffold.of(context);
-    scaff.showSnackBar(SnackBar(
-      content: Text(
-        "you discovered a premium feature",
-        textAlign: TextAlign.center,
+class UserButton extends StatelessWidget {
+  final String user;
+  const UserButton({Key key, this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 50.0,
+      child: FlatButton(
+        onPressed: () {},
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(80.0)),
+        padding: EdgeInsets.all(0.0),
+        child: Ink(
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xff374ABE), Color(0xff64B6FF)],
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+              ),
+              borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
+            alignment: Alignment.center,
+            child: Text(
+              user,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w400),
+            ),
+          ),
+        ),
       ),
-      backgroundColor: Color.fromRGBO(178, 31, 102, 1),
-      duration: Duration(seconds: 3),
-      // action: SnackBarAction(
-      //    label: 'UNDO', onPressed: scaff.hideCurrentSnackBar,
-      // ),
-    ));
+    );
   }
 }

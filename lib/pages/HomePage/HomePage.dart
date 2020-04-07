@@ -1,3 +1,4 @@
+import 'package:bridge/pages/FirstPage.dart';
 import 'package:bridge/pages/HomePage/Drawer.dart';
 import 'package:bridge/pages/HomePage/TabPage.dart';
 import 'package:bridge/pages/SignIn/LoginPage.dart';
@@ -7,7 +8,6 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
-
   final String title;
 
   @override
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     TabItem(
         icon: Icons.dashboard, title: 'Discovery', activeIcon: Icons.add_box),
     TabItem(icon: Icons.notifications, title: 'Notifi..'),
-    TabItem(icon: Icons.settings, title: 'Settings'),
+    TabItem(icon: Icons.person_outline, title: 'Profile'),
   ];
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
               child: CircularProgressIndicator(),
             );
           }
-          if (!snapshot.hasData || snapshot.data == null) return LoginPage();
+          if (!snapshot.hasData || snapshot.data == null) return FirstPage();
           return DefaultTabController(
             length: 5,
             initialIndex: 2,
@@ -47,10 +47,12 @@ class _HomePageState extends State<HomePage> {
                   //   // 1: b1,
                   // },
                   backgroundColor: Colors.black,
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(17, 29, 94, 1),
-                    Color.fromRGBO(178, 31, 102, 1)
-                  ]),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromRGBO(17, 29, 94, 1),
+                      Color.fromRGBO(178, 31, 102, 1)
+                    ],
+                  ),
                   color: Colors.blueAccent,
                   activeColor: Colors.indigoAccent,
                   curve: Curves.fastLinearToSlowEaseIn,
@@ -59,8 +61,10 @@ class _HomePageState extends State<HomePage> {
                   initialActiveIndex: 2,
                   height: 45,
                   top: -15,
-                  onTap: (int i) {
+                  onTap: (int i) async {
                     print('click index=$i');
+                    var ii = await FirebaseAuth.instance.currentUser();
+                    print(ii.photoUrl);
                     // if (i == 2)
                   },
                 ),
