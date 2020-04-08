@@ -1,33 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter/services.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
   final _db = Firestore.instance;
-
   final GoogleSignIn googleSignIn = GoogleSignIn();
-
-  Future<void> signUp({
-    String username,
-    String usn,
-  }) async {
-    FirebaseUser user = await signInWithGoogle();
-    _db.collection('users').document(user.uid).setData(
-      {
-        'uid': user.uid,
-        'USN': usn,
-        'username': username,
-        'email': user.email,
-        'photoUrl': user.photoUrl,
-        'createdAt': DateTime.now().millisecondsSinceEpoch.toString()
-      },
-    );
-    print(user.providerData.toString());
-    // UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
-    // userUpdateInfo.displayName = username;
-  }
 
   Future<FirebaseUser> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -66,6 +44,7 @@ class AuthService {
         },
       );
       print(user.providerData.toString());
+      // TODO: write info to local for both new and existing user
     }
 
     return user;
@@ -89,40 +68,5 @@ class AuthService {
     }
   }
 
-  Future<String> signInWithEmail({String email, String pass}) async {
-    try {
-      AuthResult user =
-          await _auth.signInWithEmailAndPassword(email: email, password: pass);
-      print(user.toString());
-      if (user != null) return '200';
-      return '403';
-    } catch (e) {
-      // return e;
-      print(e.toString());
-
-      switch (e.code) {
-        case "ERROR_USER_NOT_FOUND":
-          {
-            print(e);
-            return '404';
-          }
-          break;
-        case "ERROR_WRONG_PASSWORD":
-          {
-            print(e);
-            return '400';
-          }
-          break;
-        default:
-          {
-            print(e);
-            return '402';
-          }
-      }
-    }
-  }
-
-  Future<void> resetPassword(String email) async {
-    await _auth.sendPasswordResetEmail(email: email);
-  }
+  signInWithEmail({String email, String pass}) {}
 }

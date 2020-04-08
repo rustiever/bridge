@@ -1,4 +1,3 @@
-import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
 import 'package:bridge/Ui/commonUi.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   static final _formKey = GlobalKey<FormState>();
 
-  AuthService _auth = AuthService();
   TextEditingController _userName = TextEditingController();
   TextEditingController _usn = TextEditingController();
   @override
@@ -178,7 +176,7 @@ class _SignUpState extends State<SignUp> {
   void signUP() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      await _auth.signUp(usn: _usn.text, username: _userName.text);
+      // await _auth.signUp(usn: _usn.text, username: _userName.text);
     }
   }
 
