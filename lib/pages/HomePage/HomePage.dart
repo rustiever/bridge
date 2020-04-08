@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
     TabItem(
         icon: Icons.dashboard, title: 'Discovery', activeIcon: Icons.add_box),
     TabItem(icon: Icons.notifications, title: 'Notifi..'),
-    TabItem(icon: Icons.settings, title: 'Settings'),
+    TabItem(icon: Icons.settings, title: 'Profile'),
   ];
   @override
   Widget build(BuildContext context) {
