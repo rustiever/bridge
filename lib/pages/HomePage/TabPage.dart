@@ -1,6 +1,6 @@
 import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
-import 'package:bridge/pages/HomePage/ProfilePage.dart';
+import 'package:bridge/pages/HomePage/Profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/fa_icon.dart';
@@ -21,7 +21,7 @@ class _TabPagesState extends State<TabPages> {
         Text('coming soon'),
         FeedPage(),
         Text('coming soon'),
-        ProfilePage(),
+        ProfileThreePage(),
       ],
     );
   }
