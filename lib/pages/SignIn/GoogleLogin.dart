@@ -14,16 +14,19 @@ class _GoogleLoginState extends State<GoogleLogin> {
   static final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: SIGNUP_BACKGROUND,
-        ),
-        child: Form(
+    return SafeArea(
+      child: Scaffold(
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: SIGNUP_BACKGROUND,
+          ),
+          child: Form(
             key: _formKey,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Container(
                   width: MediaQuery.of(context).size.width,
@@ -59,7 +62,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
                             hintText: 'User Name',
                             hintStyle: TextStyle(color: Colors.white),
                           ),
-                          // validator: ,
+                          validator: validateUserName,
                         ),
                       ),
                     ],
@@ -105,10 +108,32 @@ class _GoogleLoginState extends State<GoogleLogin> {
                     ],
                   ),
                 ),
+                SizedBox(
+                  height: 30,
+                ),
+                FlatButton(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 15.0, horizontal: 20.0),
+                  color: Colors.pink,
+                  onPressed: toHome,
+                  child: Text(
+                    "Home",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ],
-            )),
+            ),
+          ),
+        ),
       ),
     );
+  }
+
+  String validateUserName(String value) {
+    if (value.isEmpty) {
+      return "can't send blank line";
+    } else
+      return null;
   }
 
   String validateUSN(String value) {
@@ -120,5 +145,11 @@ class _GoogleLoginState extends State<GoogleLogin> {
       return 'write proper usn';
     } else
       return null;
+  }
+
+  void toHome() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+    }
   }
 }

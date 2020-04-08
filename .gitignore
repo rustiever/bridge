@@ -13,7 +13,7 @@ Session.vim
 plsgod/
 antry/
 .undodir/
-google-services.json
+android/app/google-services.json
 
 
 # IntelliJ related
