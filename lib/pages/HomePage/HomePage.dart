@@ -1,7 +1,5 @@
-import 'package:bridge/pages/FirstPage.dart';
 import 'package:bridge/pages/HomePage/Drawer.dart';
 import 'package:bridge/pages/HomePage/TabPage.dart';
-import 'package:bridge/pages/SignIn/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
@@ -27,54 +25,44 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     MediaQueryData sd = MediaQuery.of(context);
     print('${sd.size}');
-    return StreamBuilder(
-        stream: FirebaseAuth.instance.onAuthStateChanged,
-        builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (!snapshot.hasData || snapshot.data == null) return FirstPage();
-          return DefaultTabController(
-            length: 5,
-            initialIndex: 2,
-            child: SafeArea(
-              child: Scaffold(
-                bottomNavigationBar: ConvexAppBar(
-                  // {   // badges
-                  //   // 0: '99+',
-                  //   // 1: b1,
-                  // },
-                  backgroundColor: Colors.black,
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromRGBO(17, 29, 94, 1),
-                      Color.fromRGBO(178, 31, 102, 1)
-                    ],
-                  ),
-                  color: Colors.blueAccent,
-                  activeColor: Colors.indigoAccent,
-                  curve: Curves.fastLinearToSlowEaseIn,
-                  elevation: 0.0,
-                  items: items,
-                  initialActiveIndex: 2,
-                  height: 45,
-                  top: -15,
-                  onTap: (int i) async {
-                    print('click index=$i');
-                    var ii = await FirebaseAuth.instance.currentUser();
-                    print(ii.photoUrl);
-                    // if (i == 2)
-                  },
-                ),
-                // backgroundColor: Color.fromRGBO(21, 32, 43, 1.0),
-                // backgroundColor: Color,
-                drawer: AppDrawer(),
-                body: TabPages(),
-              ),
+    return DefaultTabController(
+      length: 5,
+      initialIndex: 2,
+      child: SafeArea(
+        child: Scaffold(
+          bottomNavigationBar: ConvexAppBar(
+            // {   // badges
+            //   // 0: '99+',
+            //   // 1: b1,
+            // },
+            backgroundColor: Colors.black,
+            gradient: LinearGradient(
+              colors: [
+                Color.fromRGBO(17, 29, 94, 1),
+                Color.fromRGBO(178, 31, 102, 1)
+              ],
             ),
-          );
-        });
+            color: Colors.blueAccent,
+            activeColor: Colors.indigoAccent,
+            curve: Curves.fastLinearToSlowEaseIn,
+            elevation: 0.0,
+            items: items,
+            initialActiveIndex: 2,
+            height: 45,
+            top: -15,
+            onTap: (int i) async {
+              print('click index=$i');
+              var ii = await FirebaseAuth.instance.currentUser();
+              print(ii.photoUrl);
+              // if (i == 2)
+            },
+          ),
+          // backgroundColor: Color.fromRGBO(21, 32, 43, 1.0),
+          // backgroundColor: Color,
+          drawer: AppDrawer(),
+          body: TabPages(),
+        ),
+      ),
+    );
   }
 }
