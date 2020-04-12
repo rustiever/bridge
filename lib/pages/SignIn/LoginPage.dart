@@ -135,7 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         InkWell(
                           onTap: () async {
-                            user = await _auth.signInWithGoogle();
+                            await _auth.signInWithGoogle();
                             if (user != null) {
                               Navigator.of(context)
                                   .popAndPushNamed(GoogleLoginRoute);
@@ -167,8 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                     print('tap');
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      String status = await _auth.signInWithEmail(
-                          email: _username.text, pass: _password.text);
+                      String status = '400';
                       switch (status) {
                         case '400':
                           {

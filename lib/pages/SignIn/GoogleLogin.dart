@@ -137,7 +137,8 @@ class _GoogleLoginState extends State<GoogleLogin> {
   }
 
   String validateUSN(String value) {
-    Pattern pattern = r'^[0-9][a-zA-Z]{2}[0-9]{2}[a-zA-Z]{2}[0-9]{3}$';
+    Pattern pattern =
+        r'^4mt0*([7-9]|[1-8][0-9]|9[0-9]|100)(cs|is|ec|cv|ae|mt|me)0*([0-9]|[1-8][0-9]|9[0-9]|[1-3][0-9]{2}|4[01][0-9]|420)$';
     RegExp regex = RegExp(pattern);
     if (value.isEmpty) {
       return "can't send blank line";
