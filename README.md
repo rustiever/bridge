@@ -1,19 +1,45 @@
-# bridge
+# Bridge
 
-A new Flutter project.
+Simple overview of use/purpose.
 
-This project gives you an ability of interaction with others in college mates.
-Bridge will give an oppurtunity to provide and get the help from others
+## Description
+
+An in-depth paragraph about your project and overview of use.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Dependencies
 
-A few resources to get you started if this is your first Flutter project:
+* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
+* ex. Windows 10
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Installing
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+* How/where to download your program
+* Any modifications needed to be made to files/folders
+
+
+## Help
+
+Any advise for common problems or issues.
+```
+
+```
+
+## Authors
+
+Contributors names and contact info
+
+ex. <shashankneeded@gmail.com>
+
+ex. <sharanneeded@gmail.com>
+
+## Version History
+
+
+## License
+
+This project is licensed under the [MIT] License - see the [LICENSE.md](LICENSE.md) file for details
+
+## Acknowledgments
+
