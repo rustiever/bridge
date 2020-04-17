@@ -1,3 +1,5 @@
+![Flutter CI](https://github.com/rustiever/bridge/workflows/Flutter%20CI/badge.svg?branch=master)
+
 # Bridge
 
 Simple overview of use/purpose.
