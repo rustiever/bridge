@@ -1,7 +1,6 @@
-import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/Services/Auth.dart';
 import 'package:bridge/Ui/commonUi.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class FirstPage extends StatefulWidget {
@@ -41,8 +40,7 @@ class _FirstPageState extends State<FirstPage> {
               UserButton(
                 user: "Existing User",
                 ontap: () async {
-                  FirebaseUser user = await _auth.signInWithGoogle();
-                  print(user.photoUrl);
+                  await _auth.signInWithGoogle();
                 },
               ),
               Row(
@@ -64,7 +62,7 @@ class _FirstPageState extends State<FirstPage> {
               UserButton(
                 user: "New User",
                 ontap: () {
-                  Navigator.of(context).popAndPushNamed(SignupViewRoute);
+                  Navigator.of(context).popAndPushNamed(GoogleLoginRoute);
                 },
               ),
             ],

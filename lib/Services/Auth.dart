@@ -1,13 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:intl/intl.dart';
 
 class AuthService {
+  FirebaseUser currentUser;
   final _auth = FirebaseAuth.instance;
   final _db = Firestore.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  Future<FirebaseUser> signInWithGoogle() async {
+  get currntUserDetails => Firestore.instance
+      .collection('users')
+      .where('uid', isEqualTo: '3Lm8RPQv5MPhzBAJpS9gGcId2XJ3')
+      .snapshots();
+  initCurr() async {
+    currentUser = await FirebaseAuth.instance.currentUser();
+    print(currentUser.uid);
+  }
+
+  Future<void> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
@@ -23,7 +34,7 @@ class AuthService {
     assert(!user.isAnonymous);
     assert(await user.getIdToken() != null);
 
-    final FirebaseUser currentUser = await _auth.currentUser();
+    currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
 
     final QuerySnapshot result = await Firestore.instance
@@ -33,21 +44,27 @@ class AuthService {
     final List<DocumentSnapshot> documents = result.documents;
     if (documents.length == 0) {
       // Update data to server if new user
-      Firestore.instance.collection('users').document(user.uid).setData(
-        {
-          'userName': user.displayName,
-          'email': user.email,
-          'usn': null,
-          'photoUrl': user.photoUrl,
-          'uid': user.uid,
-          'createdAt': DateTime.now(),
-        },
-      );
+      addNewUser(user);
       print(user.providerData.toString());
-      // TODO: write info to local for both new and existing user
-    }
+    } else {}
+    // return user;
+  }
 
-    return user;
+  Future<void> addNewUser(FirebaseUser user) {
+    final now = new DateTime.now();
+    String formatter = DateFormat.yMMMMd('en_US').format(now);
+    return _db.collection('users').document(user.uid).setData(
+      {
+        'userName': user.displayName,
+        'email': user.email,
+        'usn': null,
+        'photoUrl': user.photoUrl,
+        'uid': user.uid,
+        'createdAt': formatter.toString(),
+        'batch': null,
+        'branch': null
+      },
+    );
   }
 
   Future signOutGoogle() async {

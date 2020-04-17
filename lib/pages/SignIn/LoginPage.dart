@@ -1,5 +1,5 @@
-import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/Services/Auth.dart';
 import 'package:bridge/Ui/commonUi.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +21,14 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _password = TextEditingController();
 
   FirebaseUser user;
+  var nn = 1;
   @override
   void initState() {
     _username = TextEditingController();
     _password = TextEditingController();
     super.initState();
     // _authCheck();   //enable fingerprintUnlock
+    if (nn == 5) _authCheck();
   }
 
   @override
@@ -135,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         InkWell(
                           onTap: () async {
-                            user = await _auth.signInWithGoogle();
+                            await _auth.signInWithGoogle();
                             if (user != null) {
                               Navigator.of(context)
                                   .popAndPushNamed(GoogleLoginRoute);
@@ -167,8 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                     print('tap');
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      String status = await _auth.signInWithEmail(
-                          email: _username.text, pass: _password.text);
+                      String status = '400';
                       switch (status) {
                         case '400':
                           {

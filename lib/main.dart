@@ -3,14 +3,19 @@ import 'package:bridge/Utils/double_back_to_close_app.dart';
 import 'package:bridge/pages/HomePage/HomePage.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MyApp(
+      title: 'Bridge',
+    ));
 
 class MyApp extends StatelessWidget {
+  final title;
+
+  const MyApp({Key key, this.title}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Bridge',
+      title: title,
       onGenerateRoute: router.generateRoute,
       initialRoute: router.HomeViewRoute, // change to LoginViewRoute
       theme: ThemeData(

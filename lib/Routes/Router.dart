@@ -22,8 +22,8 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return CupertinoPageRoute(builder: (context) => LoginPage());
     case SignupViewRoute:
       return CupertinoPageRoute(builder: (context) => SignUp());
-      case GoogleLoginRoute:
-        return CupertinoPageRoute(builder: (context) => GoogleLogin());
+    case GoogleLoginRoute:
+      return CupertinoPageRoute(builder: (context) => GoogleLogin());
     default:
       return MaterialPageRoute(builder: (context) => LoginPage());
   }
