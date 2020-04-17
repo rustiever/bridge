@@ -1,4 +1,3 @@
-import 'package:bridge/pages/FirstPage.dart';
 import 'package:bridge/pages/HomePage/Drawer.dart';
 import 'package:bridge/pages/HomePage/TabPage.dart';
 import 'package:bridge/pages/SignIn/GoogleLogin.dart';
