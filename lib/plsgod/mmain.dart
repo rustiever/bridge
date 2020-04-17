@@ -12,12 +12,10 @@ import 'login-reg.dart';
 
 final FirebaseAuth auth = FirebaseAuth.instance;
 
-
 class MyAppMain extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       title: 'GO',
       debugShowCheckedModeBanner: false,

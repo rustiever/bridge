@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 
 class AuthService {
@@ -9,12 +8,6 @@ class AuthService {
   final _auth = FirebaseAuth.instance;
   final _db = Firestore.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  SharedPreferences prefs;
-
-  curUser() async {
-    return (await _auth.currentUser()).uid;
-    //  return i.uid;
-  }
 
   get currntUserDetails => Firestore.instance
       .collection('users')
@@ -26,7 +19,6 @@ class AuthService {
   }
 
   Future<void> signInWithGoogle() async {
-    prefs = await SharedPreferences.getInstance();
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
@@ -54,12 +46,7 @@ class AuthService {
       // Update data to server if new user
       addNewUser(user);
       print(user.providerData.toString());
-      prefs.setString('uid', user.uid);
-      print(prefs.getString('uid'));
-    } else {
-      prefs.setString('uid', documents[0]['uid']);
-      print(prefs.getString('uid'));
-    }
+    } else {}
     // return user;
   }
 
@@ -73,8 +60,9 @@ class AuthService {
         'usn': null,
         'photoUrl': user.photoUrl,
         'uid': user.uid,
-        'bio': null,
         'createdAt': formatter.toString(),
+        'batch': null,
+        'branch': null
       },
     );
   }
@@ -98,6 +86,4 @@ class AuthService {
   }
 
   signInWithEmail({String email, String pass}) {}
-
-  currentUserr() {}
 }

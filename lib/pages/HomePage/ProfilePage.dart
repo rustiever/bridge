@@ -1,3 +1,4 @@
+import 'package:bridge/models/Users.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print(snapshot.data.data);
+          // print(snapshot.data.data);
           return profileScaffold(snapshot, context);
         }
         return Center(child: CircularProgressIndicator());
@@ -34,8 +35,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Scaffold profileScaffold(AsyncSnapshot snapshot, BuildContext context) {
-    var creds = snapshot.data.data;
+  Scaffold profileScaffold(
+      AsyncSnapshot<DocumentSnapshot> snapshot, BuildContext context) {
+    User user = User.fromDocumentSnapshot(snapshot.data);
     return Scaffold(
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
@@ -57,64 +59,40 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.only(left: 96.0),
+                          margin: EdgeInsets.only(left: 110.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
-                                creds['userName'],
-                                style: Theme.of(context).textTheme.title,
+                                user.username,
+                                style: TextStyle(fontSize: 20),
+                                // style: Theme.of(context).textTheme.title,
                               ),
                               ListTile(
                                 contentPadding: EdgeInsets.all(0),
-                                title: Text("Computer Science"),
-                                subtitle: Text("2017 Batch"),
+                                title: Text(
+                                  user.branch,
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                subtitle: Text("${user.batch} Batch"),
                               ),
                             ],
                           ),
                         ),
                         SizedBox(height: 10.0),
-                        // Row(
-                        //   children: <Widget>[
-                        //     Expanded(
-                        //       child: Column(
-                        //         children: <Widget>[
-                        //           Text("285"),
-                        //           Text("Likes")
-                        //         ],
-                        //       ),
-                        //     ),
-                        //     Expanded(
-                        //       child: Column(
-                        //         children: <Widget>[
-                        //           Text("3025"),
-                        //           Text("Comments")
-                        //         ],
-                        //       ),
-                        //     ),
-                        //     Expanded(
-                        //       child: Column(
-                        //         children: <Widget>[
-                        //           Text("650"),
-                        //           Text("Favourites")
-                        //         ],
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                       ],
                     ),
                   ),
                   Container(
-                    height: 80,
-                    width: 80,
+                    height: 90,
+                    width: 90,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                       image: DecorationImage(
-                          image: CachedNetworkImageProvider(creds['photoUrl']),
+                          image: CachedNetworkImageProvider(user.photoUrl),
                           fit: BoxFit.cover),
                     ),
-                    margin: EdgeInsets.only(left: 16.0),
+                    margin: EdgeInsets.only(left: 16.0, top: 30.0),
                   ),
                 ],
               ),
@@ -126,28 +104,23 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 child: Column(
                   children: <Widget>[
-                    // ListTile(
-                    //   title: Text("User information"),
-                    // ),
-                    Divider(),
-                    // Container(
-                    //   child: Image(
-                    //     image: NetworkImage(img),
-                    //   ),
-                    // ),
                     ListTile(
-                      title: Text("User Name"),
-                      subtitle: Text("Rustiever"),
+                      title: Text("User information"),
+                    ),
+                    Divider(),
+                    ListTile(
+                      subtitle: Text("User Name"),
+                      title: Text(user.username),
                       leading: Icon(Icons.person_outline),
                     ),
                     ListTile(
-                      title: Text("USN"),
-                      subtitle: Text("4MT17CS095"),
+                      subtitle: Text("USN"),
+                      title: Text(user.usn ?? ''),
                       leading: Icon(Icons.accessibility_new),
                     ),
                     ListTile(
-                      title: Text("Email"),
-                      subtitle: Text(creds['email']),
+                      subtitle: Text("Email"),
+                      title: Text(user.email),
                       leading: Icon(Icons.email),
                     ),
                     // ListTile(
@@ -155,15 +128,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     //   subtitle: Text("+977-9815225566"),
                     //   leading: Icon(Icons.phone),
                     // ),
+                    // ListTile(
+                    //   subtitle: Text("About"),
+                    //   title: Text(
+                    //       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, illo repellendus quas beatae reprehenderit nemo, debitis explicabo officiis sit aut obcaecati iusto porro? Exercitationem illum consequuntur magnam eveniet delectus ab."),
+                    //   leading: Icon(Icons.person),
+                    // ),
                     ListTile(
-                      title: Text("About"),
-                      subtitle: Text(
-                          "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, illo repellendus quas beatae reprehenderit nemo, debitis explicabo officiis sit aut obcaecati iusto porro? Exercitationem illum consequuntur magnam eveniet delectus ab."),
-                      leading: Icon(Icons.person),
-                    ),
-                    ListTile(
-                      title: Text("Joined Date"),
-                      subtitle: Text("{snapshot.data['createdAt']}"),
+                      subtitle: Text("Joined Date"),
+                      title: Text(user.joined),
                       leading: Icon(Icons.calendar_view_day),
                     ),
                   ],

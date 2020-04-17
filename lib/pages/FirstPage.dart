@@ -1,5 +1,5 @@
-import 'package:bridge/FirebaseServices/Auth.dart';
 import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/Services/Auth.dart';
 import 'package:bridge/Ui/commonUi.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +62,7 @@ class _FirstPageState extends State<FirstPage> {
               UserButton(
                 user: "New User",
                 ontap: () {
-                  Navigator.of(context).popAndPushNamed(SignupViewRoute);
+                  Navigator.of(context).popAndPushNamed(GoogleLoginRoute);
                 },
               ),
             ],
