@@ -13,9 +13,6 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  static const TEXT_BLACK_LIGHT = Color(0xFF34323D);
-  static const TEXT_SMALL_2_SIZE = 22.0;
-
   var curmax = 2;
 
   var list = List.generate(15, (i) => 'i');
@@ -118,8 +115,6 @@ class _FeedChildState extends State<FeedChild> {
   bool comment = true;
   bool bookmark = true;
 
-  static const YELLOW = Color(0xfffbed96);
-  static const GREEN = Color(0xffc7e5b4);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -143,10 +138,7 @@ class _FeedChildState extends State<FeedChild> {
                   ),
                   RichText(
                     text: TextSpan(
-                      style: Theme.of(context)
-                          .textTheme
-                          .body1
-                          .copyWith(fontSize: 25),
+                      style: TextStyle(fontSize: 20),
                       children: [
                         TextSpan(
                           text: 'Rustiever1',
