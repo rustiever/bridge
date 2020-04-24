@@ -60,16 +60,6 @@ class _FeedPageState extends State<FeedPage> {
               IconButton(
                 onPressed: () {
                   //Navigator.pushNamed(context, LoginViewRoute);
-                  AuthService().signOut();
-                },
-                icon: FaIcon(
-                  FontAwesomeIcons.lock,
-                  // color: Colors.white70,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, LoginViewRoute);
                   AuthService().signOutGoogle();
                 },
                 icon: FaIcon(

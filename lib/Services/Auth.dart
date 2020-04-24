@@ -9,15 +9,6 @@ class AuthService {
   final _db = Firestore.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  get currntUserDetails => Firestore.instance
-      .collection('users')
-      .where('uid', isEqualTo: '3Lm8RPQv5MPhzBAJpS9gGcId2XJ3')
-      .snapshots();
-  initCurr() async {
-    currentUser = await FirebaseAuth.instance.currentUser();
-    print(currentUser.uid);
-  }
-
   Future<void> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
@@ -70,20 +61,11 @@ class AuthService {
   Future signOutGoogle() async {
     try {
       print("User Sign Out");
+      await googleSignIn.disconnect();
       await googleSignIn.signOut();
       return await _auth.signOut();
     } catch (e) {
       print(e);
     }
   }
-
-  Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print('error signout');
-    }
-  }
-
-  signInWithEmail({String email, String pass}) {}
 }
