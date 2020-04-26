@@ -1,7 +1,6 @@
 import 'package:bridge/Ui/commonUi.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/fa_icon.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GoogleLogin extends StatefulWidget {
@@ -21,6 +20,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
   String branch;
 
   String batch;
+  String check = '';
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -49,6 +49,7 @@ class _GoogleLoginState extends State<GoogleLogin> {
                     hintText: 'USN',
                     icon: FontAwesomeIcons.universalAccess,
                     validator: validateUSN),
+                Text("$check"),
                 SizedBox(
                   height: 30,
                 ),
@@ -104,10 +105,12 @@ class _GoogleLoginState extends State<GoogleLogin> {
               controller: controller,
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: hintText,
-                hintStyle: TextStyle(color: Colors.grey),
-              ),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                      borderSide: BorderSide()),
+                  labelText: hintText,
+                  labelStyle: TextStyle(color: Colors.grey),
+                  fillColor: Colors.white),
               validator: validator,
             ),
           ),
@@ -127,33 +130,52 @@ class _GoogleLoginState extends State<GoogleLogin> {
       return null;
   }
 
+  Future<bool> usnCheck(String usn) async {
+    final result = await Firestore.instance
+        .collection('users')
+        .where('usn', isEqualTo: usn)
+        .getDocuments();
+    return result.documents.isEmpty;
+  }
+
   String validateUSN(String value) {
     Pattern pattern =
-        r'^4mt0*([7-9]|[1-8][0-9]|9[0-9]|100)(cs|is|ec|cv|ae|mt|me)0*([0-9]|[1-8][0-9]|9[0-9]|[1-3][0-9]{2}|4[01][0-9]|420)$';
+        r'^4(mt|MT)0*([7-9]|[1-8][0-9]|9[0-9]|100)(cs|is|ec|cv|ae|mt|me|CS|IS|EC|CV|AE|MT|ME)0*([0-9]|[1-8][0-9]|9[0-9]|[1-3][0-9]{2}|4[01][0-9]|420)$';
     RegExp regex = RegExp(pattern);
     if (value.isEmpty) {
       return "can't send blank line";
-    } else if (!regex.hasMatch(value.toLowerCase())) {
+    } else if (!regex.hasMatch(value)) {
       return 'write proper usn';
     } else
       return null;
   }
 
   void toHome() async {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      setData(_usn.text.toLowerCase());
-      Firestore.instance
-          .collection('users')
-          .document(widget.user.uid)
-          .updateData({
-        'userName': _userName.text,
-        'usn': _usn.text.toUpperCase(),
-        'batch': batch ?? '',
-        'branch': branch ?? ''
+    final valid = await usnCheck(_usn.text.toUpperCase());
+    if (!valid) {
+      setState(() {
+        check = 'already there';
       });
-      _userName.clear();
-      _usn.clear();
+    } else if (valid) {
+      setState(() {
+        check = '';
+      });
+
+      if (_formKey.currentState.validate()) {
+        _formKey.currentState.save();
+        setData(_usn.text.toLowerCase());
+        Firestore.instance
+            .collection('users')
+            .document(widget.user.uid)
+            .updateData({
+          'userName': _userName.text,
+          'usn': _usn.text.toUpperCase(),
+          'batch': batch ?? '',
+          'branch': branch ?? ''
+        });
+        _userName.clear();
+        _usn.clear();
+      }
     }
   }
 

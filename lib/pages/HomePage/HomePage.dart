@@ -42,7 +42,6 @@ class _HomePageState extends State<HomePage> {
           );
         }
         if (!snapshot.hasData || snapshot.data == null) return FirstPage();
-        print(snapshot.data.uid);
         return StreamBuilder(
           stream: Firestore.instance
               .collection('users')
@@ -59,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               );
             return DefaultTabController(
               length: 5,
-              initialIndex: 2,
+              // initialIndex: 1,
               child: SafeArea(
                 child: Scaffold(
                   bottomNavigationBar: ConvexAppBar(
@@ -79,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                     curve: Curves.fastLinearToSlowEaseIn,
                     elevation: 0.0,
                     items: items,
-                    initialActiveIndex: 4,
+                    initialActiveIndex: 1,
                     height: 45,
                     top: -15,
                     onTap: (int i) async {
