@@ -1,16 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  final String email;
-  final String id;
-  final String photoUrl;
-  final String username;
-  final String usn;
-  final String joined;
-  final String batch;
-  final String branch;
+  String email;
+  String id;
+  String photoUrl;
+  String username;
+  String usn;
+  String joined;
+  String batch;
+  String branch;
+  String feeds;
 
-  const User(
+  User(
       {this.username,
       this.id,
       this.photoUrl,
@@ -18,7 +19,34 @@ class User {
       this.usn,
       this.joined,
       this.batch,
-      this.branch});
+      this.branch,
+      this.feeds});
+
+  Map toMap(User user) {
+    var data = Map<String, dynamic>();
+    data['uid'] = user.id;
+    data['email'] = user.email;
+    data['photoUrl'] = user.photoUrl;
+    data['createdAt'] = user.joined;
+    data['batch'] = user.batch;
+    data['branch'] = user.branch;
+    data['usn'] = user.usn;
+    data['feeds'] = user.feeds;
+    data['userName'] = user.username;
+    return data;
+  }
+
+  User.fromMap(Map<String, dynamic> mapData) {
+    this.id = mapData['uid'];
+    this.email = mapData['email'];
+    this.photoUrl = mapData['photoUrl'];
+    this.joined = mapData['createdAt'];
+    this.batch = mapData['batch'];
+    this.branch = mapData['branch'];
+    this.feeds = mapData['feeds'];
+    this.usn = mapData['usn'];
+    this.username = mapData['userName'];
+  }
 
   factory User.fromDocumentSnapshot(DocumentSnapshot document) {
     return User(

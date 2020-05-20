@@ -1,122 +1,189 @@
 import 'package:bridge/Routes/Router.dart';
 import 'package:bridge/Services/Auth.dart';
+import 'package:bridge/Services/Repository.dart';
+import 'package:bridge/models/Users.dart';
+import 'package:bridge/pages/HomePage/Drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:getflutter/getflutter.dart';
 
 class FeedPage extends StatefulWidget {
-  final user;
-
-  const FeedPage({Key key, this.user}) : super(key: key);
   @override
   _FeedPageState createState() => _FeedPageState();
 }
 
 class _FeedPageState extends State<FeedPage> {
+  var _repository = Repository();
+  final Firestore _firestore = Firestore.instance;
+  User currentUser, user;
+  IconData icon;
+  Color color;
+  Stream<QuerySnapshot> _stream;
   var curmax = 2;
 
-  var list = List.generate(15, (i) => 'i');
-
   var _controller = ScrollController();
+
+  void fetchFeed() async {
+    FirebaseUser currentUser = await _repository.getCurrentUser();
+
+    User user = await _repository.fetchUserDetailsById(currentUser.uid);
+    setState(() {
+      this.currentUser = user;
+    });
+
+    _stream = _repository.fetchFeed();
+  }
 
   @override
   void initState() {
     _controller.addListener(() {
       if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        _loadMore();
+        getMore();
       }
     });
     super.initState();
+    fetchFeed();
+    getFeeds();
+  }
+
+  List<DocumentSnapshot> feeds = [];
+  bool loadingFeeds = true, gettinmorefeeds = false, moreAvailable = true;
+  DocumentSnapshot last;
+  getFeeds() async {
+    setState(() {
+      loadingFeeds = true;
+    });
+    Query q = _firestore
+        .collection('posts')
+        .orderBy('time', descending: true)
+        .limit(2);
+    QuerySnapshot querySnapshot = await q.getDocuments();
+    feeds = querySnapshot.documents;
+    last = querySnapshot.documents[querySnapshot.documents.length - 1];
+    setState(() {
+      loadingFeeds = false;
+    });
+  }
+
+  getMore() async {
+    print('inside getmore');
+    if (moreAvailable == false) {
+      print('no feeds');
+      return;
+    }
+    if (gettinmorefeeds == true) {
+      print('no getting feeds');
+      return;
+    }
+    gettinmorefeeds = true;
+    Query q = _firestore
+        .collection('posts')
+        .orderBy('time', descending: true)
+        .startAfter([last.data['time']]).limit(2);
+    QuerySnapshot querySnapshot = await q.getDocuments();
+    feeds.addAll(querySnapshot.documents);
+    if (querySnapshot.documents.length < 2) {
+      moreAvailable = false;
+    } else {
+      last = querySnapshot.documents[querySnapshot.documents.length - 1];
+    }
+    setState(() {});
+    gettinmorefeeds = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            // title: Text('Bridge'),
-            centerTitle: true,
-            floating: true,
-            leading: IconButton(
-              icon: FaIcon(FontAwesomeIcons.plus),
-              onPressed: () {},
-              iconSize: 35,
+    return currentUser != null
+        ? Scaffold(
+            drawer: AppDrawer(
+              user: currentUser,
+            ),
+            floatingActionButton: FloatingActionButton(onPressed: null),
+            body: loadingFeeds == true
+                ? GFLoader(
+                    type: GFLoaderType.custom,
+                    loaderIconOne: Text('Please'),
+                    loaderIconTwo: Text('Wait'),
+                    loaderIconThree: Text('a moment'),
+                  )
+                : feeds.length == 0
+                    ? Center(
+                        child: Text("no feeds"),
+                      )
+                    : sliverPage(),
+          )
+        : Center(
+            child: GFLoader(
+              type: GFLoaderType.custom,
+              loaderIconOne: Icon(Icons.insert_emoticon),
+              loaderIconTwo: Icon(Icons.insert_emoticon),
+              loaderIconThree: Icon(Icons.insert_emoticon),
+            ),
+          );
+  }
+
+  Widget sliverPage() {
+    return CustomScrollView(
+      controller: _controller,
+      slivers: <Widget>[
+        SliverAppBar(
+          elevation: 0.0,
+          backgroundColor: Colors.transparent,
+          title: Text('Bridge'),
+          centerTitle: true,
+          floating: true,
+          leading: IconButton(
+            icon: FaIcon(FontAwesomeIcons.plus),
+            onPressed: () {
+              Navigator.pushNamed(context, FeedaddRoute);
+            },
+            iconSize: 35,
+            splashColor: Colors.lightBlueAccent,
+          ),
+          actions: <Widget>[
+            IconButton(
+              onPressed: null,
+              icon: FaIcon(
+                FontAwesomeIcons.filter,
+                // color: Colors.white70,
+              ),
               splashColor: Colors.lightBlueAccent,
             ),
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, HomeViewRoute);
-                },
-                icon: FaIcon(
-                  FontAwesomeIcons.filter,
-                  // color: Colors.white70,
-                ),
-                splashColor: Colors.lightBlueAccent,
-              ),
-              IconButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, LoginViewRoute);
-                  AuthService().signOut();
-                },
-                icon: FaIcon(
-                  FontAwesomeIcons.lock,
-                  // color: Colors.white70,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  //Navigator.pushNamed(context, LoginViewRoute);
-                  AuthService().signOutGoogle();
-                },
-                icon: FaIcon(
-                  FontAwesomeIcons.userMinus,
-                  // color: Colors.white70,
-                ),
-              ),
-            ],
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index == list.length) return CupertinoActivityIndicator();
-                return FeedChild();
+            IconButton(
+              onPressed: () {
+                //Navigator.pushNamed(context, LoginViewRoute);
+                AuthService().signOutGoogle();
               },
-              childCount: list.length + 1,
+              icon: FaIcon(
+                FontAwesomeIcons.userMinus,
+                // color: Colors.white70,
+              ),
             ),
-          )
-        ],
-      ),
+          ],
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              print('$index,${feeds.length}');
+              return feedChild(index: index, list: feeds);
+            },
+            // childCount: snapshot.data.documents.length,
+            childCount: feeds.length,
+          ),
+        ),
+      ],
     );
   }
 
-  void _loadMore() {
-    for (int i = curmax; i < curmax + 2; i++) {
-      list.add('value');
-    }
+  Widget feedChild({int index, List<DocumentSnapshot> list}) {
+    bool heart = true;
+    bool comment = true;
+    bool bookmark = true;
+    print(list.length);
 
-    curmax = curmax + 2;
-  }
-}
-
-class FeedChild extends StatefulWidget {
-  FeedChild({Key key, this.ss}) : super(key: key);
-  final ss;
-
-  @override
-  _FeedChildState createState() => _FeedChildState();
-}
-
-class _FeedChildState extends State<FeedChild> {
-  bool heart = true;
-  bool comment = true;
-  bool bookmark = true;
-
-  @override
-  Widget build(BuildContext context) {
     return Card(
       margin: EdgeInsets.all(15.0),
       elevation: 5,
@@ -130,7 +197,7 @@ class _FeedChildState extends State<FeedChild> {
                   CircleAvatar(
                     radius: 15,
                     backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+                      list[index].data['postOwnerPhotoUrl'],
                     ),
                   ),
                   SizedBox(
@@ -165,7 +232,7 @@ class _FeedChildState extends State<FeedChild> {
               ),
             ),
             Image.network(
-              'https://images.unsplash.com/photo-1504610926078-a1611febcad3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80',
+              list[index].data['imgUrl'],
               loadingBuilder: (context, child, progress) {
                 return progress == null
                     ? child
@@ -219,14 +286,14 @@ class _FeedChildState extends State<FeedChild> {
       ),
     );
   }
+}
 
-  IconButton buildIconButton({@required icon, ontap}) {
-    return IconButton(
-      onPressed: ontap,
-      icon: FaIcon(
-        icon,
-        color: Colors.white70,
-      ),
-    );
-  }
+IconButton buildIconButton({@required icon, ontap}) {
+  return IconButton(
+    onPressed: ontap,
+    icon: FaIcon(
+      icon,
+      color: Colors.white70,
+    ),
+  );
 }

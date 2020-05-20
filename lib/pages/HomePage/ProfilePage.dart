@@ -1,8 +1,8 @@
 import 'package:bridge/models/Users.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   final FirebaseUser user;
@@ -47,6 +47,14 @@ class _ProfilePageState extends State<ProfilePage> {
           margin: EdgeInsets.all(20.0),
           child: Column(
             children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.style),
+                onPressed: () {
+                  // Navigator.popAndPushNamed(context, FeedRoute,
+                  // arguments: user);
+                  Navigator.of(context).pop();
+                },
+              ),
               Stack(
                 children: <Widget>[
                   Container(
@@ -123,17 +131,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       title: Text(user.email),
                       leading: Icon(Icons.email),
                     ),
-                    // ListTile(
-                    //   title: Text("Phone"),
-                    //   subtitle: Text("+977-9815225566"),
-                    //   leading: Icon(Icons.phone),
-                    // ),
-                    // ListTile(
-                    //   subtitle: Text("About"),
-                    //   title: Text(
-                    //       "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Nulla, illo repellendus quas beatae reprehenderit nemo, debitis explicabo officiis sit aut obcaecati iusto porro? Exercitationem illum consequuntur magnam eveniet delectus ab."),
-                    //   leading: Icon(Icons.person),
-                    // ),
                     ListTile(
                       subtitle: Text("Joined Date"),
                       title: Text(user.joined),

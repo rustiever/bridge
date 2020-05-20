@@ -22,9 +22,7 @@ class _TabPagesState extends State<TabPages> {
       children: [
         Text('coming soon'),
         Text('coming soon'),
-        FeedPage(
-          user: widget.user,
-        ),
+        FeedPage(),
         Text('coming soon'),
         ProfilePage(
           user: widget.user,

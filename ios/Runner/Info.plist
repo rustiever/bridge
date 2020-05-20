@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Why is my app authenticating using face id?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Why is my app authenticating using face id?</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Why is my app authenticating using face id?</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Why is my app authenticating using face id?</string>
 	<key>CFBundleDevelopmentRegion</key>
