@@ -26,6 +26,8 @@ class _FeedAddState extends State<FeedAdd> with SingleTickerProviderStateMixin {
   TabController tabController;
   ScrollController controller;
 
+  int _stackIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -55,7 +57,7 @@ class _FeedAddState extends State<FeedAdd> with SingleTickerProviderStateMixin {
   _showImageDialog() {
     return showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: ((context) {
         return SimpleDialog(
           children: <Widget>[
@@ -96,144 +98,6 @@ class _FeedAddState extends State<FeedAdd> with SingleTickerProviderStateMixin {
       }),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   MediaQueryData sd = MediaQuery.of(context);
-  //   return SafeArea(
-  //     child: Scaffold(
-  //       resizeToAvoidBottomPadding: false,
-  //       // appBar: AppBar(
-  //       //   // backgroundColor: Colors.white,
-  //       //   title: Text('what you wanna post???'),
-  //       // ),
-  //       body: GFTabs(
-  //         indicator: BoxDecoration(
-  //           gradient: LinearGradient(
-  //             colors: [Color(0xff374ABE), Color(0xff64B6FF)],
-  //             begin: Alignment.centerLeft,
-  //             end: Alignment.centerRight,
-  //           ),
-  //           borderRadius: BorderRadius.circular(30.0),
-  //         ),
-  //         labelColor: Colors.yellowAccent,
-  //         height: double.infinity,
-  //         initialIndex: 0,
-  //         length: 2,
-  //         tabBarHeight: 50,
-  //         tabs: <Widget>[
-  //           Tab(
-  //             child: Text(
-  //               "Post",
-  //             ),
-  //           ),
-  //           Tab(
-  //             child: Text(
-  //               "Poll",
-  //             ),
-  //           ),
-  //         ],
-  //         tabBarView: GFTabBarView(
-  //           children: <Widget>[
-  //             Container(
-  //               child: Column(
-  //                 children: <Widget>[
-  //                   GFCard(
-  //                     boxFit: BoxFit.cover,
-  //                     // imageOverlay: NetworkImage(
-  //                     //     'https://images.unsplash.com/photo-1511933801659-156d99ebea3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'),
-  //                     title: GFListTile(
-  //                       // avatar: GFAvatar(),
-  //                       title: Text(
-  //                         "What's in your mind???",
-  //                         style: TextStyle(fontSize: 25),
-  //                       ),
-  //                       // subTitle: Text('subtitle'),
-  //                     ),
-  //                     content: TextField(
-  //                       textAlign: TextAlign.center,
-  //                       decoration: InputDecoration(
-  //                         hintText: 'caption....',
-  //                       ),
-  //                     ),
-  //                     buttonBar: GFButtonBar(
-  //                       //  alignment: MainAxisAlignment.center,
-  //                       children: <Widget>[
-  //                         Row(
-  //                           children: <Widget>[
-  //                             Expanded(
-  //                               child: GFButton(
-  //                                 onPressed: () async {
-  //                                   FirebaseUser user =
-  //                                       await _repository.getCurrentUser();
-  //                                   String url;
-  //                                   if (user != null) {
-  //                                     if (imageFile != null) {
-  //                                       compressImage();
-  //                                       url = await _repository
-  //                                           .uploadImageToStorage(imageFile);
-  //                                     }
-  //                                     User uuser = (await _repository
-  //                                         .retrieveUserDetails(user));
-  //                                     await _repository.addPostToDb(
-  //                                         uuser,
-  //                                         url ?? 'no image',
-  //                                         _captionController.text);
-  //                                     Navigator.pushReplacementNamed(
-  //                                         context, FeedRoute);
-  //                                   } else {
-  //                                     print('user null');
-  //                                   }
-  //                                 },
-  //                                 text: 'Post',
-  //                               ),
-  //                             ),
-  //                             IconButton(
-  //                                 icon: Icon(Icons.add_a_photo),
-  //                                 onPressed: _showImageDialog),
-  //                           ],
-  //                         )
-  //                       ],
-  //                     ),
-  //                   ),
-  //                   Container(
-  //                     // height:
-  //                     child: Stack(
-  //                       children: [
-  //                         imageFile == null
-  //                             ? Center(child: Text('No image selected.'))
-  //                             : Container(
-  //                                 color: Colors.orangeAccent,
-  //                                 // height: sd.size.height / 4,
-  //                                 // width: double.infinity,
-  //                                 child: Image.file(imageFile),
-  //                               ),
-  //                         IconButton(
-  //                           icon: Icon(Icons.remove_circle),
-  //                           onPressed: () {
-  //                             setState(
-  //                               () {
-  //                                 imageFile = null;
-  //                               },
-  //                             );
-  //                           },
-  //                         )
-  //                       ],
-  //                     ),
-  //                   )
-  //                 ],
-  //               ),
-  //             ),
-  //             Container(
-  //               child: Icon(Icons.directions_bike),
-  //               color: Colors.red,
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   void compressImage() async {
     print('starting compression');
@@ -281,86 +145,93 @@ class _FeedAddState extends State<FeedAdd> with SingleTickerProviderStateMixin {
               ),
             ];
           },
-          body: Form(
-            key: _formKey,
-            child: GFTabBarView(
-              controller: tabController,
-              children: [
-                Container(
-                  // height: dHiegt(context),
-                  child: Column(
-                    children: <Widget>[
-                      GFCard(
-                        boxFit: BoxFit.cover,
-                        imageOverlay: NetworkImage(
-                            'https://images.unsplash.com/photo-1511933801659-156d99ebea3e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'),
-                        title: GFListTile(
-                          // avatar: GFAvatar(),
-                          title: Text(
-                            "What's in your mind???",
-                            style: TextStyle(fontSize: 25),
+          body: IndexedStack(
+            index: _stackIndex,
+            children: [
+              Form(
+                key: _formKey,
+                child: GFTabBarView(
+                  controller: tabController,
+                  children: [
+                    Container(
+                      // height: dHiegt(context),
+                      child: Column(
+                        children: <Widget>[
+                          GFCard(
+                            boxFit: BoxFit.cover,
+                            imageOverlay: NetworkImage(
+                                'https://images.unsplash.com/photo-1515462277126-2dd0c162007a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'),
+                            title: GFListTile(
+                              // avatar: GFAvatar(),
+                              title: Text(
+                                "What's in your mind???",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                              // subTitle: Text('subtitle'),
+                            ),
+                            content: TextFormField(
+                              validator: (value) {
+                                if (value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              },
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                hintText: 'share somthing....',
+                              ),
+                            ),
+                            buttonBar: GFButtonBar(
+                              //  alignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    GFButton(
+                                      onPressed: post,
+                                      text: 'Share',
+                                    ),
+                                    IconButton(
+                                        color: Colors.blueAccent,
+                                        icon: Icon(Icons.add_a_photo),
+                                        onPressed: _showImageDialog)
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
-                          // subTitle: Text('subtitle'),
-                        ),
-                        content: TextFormField(
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            hintText: 'caption....',
-                          ),
-                        ),
-                        buttonBar: GFButtonBar(
-                          //  alignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            GFButton(
-                              onPressed: post,
-                              text: 'Share',
-                            )
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: _showImageDialog,
-                        child: Container(
-                          height: dHiegt(context) / 2,
-                          child: Stack(
-                            children: [
-                              imageFile == null
-                                  ? Text('No image selected.')
+                          InkWell(
+                            // onTap: _showImageDialog,
+                            child: Container(
+                              height: dHiegt(context) / 2,
+                              child: imageFile == null
+                                  ? Center(child: Text('No image selected.'))
                                   : Container(
                                       color: Colors.orangeAccent,
                                       // height: sd.size.height / 4,
                                       // width: double.infinity,
-                                      child: Image.file(imageFile),
+                                      child: InkWell(
+                                          onDoubleTap: () {
+                                            setState(() => imageFile = null);
+                                          },
+                                          child: Image.file(imageFile)),
                                     ),
-                              IconButton(
-                                icon: Icon(Icons.remove_circle),
-                                onPressed: () {
-                                  setState(
-                                    () {
-                                      imageFile = null;
-                                    },
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Container(
+                      child: Icon(Icons.directions_bike),
+                      color: Colors.red,
+                    ),
+                  ],
                 ),
-                Container(
-                  child: Icon(Icons.directions_bike),
-                  color: Colors.red,
-                ),
-              ],
-            ),
+              ),
+              Center(
+                child: CircularProgressIndicator(),
+              )
+            ],
           ),
         ),
       ),
@@ -369,6 +240,7 @@ class _FeedAddState extends State<FeedAdd> with SingleTickerProviderStateMixin {
 
   post() async {
     if (_formKey.currentState.validate() || imageFile != null) {
+      setState(() => _stackIndex = 1);
       FirebaseUser user = await _repository.getCurrentUser();
       String url;
       if (user != null) {

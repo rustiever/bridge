@@ -37,12 +37,26 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         body: DoubleBackToCloseApp(
-          child: HomePage(),
+          child: Home(),
           snackBar: SnackBar(
             content: Text('Tap again to leave'),
           ),
         ),
       ),
+    );
+  }
+}
+
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text('data'),
     );
   }
 }

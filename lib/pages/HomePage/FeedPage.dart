@@ -3,6 +3,7 @@ import 'package:bridge/Services/Auth.dart';
 import 'package:bridge/Services/Repository.dart';
 import 'package:bridge/models/Users.dart';
 import 'package:bridge/pages/HomePage/Drawer.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,15 +17,12 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  var _repository = Repository();
+  Repository _repository = Repository();
   final Firestore _firestore = Firestore.instance;
   User currentUser, user;
-  IconData icon;
-  Color color;
   Stream<QuerySnapshot> _stream;
-  var curmax = 2;
 
-  var _controller = ScrollController();
+  ScrollController _controller = ScrollController();
 
   void fetchFeed() async {
     FirebaseUser currentUser = await _repository.getCurrentUser();
@@ -53,6 +51,7 @@ class _FeedPageState extends State<FeedPage> {
   bool loadingFeeds = true, gettinmorefeeds = false, moreAvailable = true;
   DocumentSnapshot last;
   getFeeds() async {
+    if (!mounted) return;
     setState(() {
       loadingFeeds = true;
     });
@@ -61,14 +60,18 @@ class _FeedPageState extends State<FeedPage> {
         .orderBy('time', descending: true)
         .limit(2);
     QuerySnapshot querySnapshot = await q.getDocuments();
-    feeds = querySnapshot.documents;
-    last = querySnapshot.documents[querySnapshot.documents.length - 1];
+    print(querySnapshot.documents.length);
+    if (querySnapshot.documents.length > 0) {
+      feeds = querySnapshot.documents;
+      last = querySnapshot.documents[querySnapshot.documents.length - 1];
+    }
+    if (!mounted) return;
     setState(() {
       loadingFeeds = false;
     });
   }
 
-  getMore() async {
+  Future<void> getMore() async {
     print('inside getmore');
     if (moreAvailable == false) {
       print('no feeds');
@@ -101,7 +104,7 @@ class _FeedPageState extends State<FeedPage> {
             drawer: AppDrawer(
               user: currentUser,
             ),
-            floatingActionButton: FloatingActionButton(onPressed: null),
+            // floatingActionButton: FloatingActionButton(onPressed: null),
             body: loadingFeeds == true
                 ? GFLoader(
                     type: GFLoaderType.custom,
@@ -109,11 +112,7 @@ class _FeedPageState extends State<FeedPage> {
                     loaderIconTwo: Text('Wait'),
                     loaderIconThree: Text('a moment'),
                   )
-                : feeds.length == 0
-                    ? Center(
-                        child: Text("no feeds"),
-                      )
-                    : sliverPage(),
+                : sliverPage(),
           )
         : Center(
             child: GFLoader(
@@ -164,25 +163,34 @@ class _FeedPageState extends State<FeedPage> {
             ),
           ],
         ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              print('$index,${feeds.length}');
-              return feedChild(index: index, list: feeds);
-            },
-            // childCount: snapshot.data.documents.length,
-            childCount: feeds.length,
-          ),
-        ),
+        feeds.length == 0
+            ? SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Center(
+                      child: Text("no feeds"),
+                    )
+                  ],
+                ),
+              )
+            : SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    print('$index,${feeds.length}');
+                    return feedChild(index: index, list: feeds);
+                  },
+                  childCount: feeds.length,
+                ),
+              ),
       ],
     );
   }
 
+  bool heart = true;
+  bool comment = true;
+  bool bookmark = true;
   Widget feedChild({int index, List<DocumentSnapshot> list}) {
-    bool heart = true;
-    bool comment = true;
-    bool bookmark = true;
-    print(list.length);
+    // print(list[index].data['time']);
 
     return Card(
       margin: EdgeInsets.all(15.0),
@@ -208,10 +216,10 @@ class _FeedPageState extends State<FeedPage> {
                       style: TextStyle(fontSize: 20),
                       children: [
                         TextSpan(
-                          text: 'Rustiever1',
+                          text: list[index].data['postOwnerName'],
                         ),
                         TextSpan(
-                          text: ' 25mins ago',
+                          // text: ' 25mins ago',
                           style: TextStyle(
                               // color: Colors.black45,
                               fontSize: 15,
@@ -220,34 +228,27 @@ class _FeedPageState extends State<FeedPage> {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: 60,
-                  ),
+                  Spacer(),
+                  // SizedBox(
+                  //   width: 112,
+                  // ),
                   IconButton(
-                    icon: Icon(Icons.more_horiz),
+                    icon: Icon(Icons.more_vert),
                     onPressed: () {},
                     iconSize: 25,
                   )
                 ],
               ),
             ),
-            Image.network(
-              list[index].data['imgUrl'],
-              loadingBuilder: (context, child, progress) {
-                return progress == null
-                    ? child
-                    : Center(
-                        child: CircularProgressIndicator(),
-                      );
-              },
+            CachedNetworkImage(
+              imageUrl: list[index].data['imgUrl'],
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  CircularProgressIndicator(value: downloadProgress.progress),
+              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                buildIconButton(
-                  icon: FontAwesomeIcons.solidEye,
-                ),
-                Text('521m'),
                 buildIconButton(
                     icon: heart
                         ? FontAwesomeIcons.heart
@@ -258,6 +259,7 @@ class _FeedPageState extends State<FeedPage> {
                       });
                     }),
                 Text('123k'),
+                Spacer(),
                 buildIconButton(
                     icon: comment
                         ? FontAwesomeIcons.commentDots
@@ -268,8 +270,10 @@ class _FeedPageState extends State<FeedPage> {
                       });
                     }),
                 Text('123m'),
-                buildIconButton(
-                    icon: FontAwesomeIcons.locationArrow, ontap: () {}),
+                Spacer(),
+                // buildIconButton(
+                //     icon: FontAwesomeIcons.locationArrow, ontap: () {}),
+                // Spacer(),
                 buildIconButton(
                     icon: bookmark
                         ? FontAwesomeIcons.bookmark
@@ -288,7 +292,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 }
 
-IconButton buildIconButton({@required icon, ontap}) {
+IconButton buildIconButton({@required icon, @required ontap}) {
   return IconButton(
     onPressed: ontap,
     icon: FaIcon(

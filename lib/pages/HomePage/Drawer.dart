@@ -46,11 +46,11 @@ class AppDrawer extends StatelessWidget {
                 minRadius: 45,
                 maxRadius: 63,
                 backgroundImage: NetworkImage(
-                  'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+                  user.photoUrl,
                 ),
               ),
               Text(
-                "Rustiever",
+                user.username,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,

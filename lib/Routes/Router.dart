@@ -1,3 +1,4 @@
+import 'package:bridge/models/Users.dart';
 import 'package:bridge/pages/HomePage/FeedAdd.dart';
 import 'package:bridge/pages/HomePage/FeedPage.dart';
 import 'package:bridge/pages/HomePage/HomePage.dart';
@@ -5,7 +6,6 @@ import 'package:bridge/pages/HomePage/ProfilePage.dart';
 import 'package:bridge/pages/SignIn/GoogleLogin.dart';
 import 'package:bridge/pages/SignIn/LoginPage.dart';
 import 'package:bridge/pages/SignIn/SignupPage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +34,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case GoogleLoginRoute:
       return CupertinoPageRoute(builder: (context) => GoogleLogin());
     case ProfileRoute:
-      var user = settings.arguments as FirebaseUser;
+      var user = settings.arguments as User;
       return CupertinoPageRoute(builder: (_) => ProfilePage(user: user));
     case FeedRoute:
       return CupertinoPageRoute(builder: (_) => FeedPage());
