@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         body: DoubleBackToCloseApp(
-          child: Home(),
+          child: HomePage(),
           snackBar: SnackBar(
             content: Text('Tap again to leave'),
           ),
@@ -47,16 +47,16 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
+// class Home extends StatefulWidget {
+//   @override
+//   _HomeState createState() => _HomeState();
+// }
 
-class _HomeState extends State<Home> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Text('data'),
-    );
-  }
-}
+// class _HomeState extends State<Home> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Text('data'),
+//     );
+//   }
+// }

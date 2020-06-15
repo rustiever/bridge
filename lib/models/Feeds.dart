@@ -7,6 +7,7 @@ class Feed {
   FieldValue time;
   String postOwnerName;
   String postOwnerPhotoUrl;
+  String mode;
 
   Feed(
       {this.currentUserUid,
@@ -14,16 +15,18 @@ class Feed {
       this.caption,
       this.time,
       this.postOwnerName,
-      this.postOwnerPhotoUrl});
+      this.postOwnerPhotoUrl,
+      this.mode});
 
   Map toMap(Feed post) {
-    var data = Map<String, dynamic>();
+    Map<String, dynamic> data = Map<String, dynamic>();
     data['ownerUid'] = post.currentUserUid;
     data['imgUrl'] = post.imgUrl;
     data['caption'] = post.caption;
     data['time'] = post.time;
     data['postOwnerName'] = post.postOwnerName;
     data['postOwnerPhotoUrl'] = post.postOwnerPhotoUrl;
+    data['mode'] = post.mode;
     return data;
   }
 
@@ -34,5 +37,6 @@ class Feed {
     this.time = mapData['time'];
     this.postOwnerName = mapData['postOwnerName'];
     this.postOwnerPhotoUrl = mapData['postOnerPhotoUrl'];
+    this.mode = mapData['mode'];
   }
 }

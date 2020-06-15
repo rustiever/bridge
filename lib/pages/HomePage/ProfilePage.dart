@@ -60,8 +60,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     padding: EdgeInsets.all(16.0),
                     margin: EdgeInsets.only(top: 16.0),
                     decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(5.0)),
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[

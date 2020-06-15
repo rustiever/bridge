@@ -20,7 +20,7 @@ class _FeedPageState extends State<FeedPage> {
   Repository _repository = Repository();
   final Firestore _firestore = Firestore.instance;
   User currentUser, user;
-  Stream<QuerySnapshot> _stream;
+  // Stream<QuerySnapshot> _stream;
 
   ScrollController _controller = ScrollController();
 
@@ -28,20 +28,25 @@ class _FeedPageState extends State<FeedPage> {
     FirebaseUser currentUser = await _repository.getCurrentUser();
 
     User user = await _repository.fetchUserDetailsById(currentUser.uid);
-    setState(() {
-      this.currentUser = user;
-    });
+    setState(
+      () {
+        this.currentUser = user;
+      },
+    );
 
-    _stream = _repository.fetchFeed();
+    // _stream = _repository.fetchFeed();
   }
 
   @override
   void initState() {
-    _controller.addListener(() {
-      if (_controller.position.pixels == _controller.position.maxScrollExtent) {
-        getMore();
-      }
-    });
+    _controller.addListener(
+      () {
+        if (_controller.position.pixels ==
+            _controller.position.maxScrollExtent) {
+          getMore();
+        }
+      },
+    );
     super.initState();
     fetchFeed();
     getFeeds();
@@ -50,25 +55,31 @@ class _FeedPageState extends State<FeedPage> {
   List<DocumentSnapshot> feeds = [];
   bool loadingFeeds = true, gettinmorefeeds = false, moreAvailable = true;
   DocumentSnapshot last;
+
   getFeeds() async {
     if (!mounted) return;
-    setState(() {
-      loadingFeeds = true;
-    });
-    Query q = _firestore
+    setState(
+      () {
+        loadingFeeds = true;
+      },
+    );
+    Query postq = _firestore
         .collection('posts')
         .orderBy('time', descending: true)
         .limit(2);
-    QuerySnapshot querySnapshot = await q.getDocuments();
-    print(querySnapshot.documents.length);
+
+    QuerySnapshot querySnapshot = await postq.getDocuments();
     if (querySnapshot.documents.length > 0) {
       feeds = querySnapshot.documents;
+      print(feeds.length);
       last = querySnapshot.documents[querySnapshot.documents.length - 1];
     }
     if (!mounted) return;
-    setState(() {
-      loadingFeeds = false;
-    });
+    setState(
+      () {
+        loadingFeeds = false;
+      },
+    );
   }
 
   Future<void> getMore() async {
@@ -82,16 +93,23 @@ class _FeedPageState extends State<FeedPage> {
       return;
     }
     gettinmorefeeds = true;
-    Query q = _firestore
+    Query postq = _firestore
         .collection('posts')
         .orderBy('time', descending: true)
         .startAfter([last.data['time']]).limit(2);
-    QuerySnapshot querySnapshot = await q.getDocuments();
+
+    QuerySnapshot querySnapshot = await postq.getDocuments();
+    //---------------------------------------------------
+
+    //---------------------------------------------------
     feeds.addAll(querySnapshot.documents);
+    print(feeds.length);
+
     if (querySnapshot.documents.length < 2) {
       moreAvailable = false;
-    } else {
+    } else if (querySnapshot.documents.length >= 2) {
       last = querySnapshot.documents[querySnapshot.documents.length - 1];
+      // print(last.data);
     }
     setState(() {});
     gettinmorefeeds = false;
@@ -153,7 +171,7 @@ class _FeedPageState extends State<FeedPage> {
             ),
             IconButton(
               onPressed: () {
-                //Navigator.pushNamed(context, LoginViewRoute);
+                Navigator.pushNamed(context, LoginViewRoute);
                 AuthService().signOutGoogle();
               },
               icon: FaIcon(
@@ -176,8 +194,11 @@ class _FeedPageState extends State<FeedPage> {
             : SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    print('$index,${feeds.length}');
-                    return feedChild(index: index, list: feeds);
+                    // print('$index,${feeds.length}');
+                    return feedChild(
+                      index: index,
+                      list: feeds,
+                    );
                   },
                   childCount: feeds.length,
                 ),
@@ -190,7 +211,72 @@ class _FeedPageState extends State<FeedPage> {
   bool comment = true;
   bool bookmark = true;
   Widget feedChild({int index, List<DocumentSnapshot> list}) {
-    // print(list[index].data['time']);
+    // print(list[index].documentID);
+    if (list[index].data['mode'] == 'poll') {
+      String docId = list[index].documentID;
+      return StreamBuilder(
+        stream: _firestore.collection('posts').document(docId).snapshots(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return GFLoader();
+          }
+          Map<String, dynamic> fl = snapshot.data['options'];
+          List<Map<String, int>> ll = [];
+          fl.forEach((key, value) {
+            ll.add({key: value});
+          });
+          print('calling');
+          return Card(
+            margin: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            elevation: 0.0,
+            child: Column(
+              children: [
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    snapshot.data['question'],
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                ListView.builder(
+                  itemCount: ll.length,
+                  shrinkWrap: true,
+                  itemBuilder: (_, int i) {
+                    var val = ll[i]
+                        .values
+                        .toString()
+                        .substring(1, ll[i].values.toString().length - 1);
+                    return ListTile(
+                      onTap: () async {
+                        int count = 0;
+                        count = int.tryParse(val);
+                        fl.update(
+                            ll[i]
+                                .keys
+                                .toString()
+                                .substring(1, ll[i].keys.toString().length - 1),
+                            (value) => ++count);
+
+                        print(ll[i].values);
+                        print(count);
+                        await _firestore
+                            .collection('posts')
+                            .document(docId)
+                            .updateData({'options': fl});
+                      },
+                      title: Text(
+                        ll[i].keys.toString(),
+                      ),
+                      trailing: Text(val),
+                    );
+                  },
+                )
+              ],
+            ),
+          );
+        },
+      );
+    }
 
     return Card(
       margin: EdgeInsets.all(15.0),
@@ -205,7 +291,7 @@ class _FeedPageState extends State<FeedPage> {
                   CircleAvatar(
                     radius: 15,
                     backgroundImage: NetworkImage(
-                      list[index].data['postOwnerPhotoUrl'],
+                      list[index].data['postOwnerPhotoUrl'], //TODO url!= null
                     ),
                   ),
                   SizedBox(
@@ -250,39 +336,48 @@ class _FeedPageState extends State<FeedPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 buildIconButton(
-                    icon: heart
-                        ? FontAwesomeIcons.heart
-                        : FontAwesomeIcons.solidHeart,
-                    ontap: () {
-                      setState(() {
+                  icon: heart
+                      ? FontAwesomeIcons.heart
+                      : FontAwesomeIcons.solidHeart,
+                  ontap: () {
+                    setState(
+                      () {
                         heart = !heart;
-                      });
-                    }),
+                      },
+                    );
+                  },
+                ),
                 Text('123k'),
                 Spacer(),
                 buildIconButton(
-                    icon: comment
-                        ? FontAwesomeIcons.commentDots
-                        : FontAwesomeIcons.solidCommentDots,
-                    ontap: () {
-                      setState(() {
+                  icon: comment
+                      ? FontAwesomeIcons.commentDots
+                      : FontAwesomeIcons.solidCommentDots,
+                  ontap: () {
+                    setState(
+                      () {
                         comment = !comment;
-                      });
-                    }),
+                      },
+                    );
+                  },
+                ),
                 Text('123m'),
                 Spacer(),
                 // buildIconButton(
                 //     icon: FontAwesomeIcons.locationArrow, ontap: () {}),
                 // Spacer(),
                 buildIconButton(
-                    icon: bookmark
-                        ? FontAwesomeIcons.bookmark
-                        : FontAwesomeIcons.solidBookmark,
-                    ontap: () {
-                      setState(() {
+                  icon: bookmark
+                      ? FontAwesomeIcons.bookmark
+                      : FontAwesomeIcons.solidBookmark,
+                  ontap: () {
+                    setState(
+                      () {
                         bookmark = !bookmark;
-                      });
-                    }),
+                      },
+                    );
+                  },
+                ),
               ],
             )
           ],

@@ -24,6 +24,10 @@ class Repository {
   Future<void> addPostToDb(User currentUser, String imgUrl, String caption) =>
       _firebaseProvider.addPostToDb(currentUser, imgUrl, caption);
 
+  Future<void> addPollToDb(
+          User currentUser, Map<String, int> options, String question) =>
+      _firebaseProvider.addPollToDb(currentUser, options, question);
+
   Future<User> fetchUserDetailsById(String uid) =>
       _firebaseProvider.fetchUserDetailsById(uid);
 

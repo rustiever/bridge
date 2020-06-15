@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bridge/models/Feeds.dart';
+import 'package:bridge/models/Polling.dart';
 import 'package:bridge/models/Users.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +12,7 @@ class FirebaseProvider {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final Firestore _firestore = Firestore.instance;
   User user;
-  Feed post;
+  var post;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   StorageReference _storageReference;
 
@@ -77,7 +78,21 @@ class FirebaseProvider {
         caption: caption,
         postOwnerName: currentUser.username,
         postOwnerPhotoUrl: currentUser.photoUrl,
-        time: FieldValue.serverTimestamp());
+        time: FieldValue.serverTimestamp(),
+        mode: 'post');
+
+    return _collectionRef.add(post.toMap(post));
+  }
+
+  Future<void> addPollToDb(
+      User currentuser, Map<String, int> options, String question) {
+    CollectionReference _collectionRef = _firestore.collection("posts");
+
+    post = Poll(
+        question: question,
+        options: options,
+        time: FieldValue.serverTimestamp(),
+        mode: 'poll');
 
     return _collectionRef.add(post.toMap(post));
   }
