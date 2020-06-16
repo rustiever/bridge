@@ -32,9 +32,9 @@ Any advise for common problems or issues.
 
 Contributors names and contact info
 
-ex. <shashankneeded@gmail.com>
+<shashankneeded@gmail.com>
 
-ex. <sharanneeded@gmail.com>
+<sharanneeded@gmail.com>
 
 ## Version History
 
