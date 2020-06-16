@@ -61,20 +61,11 @@ class AuthService {
   Future signOutGoogle() async {
     try {
       print("User Sign Out");
+      await googleSignIn.disconnect();
       await googleSignIn.signOut();
       return await _auth.signOut();
     } catch (e) {
       print(e);
     }
   }
-
-  Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print('error signout');
-    }
-  }
-
-  signInWithEmail({String email, String pass}) {}
 }

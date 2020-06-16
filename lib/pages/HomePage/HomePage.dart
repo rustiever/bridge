@@ -33,7 +33,6 @@ class _HomePageState extends State<HomePage> {
           );
         }
         if (!snapshot.hasData || snapshot.data == null) return FirstPage();
-        print(snapshot.data.uid);
         return StreamBuilder(
           stream: Firestore.instance
               .collection('users')

@@ -3,6 +3,7 @@ import 'package:bridge/pages/HomePage/FeedAdd.dart';
 import 'package:bridge/pages/HomePage/FeedPage.dart';
 import 'package:bridge/pages/HomePage/HomePage.dart';
 import 'package:bridge/pages/HomePage/ProfilePage.dart';
+import 'package:bridge/pages/FirstPage.dart';
 import 'package:bridge/pages/SignIn/GoogleLogin.dart';
 import 'package:bridge/pages/SignIn/LoginPage.dart';
 import 'package:bridge/pages/SignIn/SignupPage.dart';
@@ -38,7 +39,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return CupertinoPageRoute(builder: (_) => ProfilePage(user: user));
     case FeedRoute:
       return CupertinoPageRoute(builder: (_) => FeedPage());
+    case GoogleLoginRoute:
+      return CupertinoPageRoute(builder: (context) => GoogleLogin());
     default:
-      return MaterialPageRoute(builder: (context) => LoginPage());
+      return MaterialPageRoute(builder: (context) => FirstPage());
   }
 }
