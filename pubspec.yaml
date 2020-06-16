@@ -27,7 +27,7 @@ dependencies:
   mime:
   path_provider:
   photo_view:
-  # file_picker:
+  file_picker:
 dev_dependencies:
   flutter_test:
     sdk: flutter
