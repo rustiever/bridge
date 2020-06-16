@@ -9,15 +9,21 @@ void main() => runApp(
       ),
     );
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   final title;
 
   const MyApp({Key key, this.title}) : super(key: key);
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: title,
+      title: widget.title,
       onGenerateRoute: router.generateRoute,
       initialRoute: router.HomeViewRoute, // change to LoginViewRoute
       theme: ThemeData(
@@ -31,12 +37,26 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         body: DoubleBackToCloseApp(
-          snackBar: const SnackBar(
+          child: HomePage(),
+          snackBar: SnackBar(
             content: Text('Tap again to leave'),
           ),
-          child: HomePage(),
         ),
       ),
     );
   }
 }
+
+// class Home extends StatefulWidget {
+//   @override
+//   _HomeState createState() => _HomeState();
+// }
+
+// class _HomeState extends State<Home> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Text('data'),
+//     );
+//   }
+// }

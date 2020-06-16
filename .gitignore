@@ -10,12 +10,9 @@
 .svn/
 .vscode
 Session.vim
-plsgod/
-antry/
 .undodir/
 android/app/google-services.json
 android/key.properties
-
 
 # IntelliJ related
 *.iml

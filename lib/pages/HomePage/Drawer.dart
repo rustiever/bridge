@@ -1,7 +1,12 @@
+import 'package:bridge/Routes/Router.dart';
+import 'package:bridge/models/Users.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 
 class AppDrawer extends StatelessWidget {
+  final User user;
+
+  const AppDrawer({Key key, this.user}) : super(key: key);
   Widget _createDrawerItem(
       {IconData icon, String text, GestureTapCallback onTap}) {
     return ListTile(
@@ -18,7 +23,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _createHeader() {
+  Widget _createHeader(context) {
     return GFDrawerHeader(
       margin: EdgeInsets.zero,
       decoration: BoxDecoration(
@@ -28,26 +33,32 @@ class AppDrawer extends StatelessWidget {
               'https://images.unsplash.com/photo-1515387784663-e2e29a23f69e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1534&q=80'),
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 25),
-        child: Column(
-          children: <Widget>[
-            CircleAvatar(
-              minRadius: 45,
-              maxRadius: 63,
-              backgroundImage: NetworkImage(
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).pushNamed(ProfileRoute, arguments: user);
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(right: 25),
+          child: Column(
+            children: <Widget>[
+              CircleAvatar(
+                minRadius: 45,
+                maxRadius: 63,
+                backgroundImage: NetworkImage(
+                  user.photoUrl,
+                ),
               ),
-            ),
-            Text(
-              "Rustiever",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
-                fontWeight: FontWeight.w500,
+              Text(
+                user.username,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -59,7 +70,7 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          _createHeader(),
+          _createHeader(context),
           _createDrawerItem(
             icon: Icons.remove_from_queue,
             text: 'Requests',

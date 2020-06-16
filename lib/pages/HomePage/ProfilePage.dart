@@ -1,11 +1,10 @@
 import 'package:bridge/models/Users.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
-  final FirebaseUser user;
+  final User user;
 
   const ProfilePage({Key key, this.user}) : super(key: key);
   @override
@@ -23,7 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return StreamBuilder<DocumentSnapshot>(
       stream: Firestore.instance
           .collection('users')
-          .document(widget.user.uid)
+          .document(widget.user.id)
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {

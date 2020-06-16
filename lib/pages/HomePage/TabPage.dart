@@ -1,6 +1,5 @@
 import 'package:bridge/pages/HomePage/FeedPage.dart';
 import 'package:bridge/pages/HomePage/ProfilePage.dart';
-import 'package:bridge/pages/Polls/ViewPolls.dart';
 import 'package:flutter/material.dart';
 
 class TabPages extends StatefulWidget {
@@ -22,10 +21,8 @@ class _TabPagesState extends State<TabPages> {
     return TabBarView(
       children: [
         Text('coming soon'),
-        PollingPage(),
-        FeedPage(
-          user: widget.user,
-        ),
+        Text('coming soon'),
+        FeedPage(),
         Text('coming soon'),
         ProfilePage(
           user: widget.user,
