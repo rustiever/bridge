@@ -3,10 +3,11 @@
 ![issues-raw](https://img.shields.io/github/issues-raw/rustiever/bridge)
 ![license](https://img.shields.io/github/license/rustiever/bridge)
 ![last-commit](https://img.shields.io/github/last-commit/rustiever/bridge)
-![stars](https://img.shields.io/github/stars/rustiever/bridge?style=social)
- <a href="https://www.buymeacoffee.com/abdoo" target="_blank">
-    <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
-  </a>
+
+
+
+# Still in development
+
 
 # Bridge
 
@@ -39,8 +40,6 @@ Any advise for common problems or issues.
 ## Authors
 
 Contributors names and contact info
-
-<shashankneeded@gmail.com>
 
 <sharanneeded@gmail.com>
 
