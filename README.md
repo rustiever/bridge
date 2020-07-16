@@ -10,12 +10,12 @@
 
 
 # Bridge
+Bridge is small community app built for college where all activities of college are updated and lot more are there
 
-Simple overview of use/purpose.
 
 ## Description
 
-An in-depth paragraph about your project and overview of use.
+Bridge is an community app for uniting the whole college as family. This app acts as bridge between faculties, students(seniors, juniors) etc.
 
 ## Getting Started
 
@@ -42,6 +42,7 @@ Any advise for common problems or issues.
 Contributors names and contact info
 
 <sharanneeded@gmail.com>
+<shashankneeded@gmail.com>
 
 ## Version History
 
