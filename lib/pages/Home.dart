@@ -1,8 +1,10 @@
+import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/services/auth.dart';
+
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  final dynamic ll;
+  final User ll;
 
   const Home({Key key, this.ll}) : super(key: key);
   @override
@@ -10,14 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Widget> gett(Home sd) {
-    List<Widget> l = List();
-    for (var i in sd.ll) {
-      l.add(SelectableText(i ?? 'none'));
-    }
-    return l;
-  }
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -25,7 +19,7 @@ class _HomeState extends State<Home> {
         body: Container(
           margin: EdgeInsets.all(10),
           child: Center(
-            child: Column(children: gett(widget)),
+            child: Column(children: [Text(widget?.ll?.email ?? 'none')]),
           ),
         ),
         floatingActionButton: FloatingActionButton(

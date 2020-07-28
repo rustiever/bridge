@@ -49,11 +49,23 @@ class FirebaseAuthService {
     var dd = await authResult.user.getIdToken();
     print(dd.token);
 
-    return _userFromFirebase(authResult.user, googleAuth, authResult);
+    return [
+      authResult.additionalUserInfo.isNewUser,
+      await authResult.user.getIdToken()
+    ];
+
+    // return _userFromFirebase(authResult.user, googleAuth, authResult);
   }
 
   Future<void> signOut() async {
-    return _firebaseAuth.signOut();
+    try {
+      print("User Sign Out");
+      await _googleSignIn.disconnect();
+      await _googleSignIn.signOut();
+      return await _firebaseAuth.signOut();
+    } catch (e) {
+      print(e);
+    }
   }
 
   // Future<List<dynamic>> currentUser() async {
