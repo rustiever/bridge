@@ -1,71 +1,63 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:intl/intl.dart';
 
-class AuthService {
-  FirebaseUser currentUser;
-  final _auth = FirebaseAuth.instance;
-  final _db = Firestore.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+class FirebaseAuthService {
+  final FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
+  FirebaseAuthService({FirebaseAuth firebaseAuth, GoogleSignIn googleSignin})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
+        _googleSignIn = googleSignin ?? GoogleSignIn();
 
-  Future<void> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleSignInAuthentication.accessToken,
-      idToken: googleSignInAuthentication.idToken,
-    );
-
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
-
-    assert(!user.isAnonymous);
-    assert(await user.getIdToken() != null);
-
-    currentUser = await _auth.currentUser();
-    assert(user.uid == currentUser.uid);
-
-    final QuerySnapshot result = await Firestore.instance
-        .collection('users')
-        .where('uid', isEqualTo: user.uid)
-        .getDocuments();
-    final List<DocumentSnapshot> documents = result.documents;
-    if (documents.length == 0) {
-      // Update data to server if new user
-      addNewUser(user);
-      print(user.providerData.toString());
-    } else {}
-    // return user;
-  }
-
-  Future<void> addNewUser(FirebaseUser user) {
-    final now = new DateTime.now();
-    String formatter = DateFormat.yMMMMd('en_US').format(now);
-    return _db.collection('users').document(user.uid).setData(
-      {
-        'userName': user.displayName,
-        'email': user.email,
-        'usn': null,
-        'photoUrl': user.photoUrl,
-        'uid': user.uid,
-        'createdAt': formatter.toString(),
-        'batch': null,
-        'branch': null
-      },
-    );
-  }
-
-  Future signOutGoogle() async {
-    try {
-      print("User Sign Out");
-      await googleSignIn.disconnect();
-      await googleSignIn.signOut();
-      return await _auth.signOut();
-    } catch (e) {
-      print(e);
+  _userFromFirebase(
+      FirebaseUser user, GoogleSignInAuthentication gAuth, AuthResult auth) {
+    if (user == null) {
+      return null;
     }
+    return [
+      user.displayName,
+      user.email,
+      user.isEmailVerified.toString(),
+      user.metadata.lastSignInTime.toIso8601String(),
+      user.phoneNumber,
+      gAuth.accessToken,
+      gAuth.idToken,
+      gAuth.serverAuthCode,
+      auth.additionalUserInfo.isNewUser.toString(),
+      // auth.additionalUserInfo.profile,
+      auth.additionalUserInfo.providerId,
+      auth.additionalUserInfo.username
+    ];
   }
+
+  // Stream<List<dynamic>> get onAuthStateChanged {
+  //   return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
+  // }
+
+  Future<List<dynamic>> signInWithGoogle() async {
+    final googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+    final credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    final authResult = await _firebaseAuth.signInWithCredential(credential);
+    print(authResult.additionalUserInfo.isNewUser);
+    print(authResult.additionalUserInfo.profile);
+    print(authResult.additionalUserInfo.providerId);
+    print(authResult.additionalUserInfo.username);
+    var dd = await authResult.user.getIdToken();
+    print(dd.token);
+
+    return _userFromFirebase(authResult.user, googleAuth, authResult);
+  }
+
+  Future<void> signOut() async {
+    return _firebaseAuth.signOut();
+  }
+
+  // Future<List<dynamic>> currentUser() async {
+  //   final user = await _firebaseAuth.currentUser();
+  //   return _userFromFirebase(user);
+  // }
 }
