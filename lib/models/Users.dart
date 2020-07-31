@@ -4,10 +4,10 @@ class User {
   String photoUrl;
   String username;
   String usn;
-  String joined;
+  // String joined;
   String batch;
   String branch;
-  String feeds;
+  String token;
 
   User(
       {this.username,
@@ -15,19 +15,19 @@ class User {
       this.photoUrl,
       this.email,
       this.usn,
-      this.joined,
+      // this.joined,
       this.batch,
       this.branch,
-      this.feeds});
+      this.token});
 
   User.fromMap(Map<String, dynamic> mapData) {
     this.id = mapData['uid'];
     this.email = mapData['email'];
     this.photoUrl = mapData['photoUrl'];
-    this.joined = mapData['createdAt'];
+    // this.joined = mapData['createdAt'];
     this.batch = mapData['batch'];
     this.branch = mapData['branch'];
-    this.feeds = mapData['feeds'];
+    this.token = mapData['token'];
     this.usn = mapData['usn'];
     this.username = mapData['userName'];
   }
@@ -37,11 +37,11 @@ class User {
     data['uid'] = user.id;
     data['email'] = user.email;
     data['photoUrl'] = user.photoUrl;
-    data['createdAt'] = user.joined;
+    // data['createdAt'] = user.joined;
     data['batch'] = user.batch;
     data['branch'] = user.branch;
     data['usn'] = user.usn;
-    data['feeds'] = user.feeds;
+    data['token'] = user.token;
     data['userName'] = user.username;
     return data;
   }

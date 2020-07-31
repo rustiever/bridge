@@ -19,7 +19,10 @@ class _HomeState extends State<Home> {
         body: Container(
           margin: EdgeInsets.all(10),
           child: Center(
-            child: Column(children: [Text(widget?.ll?.email ?? 'none')]),
+            child: Column(children: [
+              Text(widget?.ll?.email ?? 'none'),
+              Text(widget?.ll?.token ?? 'none')
+            ]),
           ),
         ),
         floatingActionButton: FloatingActionButton(

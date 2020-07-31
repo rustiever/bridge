@@ -44,13 +44,14 @@ class _AuthState extends State<Auth> {
                   await FirebaseAuthService().signInWithGoogle();
               if (res[0] == true) {
                 var t = await create(context);
-                // SnackBar mm = SnackBar(content: Text(t));
-                // Scaffold.of(context).showSnackBar(mm);
+
                 print(t);
-                User d = await _backend.authenticate(token: res[1], usn: t);
+                User d = await _backend.authenticate(
+                    token: res[2], usn: t, user: res[1]);
                 Navigator.of(context).pushNamed(Homeroute, arguments: d);
               } else {
-                User d = await _backend.authenticate(token: res[1]);
+                User d =
+                    await _backend.authenticate(token: res[2], user: res[1]);
                 Navigator.of(context).pushNamed(Homeroute, arguments: d);
               }
             }),

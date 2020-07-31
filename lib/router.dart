@@ -20,9 +20,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case Authroute:
       return MaterialPageRoute(
-        builder: (context) => Auth(
-            // title: 'Bridge',
-            ),
+        builder: (context) => Auth(),
       );
     default:
       return MaterialPageRoute(builder: (context) => Auth());
