@@ -70,20 +70,22 @@ class _AuthState extends State<Auth> {
                 height: (_media.height - kToolbarHeight) / 2.7,
               ),
               UserButton(
-                user: "Existing User",
+                user: "Explore",
                 ontap: () async {
                   List<dynamic> res =
                       await FirebaseAuthService().signInWithGoogle();
                   if (res[0] == true) {
                     var t = await create(context);
                     print(t);
-                    User d = await _backend.authenticate(
-                        token: res[2], usn: t, user: res[1]);
-                    Navigator.of(context).pushNamed(Homeroute, arguments: d);
+                    // User d = await _backend.authenticate(
+                    //     token: res[2], usn: t, user: res[1]);
+                    // Navigator.of(context).pushNamed(Homeroute, arguments: d);
+                    Navigator.of(context).pushNamed(Feedroute);
                   } else {
-                    User d = await _backend.authenticate(
-                        token: res[2], user: res[1]);
-                    Navigator.of(context).pushNamed(Homeroute, arguments: d);
+                    // User d = await _backend.authenticate(
+                    //     token: res[2], user: res[1]);
+                    // Navigator.of(context).pushNamed(Homeroute, arguments: d);
+                    Navigator.of(context).pushNamed(Feedroute);
                   }
                 },
               ),
