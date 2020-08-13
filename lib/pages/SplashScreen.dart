@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Bridge/constants.dart';
+import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void navigationPage() {
-    Navigator.of(context).pushReplacementNamed(Authroute);
+    Navigator.of(context).pushReplacementNamed(Homeroute);
   }
 
   @override

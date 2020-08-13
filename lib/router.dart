@@ -1,15 +1,14 @@
-import 'package:Bridge/pages/FeedPage.dart';
-import 'package:Bridge/pages/SplashScreen.dart';
 import 'package:flutter/material.dart';
 
-import 'models/Users.dart';
 import 'pages/Auth.dart';
+import 'pages/FeedPage.dart';
 import 'pages/Home.dart';
+import 'pages/SplashScreen.dart';
 
-const String Homeroute = '/';
 const String Authroute = 'auth';
-const String Splashroute = 'splash';
 const String Feedroute = 'feed';
+const String Homeroute = '/';
+const String Splashroute = 'splash';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   print(settings.name);
@@ -24,9 +23,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       );
     case Homeroute:
       return MaterialPageRoute(
-        builder: (context) => Home(
-          ll: settings.arguments as User,
-        ),
+        builder: (context) => Home(),
       );
     case Authroute:
       return MaterialPageRoute(

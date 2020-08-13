@@ -1,6 +1,5 @@
-import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/router.dart';
-import 'package:Bridge/services/backendAuth.dart';
+
 import 'package:flutter/material.dart';
 
 import '../Services/Auth.dart';
@@ -29,7 +28,6 @@ class _AuthState extends State<Auth> {
     );
   }
 
-  Backend _backend = Backend();
   @override
   Widget build(BuildContext context) {
     final _media = MediaQuery.of(context).size;

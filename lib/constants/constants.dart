@@ -1,5 +1,5 @@
 // API LINKS
-const login =
+const studentLogin =
     'https://us-central1-bridge-fd58f.cloudfunctions.net/app/api/auth';
 const logout = '';
 

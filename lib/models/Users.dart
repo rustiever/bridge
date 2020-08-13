@@ -1,48 +1,67 @@
 class User {
-  String email;
-  String id;
-  String photoUrl;
-  String username;
-  String usn;
-  // String joined;
-  String batch;
-  String branch;
-  String token;
+  String authorizeToken;
+  UserData userData;
 
-  User(
-      {this.username,
-      this.id,
-      this.photoUrl,
-      this.email,
-      this.usn,
-      // this.joined,
-      this.batch,
-      this.branch,
-      this.token});
+  User({this.authorizeToken, this.userData});
 
-  User.fromMap(Map<String, dynamic> mapData) {
-    this.id = mapData['uid'];
-    this.email = mapData['email'];
-    this.photoUrl = mapData['photoUrl'];
-    // this.joined = mapData['createdAt'];
-    this.batch = mapData['batch'];
-    this.branch = mapData['branch'];
-    this.token = mapData['token'];
-    this.usn = mapData['usn'];
-    this.username = mapData['userName'];
+  User.fromJson(Map<String, dynamic> json) {
+    authorizeToken = json['authorizeToken'];
+    userData = json['userData'] != null
+        ? new UserData.fromJson(json['userData'])
+        : null;
   }
 
-  Map toMap(User user) {
-    var data = Map<String, dynamic>();
-    data['uid'] = user.id;
-    data['email'] = user.email;
-    data['photoUrl'] = user.photoUrl;
-    // data['createdAt'] = user.joined;
-    data['batch'] = user.batch;
-    data['branch'] = user.branch;
-    data['usn'] = user.usn;
-    data['token'] = user.token;
-    data['userName'] = user.username;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['authorizeToken'] = this.authorizeToken;
+    if (this.userData != null) {
+      data['userData'] = this.userData.toJson();
+    }
+    return data;
+  }
+}
+
+class UserData {
+  int batch;
+  String uSN;
+  String email;
+  String branch;
+  String userID;
+  String photoURL;
+  String name;
+  List<String> token;
+
+  UserData(
+      {this.batch,
+      this.uSN,
+      this.email,
+      this.branch,
+      this.userID,
+      this.photoURL,
+      this.name,
+      this.token});
+
+  UserData.fromJson(Map<String, dynamic> json) {
+    batch = json['Batch'];
+    uSN = json['USN'];
+    email = json['Email'];
+    branch = json['Branch'];
+    userID = json['UserID'];
+    photoURL = json['PhotoURL'];
+    name = json['Name'];
+    token = json['token'].cast<String>();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Batch'] = this.batch;
+    data['USN'] = this.uSN;
+    data['Email'] = this.email;
+    data['Branch'] = this.branch;
+    data['UserID'] = this.userID;
+    data['PhotoURL'] = this.photoURL;
+    data['Name'] = this.name;
+    data['token'] = this.token;
     return data;
   }
 }

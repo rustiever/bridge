@@ -1,4 +1,4 @@
-import 'package:Bridge/constants.dart';
+import 'package:Bridge/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class FeedScreen extends StatefulWidget {
@@ -7,7 +7,7 @@ class FeedScreen extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<FeedScreen> {
-  Widget _buildPost(int index) {
+  Widget buildPost(int index) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       child: Container(
@@ -241,8 +241,8 @@ class _FeedScreenState extends State<FeedScreen> {
               },
             ),
           ),
-          _buildPost(0),
-          _buildPost(1),
+          buildPost(0),
+          buildPost(1),
         ],
       ),
       bottomNavigationBar: ClipRRect(
