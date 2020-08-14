@@ -1,10 +1,10 @@
-import 'package:Bridge/models/Users.dart';
-import 'package:Bridge/services/auth.dart';
-import 'package:Bridge/services/backendAuth.dart';
+import 'package:Bridge/services/FirebaseAuth.dart';
+
+import '../models/Users.dart';
+import '../services/Service.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'FeedPage.dart';

@@ -1,8 +1,7 @@
 import 'package:Bridge/router.dart';
+import 'package:Bridge/services/FirebaseAuth.dart';
 
 import 'package:flutter/material.dart';
-
-import '../Services/Auth.dart';
 
 class Auth extends StatefulWidget {
   @override
