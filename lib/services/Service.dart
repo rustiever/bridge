@@ -21,7 +21,7 @@ class ApiService {
     http.Response res;
     if (newUser) {
       res = await http.post(
-        student + 'api/register',
+        student + registerApi,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -38,7 +38,7 @@ class ApiService {
         return Future.error('something went wrong');
     } else {
       res = await http.post(
-        student + 'api/login',
+        student + loginApi,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -59,7 +59,7 @@ class ApiService {
 
   Future<int> logout({String token}) async {
     print('In Logout Func');
-    var res = await http.get(student + 'api/logout',
+    var res = await http.get(student + logoutApi,
         headers: {HttpHeaders.authorizationHeader: 'bearer $token'});
     if (res.statusCode == 200) {
       return 200;
