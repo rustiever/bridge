@@ -6,6 +6,9 @@ const anonymous = 'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous
 //Anonymous User Home Page
 const anonymousHome = 'api/home';
 
+//Anonymous User to get Faculties Details
+const anonymousFacDet = 'api/faculties';
+
 //Login
 const loginApi = 'api/login';
 
