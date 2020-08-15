@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'pages/Auth.dart';
 import 'pages/FeedPage.dart';
-import 'pages/Home.dart';
 import 'pages/SplashScreen.dart';
+import 'screens/Home/HomePage.dart';
 
 const String Authroute = 'auth';
 const String Feedroute = 'feed';
