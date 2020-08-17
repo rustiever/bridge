@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:Bridge/models/AnonFeed.dart';
+import 'package:Bridge/models/Feeds.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../services/Service.dart';
 
@@ -18,7 +17,7 @@ import '../services/Service.dart';
 //   },
 // );
 
-final anonPostProvider = FutureProvider.autoDispose<AnonFeed>((ref) {
+final anonPostProvider = FutureProvider.autoDispose<FeedModel>((ref) {
   return ApiService.instance.getAnonFeeds();
 });
 

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:Bridge/constants/Apis.dart';
-import 'package:Bridge/models/AnonFeed.dart';
+import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/models/Users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
@@ -76,12 +76,13 @@ class ApiService {
     return Future.error("Error in SharedPreferences in getuserDetails()");
   }
 
-  Future<AnonFeed> getAnonFeeds() async {
+  Future<FeedModel> getAnonFeeds() async {
     print('IN getAnonFeeds Func');
-    var res = await http.get(anonymous + anonymousHome);
+    var res = await http.get(
+        'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home');
 
     if (res.statusCode == 200) {
-      return AnonFeed.fromJson(jsonDecode(res.body));
+      return FeedModel.fromJson(jsonDecode(res.body));
     } else {
       return Future.error("Error from server");
     }

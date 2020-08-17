@@ -1,5 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/models/models.dart';
+import 'package:Bridge/models/Feeds.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -7,7 +7,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'widgets.dart';
 
 class PostContainer extends StatelessWidget {
-  final Post post;
+  final FeedData post;
 
   const PostContainer({
     Key key,
@@ -36,20 +36,22 @@ class PostContainer extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _PostHeader(post: post),
+                  _PostHeader(
+                    post: post,
+                  ),
                   const SizedBox(height: 4.0),
                   Text(post.caption),
-                  post.imageUrl != null
+                  // Text(feed?.data[index].caption),
+                  post.photoUrl != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
                 ],
               ),
             ),
-            post.imageUrl != null
+            post.photoUrl != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CachedNetworkImage(imageUrl: post.imageUrl),
-                  )
+                    child: Image.network(post.photoUrl))
                 : const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -63,7 +65,7 @@ class PostContainer extends StatelessWidget {
 }
 
 class _PostHeader extends StatelessWidget {
-  final Post post;
+  final FeedData post;
 
   const _PostHeader({
     Key key,
@@ -74,14 +76,14 @@ class _PostHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ProfileAvatar(imageUrl: post.user.imageUrl),
+        ProfileAvatar(imageUrl: post.ownerPhotoUrl),
         const SizedBox(width: 8.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post.user.name,
+                post.ownerName,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -89,7 +91,7 @@ class _PostHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '${post.timeAgo} • ',
+                    '${post.timeStamp} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,
@@ -115,7 +117,7 @@ class _PostHeader extends StatelessWidget {
 }
 
 class _PostStats extends StatelessWidget {
-  final Post post;
+  final FeedData post;
 
   const _PostStats({
     Key key,
@@ -157,7 +159,7 @@ class _PostStats extends StatelessWidget {
             ),
             const SizedBox(width: 8.0),
             Text(
-              '${post.shares} Shares',
+              '${post.comments} Shares',
               style: TextStyle(
                 color: Colors.grey[600],
               ),
@@ -221,14 +223,14 @@ class _PostButton extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 7.0),
             height: 25.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 icon,
-                const SizedBox(width: 4.0),
-                Text(label),
+                const SizedBox(width: 2.0),
+                Flexible(child: Text(label)),
               ],
             ),
           ),

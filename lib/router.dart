@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'pages/Auth.dart';
 import 'pages/FeedPage.dart';
 import 'pages/SplashScreen.dart';
-import 'screens/Home/HomePage.dart';
 
 const String Authroute = 'auth';
 const String Feedroute = 'feed';
@@ -21,10 +20,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => FeedScreen(),
       );
-    case Homeroute:
-      return MaterialPageRoute(
-        builder: (context) => Home(),
-      );
+    // case Homeroute:
+    //   return MaterialPageRoute(
+    //     builder: (context) => Home(),
+    //   );
     case Authroute:
       return MaterialPageRoute(
         builder: (context) => Auth(),
