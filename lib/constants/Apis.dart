@@ -5,13 +5,19 @@ const anonymous =
     'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/';
 
 //Anonymous User Home Page
-const anonymousHome = 'api/home';
+const anonymousHome = 'home';
+
+//Anonymous User to get Faculties Details
+const anonymousFacDet = 'faculties';
 
 //Login
-const loginApi = 'api/login';
+const loginApi = 'login';
 
 //Logout
-const logoutApi = 'api/logout';
+const logoutApi = 'logout';
 
 //Register Student
-const registerApi = 'api/register';
+const registerApi = 'register';
+
+//Faculty Post API
+const facultyPost = 'post';
