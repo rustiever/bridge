@@ -1,7 +1,8 @@
 // Login API's
 const student = 'https://us-central1-bridge-fd58f.cloudfunctions.net/student/';
 const faculty = 'https://us-central1-bridge-fd58f.cloudfunctions.net/faculty/';
-const anonymous = 'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous';
+const anonymous =
+    'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/';
 
 //Anonymous User Home Page
 const anonymousHome = 'api/home';

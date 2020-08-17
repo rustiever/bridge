@@ -21,9 +21,9 @@ dependencies:
   cupertino_icons:
   file_picker:
   font_awesome_flutter:
-  # flutter_riverpod: 
-  # hooks_riverpod: 
-  riverpod: 
+  hooks_riverpod: ^0.6.0-dev+3
+  flutter_hooks:
+  connectivity: ^0.4.9
 
 dev_dependencies:
   flutter_test:

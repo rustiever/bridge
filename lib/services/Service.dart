@@ -1,20 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:Bridge/constants/Apis.dart';
+import 'package:Bridge/models/AnonFeed.dart';
 import 'package:Bridge/models/Users.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:riverpod/riverpod.dart';
+
+import '../constants/Apis.dart';
 
 class ApiService {
-  ApiService._ins();
-  static final ApiService instance = ApiService._ins();
+  ApiService._instance();
+  static final ApiService instance = ApiService._instance();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<User> login(
+  Future<Object> login(
       {bool newUser, FirebaseUser user, IdTokenResult tokenResult}) async {
     print('In Login Func');
     final SharedPreferences prefs = await _prefs;
@@ -51,6 +51,7 @@ class ApiService {
       if (res.statusCode == 200) {
         var user = User.fromJson(jsonDecode(res.body));
         await prefs.setString('token', user.authorizeToken);
+        await prefs.setString('user', res.body);
         return user;
       } else
         return Future.error('not valid user');
@@ -67,16 +68,22 @@ class ApiService {
       return Future.error('something went wrong');
   }
 
-  Future<User> getUserDetails() async {
+  Future<Object> getUserDetails() async {
     final SharedPreferences prefs = await _prefs;
     var user = prefs.getString('user');
     print('In getuserDetails()');
     if (user != null) return User.fromJson(json.decode(user));
     return Future.error("Error in SharedPreferences in getuserDetails()");
   }
-}
 
-//State
-final userProvider = FutureProvider<User>((ref) {
-  return ApiService.instance.getUserDetails();
-});
+  Future<AnonFeed> getAnonFeeds() async {
+    print('IN getAnonFeeds Func');
+    var res = await http.get(anonymous + anonymousHome);
+
+    if (res.statusCode == 200) {
+      return AnonFeed.fromJson(jsonDecode(res.body));
+    } else {
+      return Future.error("Error from server");
+    }
+  }
+}

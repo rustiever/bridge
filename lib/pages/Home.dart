@@ -1,5 +1,7 @@
 import 'package:Bridge/services/FirebaseAuth.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../constants/constants.dart';
 import '../models/Users.dart';
 import '../services/Service.dart';
 import 'package:http/http.dart' as http;
@@ -9,15 +11,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'FeedPage.dart';
 
-class Home extends StatefulWidget {
-  const Home({
+class HomeP extends StatefulWidget {
+  const HomeP({
     Key key,
   }) : super(key: key);
   @override
-  _HomeState createState() => _HomeState();
+  _HomePState createState() => _HomePState();
 }
 
-class _HomeState extends State<Home> {
+class _HomePState extends State<HomeP> {
   User user;
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -435,5 +437,90 @@ class _HomeState extends State<Home> {
       print(e);
     }
     // Navigator.pop(context);
+  }
+}
+
+class Home extends HookWidget {
+  @override
+  Widget build(BuildContext context) {
+    final scrollController = useScrollController();
+    // var user = useProvider(userData);
+    var loggedIn = useState(false);
+    return SafeArea(
+      child: Scaffold(
+        endDrawer: Drawer(
+          child: Column(
+            children: [
+              Expanded(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.85,
+                  child: DrawerHeader(
+                    child: Text('data'),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage(appIcon), fit: BoxFit.cover),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+        bottomNavigationBar: HomeBottomNavBar(),
+        body: loggedIn.value
+            ? ListView.builder(itemBuilder: null)
+            : AnonBody(scrollController: scrollController),
+      ),
+    );
+  }
+}
+
+class AnonBody extends HookWidget {
+  const AnonBody({
+    Key key,
+    @required this.scrollController,
+  }) : super(key: key);
+
+  final ScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      controller: scrollController,
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+      itemExtent: 20,
+      itemCount: 20,
+      itemBuilder: null,
+    );
+  }
+}
+
+class HomeBottomNavBar extends HookWidget {
+  const HomeBottomNavBar({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      items: [
+        const BottomNavigationBarItem(
+          icon: Icon(
+            Icons.dashboard,
+            size: 30.0,
+            color: Colors.black,
+          ),
+          title: Text('Dashboard'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.search,
+            size: 30.0,
+            color: Colors.grey,
+          ),
+          title: Text(''),
+        ),
+      ],
+    );
   }
 }
