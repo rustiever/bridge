@@ -1,3 +1,4 @@
+import 'package:Bridge/constants/Assets.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 

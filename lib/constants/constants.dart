@@ -1,7 +1,3 @@
-// API LINKS
-const studentLogin =
-    'https://us-central1-bridge-fd58f.cloudfunctions.net/app/api/auth';
-const logout = '';
-
-// ASSETS
-const appIcon = 'assets/appIcon/Bridge_Icon.png';
+export 'Apis.dart';
+export 'Palattes.dart';
+export 'Assets.dart';

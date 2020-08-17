@@ -24,6 +24,9 @@ dependencies:
   hooks_riverpod: ^0.6.0-dev+3
   flutter_hooks:
   connectivity: ^0.4.9
+  device_preview:
+  cached_network_image: ^2.2.0+1
+  material_design_icons_flutter: ^4.0.5345
 
 dev_dependencies:
   flutter_test:

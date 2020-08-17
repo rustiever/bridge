@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:Bridge/constants/Assets.dart';
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
