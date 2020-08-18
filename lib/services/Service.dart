@@ -14,7 +14,7 @@ class ApiService {
   static final ApiService instance = ApiService._instance();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<Object> login(
+  Future<User> login(
       {bool newUser, FirebaseUser user, IdTokenResult tokenResult}) async {
     print('In Login Func');
     final SharedPreferences prefs = await _prefs;
@@ -33,6 +33,7 @@ class ApiService {
         var user = User.fromJson(jsonDecode(res.body));
         await prefs.setString('token', user.authorizeToken);
         await prefs.setString('user', res.body);
+        print('logging in new user');
         return user;
       } else
         return Future.error('something went wrong');
@@ -52,6 +53,7 @@ class ApiService {
         var user = User.fromJson(jsonDecode(res.body));
         await prefs.setString('token', user.authorizeToken);
         await prefs.setString('user', res.body);
+        print('logging in old user');
         return user;
       } else
         return Future.error('not valid user');
@@ -68,11 +70,12 @@ class ApiService {
       return Future.error('something went wrong');
   }
 
-  Future<Object> getUserDetails() async {
+  Future<User> getUserDetails() async {
     final SharedPreferences prefs = await _prefs;
     var user = prefs.getString('user');
     print('In getuserDetails()');
     if (user != null) return User.fromJson(json.decode(user));
+    // return null;
     return Future.error("Error in SharedPreferences in getuserDetails()");
   }
 

@@ -1,11 +1,17 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/models/models.dart';
+import 'package:Bridge/router.dart';
+import 'package:Bridge/services/FirebaseAuth.dart';
+import 'package:Bridge/services/Service.dart';
+import 'package:Bridge/stateProviders/Providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'widgets.dart';
 
-class CustomAppBar extends StatelessWidget {
+class CustomAppBar extends HookWidget {
   final User currentUser;
   final List<IconData> icons;
   final int selectedIndex;
@@ -21,6 +27,7 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = useProvider(userProvider);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       height: 65.0,
@@ -62,7 +69,41 @@ class CustomAppBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                UserCard(user: currentUser),
+                user != null
+                    ? UserCard(user: currentUser)
+                    : InkWell(
+                        onTap: () async {
+                          List<dynamic> res =
+                              await FirebaseAuthService().signInWithGoogle();
+                          try {
+                            var user = await ApiService.instance.login(
+                                newUser: res[0],
+                                user: res[1],
+                                tokenResult: res[2]);
+                            print(user.userData.email);
+                            print(user.authorizeToken);
+                            // setState(() {});
+                            Navigator.of(context)
+                                .pushReplacementNamed(Homeroute);
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ProfileAvatar(imageUrl: null),
+                            const SizedBox(width: 6.0),
+                            Flexible(
+                              child: Text(
+                                'login',
+                                style: const TextStyle(fontSize: 16.0),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                 const SizedBox(width: 12.0),
                 CircleButton(
                   icon: Icons.search,

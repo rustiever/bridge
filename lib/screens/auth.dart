@@ -1,5 +1,6 @@
 import 'package:Bridge/router.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
+import 'package:Bridge/services/Service.dart';
 
 import 'package:flutter/material.dart';
 
@@ -9,86 +10,37 @@ class Auth extends StatefulWidget {
 }
 
 class _AuthState extends State<Auth> {
-  Future<String> create(BuildContext context) {
-    TextEditingController _usn = TextEditingController();
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('usn'),
-        content: TextField(
-          controller: _usn,
-        ),
-        actions: [
-          RaisedButton(
-            onPressed: () => Navigator.of(context).pop(_usn.text),
-          )
-        ],
-      ),
-    );
+  Future<void> login() async {
+    List<dynamic> res = await FirebaseAuthService().signInWithGoogle();
+    try {
+      var user = await ApiService.instance
+          .login(newUser: res[0], user: res[1], tokenResult: res[2]);
+      print(user.userData.email);
+      print(user.authorizeToken);
+      Navigator.of(context).pushReplacementNamed(Homeroute);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final _media = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: FractionalOffset(0.0, 0.4),
-              end: FractionalOffset(0.9, 0.7),
-              // Add one stop for each color. Stops should increase from 0 to 1
-              stops: [0.1, 0.9],
-              colors: [
-                Color.fromRGBO(17, 29, 94, 1),
-                Color.fromRGBO(178, 31, 102, 1)
-              ],
-            ),
+    // final _media = MediaQuery.of(context).size;
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          UserButton(user: "Student", ontap: login),
+          UserButton(
+            user: "Faculty",
+            ontap: () {},
           ),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 45.0),
-                child: Text(
-                  "WELCOME \tFOLKS!",
-                  style: TextStyle(
-                    letterSpacing: 4,
-                    color: Colors.white,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22.0,
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: (_media.height - kToolbarHeight) / 2.7,
-              ),
-              UserButton(
-                user: "Explore",
-                ontap: () async {
-                  List<dynamic> res =
-                      await FirebaseAuthService().signInWithGoogle();
-                  if (res[0] == true) {
-                    var t = await create(context);
-                    print(t);
-                    // User d = await _backend.authenticate(
-                    //     token: res[2], usn: t, user: res[1]);
-                    // Navigator.of(context).pushNamed(Homeroute, arguments: d);
-                    Navigator.of(context).pushNamed(Feedroute);
-                  } else {
-                    // User d = await _backend.authenticate(
-                    //     token: res[2], user: res[1]);
-                    // Navigator.of(context).pushNamed(Homeroute, arguments: d);
-                    Navigator.of(context).pushNamed(Feedroute);
-                  }
-                },
-              ),
-            ],
+          UserButton(
+            user: "Alumni",
+            ontap: () {},
           ),
-        ),
+        ],
       ),
     );
   }
@@ -102,7 +54,8 @@ class UserButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.0,
+      padding: EdgeInsets.all(10),
+      // height: 50.0,
       child: FlatButton(
         onPressed: ontap,
         shape:

@@ -1,21 +1,19 @@
 import 'dart:io';
 import 'package:Bridge/models/Feeds.dart';
+import 'package:Bridge/models/Users.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../services/Service.dart';
 
-// final userProvider = FutureProvider.autoDispose<User>((ref) {
-//   try {
-//     return ApiService.instance.getUserDetails();
-//   } catch (e) {
-//     print('object');
-//   }
-// });
-
-// final userData = Provider.autoDispose(
-//   (ref) {
-//     return ref.read(userProvider).data.value;
-//   },
-// );
+final userProvider = FutureProvider.autoDispose<User>((ref) async {
+  try {
+    var u = await ApiService.instance.getUserDetails();
+    print('futre provider $u');
+    return u;
+  } catch (e) {
+    print('object $e');
+    return null;
+  }
+});
 
 final anonPostProvider = FutureProvider.autoDispose<FeedModel>((ref) {
   return ApiService.instance.getAnonFeeds();

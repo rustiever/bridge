@@ -1,9 +1,13 @@
 import 'package:Bridge/models/models.dart';
+import 'package:Bridge/router.dart';
 import 'package:Bridge/screens/screens.dart';
+import 'package:Bridge/services/FirebaseAuth.dart';
+import 'package:Bridge/services/Service.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NavScreen extends StatefulWidget {
   @override
@@ -17,7 +21,7 @@ class _NavScreenState extends State<NavScreen> {
     Scaffold(),
     Scaffold(),
     Scaffold(),
-    Scaffold(),
+    Settings()
   ];
   final List<IconData> _icons = const [
     Icons.home,
@@ -116,6 +120,43 @@ class Nav extends HookWidget {
                 ),
               )
             : const SizedBox.shrink(),
+      ),
+    );
+  }
+}
+
+class Settings extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          RaisedButton(
+            onPressed: () async {
+              try {
+                var rr =
+                    (await SharedPreferences.getInstance()).getString('token');
+                var rrt =
+                    (await SharedPreferences.getInstance()).getString('user');
+                print(rrt);
+                await (await SharedPreferences.getInstance())
+                    .clear(); // TODO refactor pls
+                var res = await ApiService.instance.logout(token: rr);
+                print(res);
+                await FirebaseAuthService().signOut();
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(Authroute, (route) => false);
+                // user = null;
+                // setState(() {});
+              } catch (e) {
+                print(e);
+              }
+              // Navigator.pop(context);
+            },
+            child: Text('logout'),
+          )
+        ],
       ),
     );
   }

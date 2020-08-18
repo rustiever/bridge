@@ -1,8 +1,6 @@
+import 'package:Bridge/screens/screens.dart';
 import 'package:flutter/material.dart';
-
-import 'pages/Auth.dart';
 import 'pages/FeedPage.dart';
-import 'pages/SplashScreen.dart';
 
 const String Authroute = 'auth';
 const String Feedroute = 'feed';
@@ -14,12 +12,17 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
     case Splashroute:
       return MaterialPageRoute(
-        builder: (context) => SplashScreen(),
+        builder: (context) => Auth(),
       );
     case Feedroute:
       return MaterialPageRoute(
         builder: (context) => FeedScreen(),
       );
+    case Homeroute:
+      return MaterialPageRoute(
+        builder: (context) => NavScreen(),
+      );
+
     // case Homeroute:
     //   return MaterialPageRoute(
     //     builder: (context) => Home(),

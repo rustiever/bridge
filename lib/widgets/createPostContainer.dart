@@ -1,4 +1,4 @@
-import 'package:Bridge/models/models.dart';
+import 'package:Bridge/models/Users.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets.dart';
@@ -27,7 +27,7 @@ class CreatePostContainer extends StatelessWidget {
           children: [
             Row(
               children: [
-                ProfileAvatar(imageUrl: currentUser.imageUrl),
+                ProfileAvatar(imageUrl: currentUser.userData.photoURL),
                 const SizedBox(width: 8.0),
                 Expanded(
                   child: TextField(

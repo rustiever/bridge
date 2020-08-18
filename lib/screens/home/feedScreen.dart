@@ -2,9 +2,11 @@ import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/services/Service.dart';
+import 'package:Bridge/stateProviders/Providers.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,16 +27,41 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Home(
+          trackingScrollController: _trackingScrollController,
+        ));
+  }
+}
+
+class Home extends HookWidget {
+  final TrackingScrollController trackingScrollController;
+
+  const Home({Key key, @required this.trackingScrollController})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final user = useProvider(userProvider);
+    return user.when(
+      data: (user) => Scaffold(
         body: Responsive(
-          mobile:
-              _HomeScreenMobile(scrollController: _trackingScrollController),
+          mobile: _HomeScreenMobile(scrollController: trackingScrollController),
           desktop:
-              _HomeScreenDesktop(scrollController: _trackingScrollController),
+              _HomeScreenDesktop(scrollController: trackingScrollController),
+        ),
+      ),
+      loading: () => Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+      error: (e, s) => Scaffold(
+        body: Center(
+          child: Text("$e  $s"),
         ),
       ),
     );
+    // return ;
   }
 }
 
@@ -48,11 +75,13 @@ class _HomeScreenMobile extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = useProvider(userProvider).data.value;
     final refresh = useState(true);
     var anonFuture =
         useMemoized(() => ApiService.instance.getAnonFeeds(), [refresh.value]);
     AsyncSnapshot<FeedModel> snapshot = useFuture(anonFuture);
-    // print(snapshot?.data?.data[0]?.caption ?? '');
+    print(user == null);
+    print(user);
     switch (snapshot.connectionState) {
       case ConnectionState.done:
         print(snapshot?.data?.feedData[0]?.caption ?? 'none');
@@ -87,23 +116,8 @@ class _HomeScreenMobile extends HookWidget {
               ],
             ),
             SliverToBoxAdapter(
-              child: CreatePostContainer(currentUser: currentUser),
+              child: CreatePostContainer(currentUser: user),
             ),
-            // SliverPadding(
-            //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
-            //   sliver: SliverToBoxAdapter(
-            //     child: Rooms(onlineUsers: onlineUsers),
-            //   ),
-            // ),
-            // SliverPadding(
-            //   padding: const EdgeInsets.fromLTRB(0.0, 5.0, 0.0, 5.0),
-            //   sliver: SliverToBoxAdapter(
-            //     child: Stories(
-            //       currentUser: currentUser,
-            //       stories: stories,
-            //     ),
-            //   ),
-            // ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
@@ -139,6 +153,7 @@ class _HomeScreenDesktop extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = useProvider(userProvider).data.value;
     final refresh = useState(true);
     var anonFuture =
         useMemoized(() => ApiService.instance.getAnonFeeds(), [refresh.value]);
@@ -164,24 +179,9 @@ class _HomeScreenDesktop extends HookWidget {
               child: CustomScrollView(
                 controller: scrollController,
                 slivers: [
-                  // SliverPadding(
-                  //   padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
-                  //   sliver: SliverToBoxAdapter(
-                  //     child: Stories(
-                  //       currentUser: currentUser,
-                  //       stories: stories,
-                  //     ),
-                  //   ),
-                  // ),
                   SliverToBoxAdapter(
-                    child: CreatePostContainer(currentUser: currentUser),
+                    child: CreatePostContainer(currentUser: user),
                   ),
-                  // SliverPadding(
-                  //   padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 5.0),
-                  //   sliver: SliverToBoxAdapter(
-                  //     child: Rooms(onlineUsers: onlineUsers),
-                  //   ),
-                  // ),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (context, index) {

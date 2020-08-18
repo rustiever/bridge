@@ -1,9 +1,7 @@
-import 'package:Bridge/screens/screens.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'constants/constants.dart';
-// import 'router.dart' as router;
+import 'router.dart' as router;
 
 // void main() {
 //   runApp(DevicePreview(builder: (context) => MyApp()));
@@ -17,15 +15,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // onGenerateRoute: router.generateRoute,
-      // initialRoute: router.Splashroute,
+      onGenerateRoute: router.generateRoute,
+      initialRoute: router.Splashroute,
       title: 'Bridge',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Palette.scaffold,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: NavScreen(),
+      // home: NavScreen(),
     );
   }
 }

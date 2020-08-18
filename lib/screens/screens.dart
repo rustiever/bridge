@@ -1,2 +1,4 @@
-export 'home_screen.dart';
-export 'nav_screen.dart';
+export 'home/feedScreen.dart';
+export 'navScreen.dart';
+export 'auth.dart';
+export 'splash.dart';
