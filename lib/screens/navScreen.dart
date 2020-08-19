@@ -17,17 +17,17 @@ class NavScreen extends StatefulWidget {
 class _NavScreenState extends State<NavScreen> {
   final List<Widget> _screens = [
     HomeScreen(),
-    Scaffold(),
-    Scaffold(),
-    Scaffold(),
+    // Scaffold(),
+    // Scaffold(),
+    // Scaffold(),
     Scaffold(),
     Settings()
   ];
   final List<IconData> _icons = const [
     Icons.home,
-    Icons.ondemand_video,
-    MdiIcons.accountCircleOutline,
-    MdiIcons.accountGroupOutline,
+    // Icons.ondemand_video,
+    // MdiIcons.accountCircleOutline,
+    // MdiIcons.accountGroupOutline,
     MdiIcons.bellOutline,
     Icons.menu,
   ];
@@ -142,7 +142,7 @@ class Settings extends StatelessWidget {
                 print(rrt);
                 await (await SharedPreferences.getInstance())
                     .clear(); // TODO refactor pls
-                var res = await ApiService.instance.logout(token: rr);
+                var res = await ApiServices.instance.logout(token: rr);
                 print(res);
                 await FirebaseAuthService().signOut();
                 Navigator.of(context)

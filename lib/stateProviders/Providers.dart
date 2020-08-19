@@ -6,7 +6,7 @@ import '../services/Service.dart';
 
 final userProvider = FutureProvider.autoDispose<User>((ref) async {
   try {
-    var u = await ApiService.instance.getUserDetails();
+    var u = await ApiServices.instance.getUserDetails();
     print('futre provider $u');
     return u;
   } catch (e) {
@@ -16,7 +16,7 @@ final userProvider = FutureProvider.autoDispose<User>((ref) async {
 });
 
 final anonPostProvider = FutureProvider.autoDispose<FeedModel>((ref) {
-  return ApiService.instance.getAnonFeeds();
+  return ApiServices.instance.getAnonFeeds();
 });
 
 final platform = Provider.autoDispose((ref) {

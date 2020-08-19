@@ -1,23 +1,19 @@
 import 'package:Bridge/router.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:Bridge/services/Service.dart';
-
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
-class Auth extends StatefulWidget {
-  @override
-  _AuthState createState() => _AuthState();
-}
-
-class _AuthState extends State<Auth> {
+class Auth extends StatelessWidget {
   Future<void> login() async {
     List<dynamic> res = await FirebaseAuthService().signInWithGoogle();
     try {
-      var user = await ApiService.instance
+      var user = await ApiServices.instance
           .login(newUser: res[0], user: res[1], tokenResult: res[2]);
       print(user.userData.email);
       print(user.authorizeToken);
-      Navigator.of(context).pushReplacementNamed(Homeroute);
+      // Navigator.of(context).pushReplacementNamed(Homeroute);
+      Get.offNamed(Homeroute);
     } catch (e) {
       print(e);
     }
@@ -34,11 +30,17 @@ class _AuthState extends State<Auth> {
           UserButton(user: "Student", ontap: login),
           UserButton(
             user: "Faculty",
-            ontap: () {},
+            ontap: () {
+              Get.snackbar(
+                  'Sorry', 'soon you\'ll able to login! not now sorry');
+            },
           ),
           UserButton(
             user: "Alumni",
-            ontap: () {},
+            ontap: () {
+              Get.snackbar(
+                  'Sorry', 'soon you\'ll able to login! not now sorry');
+            },
           ),
         ],
       ),

@@ -4,6 +4,7 @@ import 'package:Bridge/constants/Assets.dart';
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,9 +29,9 @@ class _SplashScreenState extends State<SplashScreen>
     var user = prefs.getString('user');
     print('In splashscreen');
     if (user != null)
-      Navigator.of(context).pushReplacementNamed(Homeroute);
+      Get.offNamed(Homeroute);
     else
-      Navigator.of(context).pushReplacementNamed(Authroute);
+      Get.offNamed(Authroute);
   }
 
   @override

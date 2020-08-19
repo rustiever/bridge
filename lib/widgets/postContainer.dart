@@ -1,7 +1,9 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/models/Feeds.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'widgets.dart';
 
@@ -40,7 +42,6 @@ class PostContainer extends StatelessWidget {
                   ),
                   const SizedBox(height: 4.0),
                   Text(post.caption),
-                  // Text(feed?.data[index].caption),
                   post.photoUrl != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
@@ -50,7 +51,17 @@ class PostContainer extends StatelessWidget {
             post.photoUrl != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Image.network(post.photoUrl))
+                    child: CachedNetworkImage(
+                      imageUrl: post.photoUrl,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                      placeholderFadeInDuration: Duration(milliseconds: 400),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                    // child: Image.network(post.photoUrl),
+                  )
                 : const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -90,7 +101,7 @@ class _PostHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '${post.timeStamp} • ',
+                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(post.timeStamp * 1000), locale: 'en_short')} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,

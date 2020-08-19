@@ -9,31 +9,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final TrackingScrollController _trackingScrollController =
-      TrackingScrollController();
-
-  @override
-  void dispose() {
-    _trackingScrollController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Home(
-          trackingScrollController: _trackingScrollController,
-        ));
-  }
-}
-
 class Home extends HookWidget {
   final TrackingScrollController trackingScrollController;
 
@@ -61,7 +36,89 @@ class Home extends HookWidget {
         ),
       ),
     );
-    // return ;
+  }
+}
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenDesktop extends HookWidget {
+  final TrackingScrollController scrollController;
+
+  const _HomeScreenDesktop({
+    Key key,
+    @required this.scrollController,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final user = useProvider(userProvider).data.value;
+    final refresh = useState(true);
+    var anonFuture =
+        useMemoized(() => ApiServices.instance.getAnonFeeds(), [refresh.value]);
+    AsyncSnapshot<FeedModel> snapshot = useFuture(anonFuture);
+    print(snapshot.connectionState);
+    switch (snapshot.connectionState) {
+      case ConnectionState.done:
+        return Row(
+          children: [
+            Flexible(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: MoreOptionsList(currentUser: currentUser),
+                ),
+              ),
+            ),
+            const Spacer(),
+            Container(
+              width: 600.0,
+              child: CustomScrollView(
+                controller: scrollController,
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: CreatePostContainer(currentUser: user),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final FeedData post = snapshot?.data?.feedData[index] ??
+                            FeedData.fromJson({});
+                        return PostContainer(
+                          post: post,
+                        );
+                      },
+                      childCount: snapshot?.data?.feedData?.length ?? 0,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Spacer(),
+            Flexible(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: ContactsList(users: onlineUsers),
+                ),
+              ),
+            ),
+          ],
+        );
+      case ConnectionState.active:
+      case ConnectionState.none:
+      case ConnectionState.waiting:
+      default:
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+    }
   }
 }
 
@@ -78,7 +135,7 @@ class _HomeScreenMobile extends HookWidget {
     final user = useProvider(userProvider).data.value;
     final refresh = useState(true);
     var anonFuture =
-        useMemoized(() => ApiService.instance.getAnonFeeds(), [refresh.value]);
+        useMemoized(() => ApiServices.instance.getAnonFeeds(), [refresh.value]);
     AsyncSnapshot<FeedModel> snapshot = useFuture(anonFuture);
     print(user == null);
     print(user);
@@ -109,9 +166,9 @@ class _HomeScreenMobile extends HookWidget {
                   onPressed: () => print('Search'),
                 ),
                 CircleButton(
-                  icon: MdiIcons.facebookMessenger,
+                  icon: MdiIcons.filter,
                   iconSize: 30.0,
-                  onPressed: () => print('Messenger'),
+                  onPressed: () => print('filter'),
                 ),
               ],
             ),
@@ -122,7 +179,6 @@ class _HomeScreenMobile extends HookWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final FeedData post = snapshot.data.feedData[index];
-                  print(snapshot.data.feedData[index].caption);
                   return PostContainer(
                     post: post,
                   );
@@ -143,79 +199,23 @@ class _HomeScreenMobile extends HookWidget {
   }
 }
 
-class _HomeScreenDesktop extends HookWidget {
-  final TrackingScrollController scrollController;
-
-  const _HomeScreenDesktop({
-    Key key,
-    @required this.scrollController,
-  }) : super(key: key);
+class _HomeScreenState extends State<HomeScreen> {
+  final TrackingScrollController _trackingScrollController =
+      TrackingScrollController();
 
   @override
   Widget build(BuildContext context) {
-    final user = useProvider(userProvider).data.value;
-    final refresh = useState(true);
-    var anonFuture =
-        useMemoized(() => ApiService.instance.getAnonFeeds(), [refresh.value]);
-    AsyncSnapshot<FeedModel> snapshot = useFuture(anonFuture);
-    print(snapshot.connectionState);
-    switch (snapshot.connectionState) {
-      case ConnectionState.done:
-        return Row(
-          children: [
-            Flexible(
-              flex: 2,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: MoreOptionsList(currentUser: currentUser),
-                ),
-              ),
-            ),
-            const Spacer(),
-            Container(
-              width: 600.0,
-              child: CustomScrollView(
-                controller: scrollController,
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: CreatePostContainer(currentUser: user),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final FeedData post = snapshot.data.feedData[index];
-                        return PostContainer(
-                          post: post,
-                        );
-                      },
-                      childCount: snapshot.data.feedData.length,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Spacer(),
-            Flexible(
-              flex: 2,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: ContactsList(users: onlineUsers),
-                ),
-              ),
-            ),
-          ],
-        );
-      case ConnectionState.active:
-      case ConnectionState.none:
-      case ConnectionState.waiting:
-      default:
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-    }
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Home(
+        trackingScrollController: _trackingScrollController,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _trackingScrollController.dispose();
+    super.dispose();
   }
 }

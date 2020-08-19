@@ -1,10 +1,11 @@
 import 'package:Bridge/screens/screens.dart';
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 import 'pages/FeedPage.dart';
 
-const String Authroute = 'auth';
+const String Authroute = '/';
 const String Feedroute = 'feed';
-const String Homeroute = '/';
+const String Homeroute = 'home';
 const String Splashroute = 'splash';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -34,4 +35,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     default:
       return MaterialPageRoute(builder: (context) => Auth());
   }
+}
+
+List<GetPage> routes() {
+  return [
+    GetPage(name: Splashroute, page: () => SplashScreen()),
+    GetPage(name: Authroute, page: () => Auth()),
+    GetPage(name: Homeroute, page: () => NavScreen()),
+  ];
 }

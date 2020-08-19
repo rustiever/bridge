@@ -16,17 +16,20 @@ dependencies:
     sdk: flutter
   http:
   shared_preferences:
+  get:
+  get_storage:
   firebase_auth:
   google_sign_in:
   cupertino_icons:
   file_picker:
   font_awesome_flutter:
-  hooks_riverpod: ^0.6.0-dev+3
+  hooks_riverpod:
   flutter_hooks:
   connectivity: ^0.4.9
   device_preview:
-  cached_network_image: ^2.2.0+1
-  material_design_icons_flutter: ^4.0.5345
+  cached_network_image:
+  material_design_icons_flutter: 
+  timeago:
 
 dev_dependencies:
   flutter_test:

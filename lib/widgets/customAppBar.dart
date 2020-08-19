@@ -76,7 +76,7 @@ class CustomAppBar extends HookWidget {
                           List<dynamic> res =
                               await FirebaseAuthService().signInWithGoogle();
                           try {
-                            var user = await ApiService.instance.login(
+                            var user = await ApiServices.instance.login(
                                 newUser: res[0],
                                 user: res[1],
                                 tokenResult: res[2]);
@@ -111,7 +111,7 @@ class CustomAppBar extends HookWidget {
                   onPressed: () => print('Search'),
                 ),
                 CircleButton(
-                  icon: MdiIcons.facebookMessenger,
+                  icon: MdiIcons.filter,
                   iconSize: 30.0,
                   onPressed: () => print('Messenger'),
                 ),

@@ -36,7 +36,7 @@ class _HomePState extends State<HomeP> {
   Future<void> login() async {
     List<dynamic> res = await FirebaseAuthService().signInWithGoogle();
     try {
-      user = await ApiService.instance
+      user = await ApiServices.instance
           .login(newUser: res[0], user: res[1], tokenResult: res[2]);
       print(user.userData.email);
       print(user.authorizeToken);
@@ -429,7 +429,7 @@ class _HomePState extends State<HomeP> {
   void logout() async {
     try {
       var rr = (await _prefs).getString('token');
-      var res = await ApiService.instance.logout(token: rr);
+      var res = await ApiServices.instance.logout(token: rr);
       print(res);
       await FirebaseAuthService().signOut();
       user = null;

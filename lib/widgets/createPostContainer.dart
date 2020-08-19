@@ -1,5 +1,6 @@
 import 'package:Bridge/models/Users.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'widgets.dart';
 
@@ -27,15 +28,35 @@ class CreatePostContainer extends StatelessWidget {
           children: [
             Row(
               children: [
-                ProfileAvatar(imageUrl: currentUser.userData.photoURL),
+                const SizedBox(width: 5.0),
+
+                ProfileAvatar(
+                    imageUrl: currentUser?.userData?.photoURL ?? null),
                 const SizedBox(width: 8.0),
+                // Expanded(
+                //   child: TextField(
+                //     decoration: InputDecoration.collapsed(
+
+                //       hintText: 'What\'s on your mind?',
+                //     ),
+                //   ),
+                // )
                 Expanded(
-                  child: TextField(
-                    decoration: InputDecoration.collapsed(
-                      hintText: 'What\'s on your mind?',
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[400]),
+                      borderRadius: BorderRadius.circular(30.0),
                     ),
+                    child: Center(
+                      child: Text(
+                        'What\'s on your mind?',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                    height: 40,
+                    width: double.infinity,
                   ),
-                )
+                ),
               ],
             ),
             const Divider(height: 10.0, thickness: 0.5),
@@ -43,32 +64,24 @@ class CreatePostContainer extends StatelessWidget {
               height: 40.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  FlatButton.icon(
-                    onPressed: () => print('Live'),
-                    icon: const Icon(
-                      Icons.videocam,
-                      color: Colors.red,
-                    ),
-                    label: Text('Live'),
-                  ),
-                  const VerticalDivider(width: 8.0),
                   FlatButton.icon(
                     onPressed: () => print('Photo'),
                     icon: const Icon(
-                      Icons.photo_library,
+                      MdiIcons.imagePlus,
                       color: Colors.green,
                     ),
                     label: Text('Photo'),
                   ),
-                  const VerticalDivider(width: 8.0),
+                  const VerticalDivider(width: 10.0),
                   FlatButton.icon(
                     onPressed: () => print('Room'),
                     icon: const Icon(
-                      Icons.video_call,
+                      MdiIcons.poll,
                       color: Colors.purpleAccent,
                     ),
-                    label: Text('Room'),
+                    label: Text('Poll'),
                   ),
                 ],
               ),
