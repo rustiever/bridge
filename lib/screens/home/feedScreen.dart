@@ -1,147 +1,123 @@
 import 'package:Bridge/constants/constants.dart';
+import 'package:Bridge/controllers/anonFeedController.dart';
+import 'package:Bridge/controllers/userController.dart';
 import 'package:Bridge/models/Feeds.dart';
-import 'package:Bridge/models/models.dart';
-import 'package:Bridge/services/Service.dart';
-import 'package:Bridge/stateProviders/Providers.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:get/get.dart';
+
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class Home extends HookWidget {
-  final TrackingScrollController trackingScrollController;
+import '../navScreen.dart';
 
-  const Home({Key key, @required this.trackingScrollController})
-      : super(key: key);
+class Homee extends GetWidget<NavController> {
   @override
   Widget build(BuildContext context) {
-    final user = useProvider(userProvider);
-    return user.when(
-      data: (user) => Scaffold(
-        body: Responsive(
-          mobile: _HomeScreenMobile(scrollController: trackingScrollController),
-          desktop:
-              _HomeScreenDesktop(scrollController: trackingScrollController),
-        ),
-      ),
-      loading: () => Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      error: (e, s) => Scaffold(
-        body: Center(
-          child: Text("$e  $s"),
-        ),
+    return Scaffold(
+      body: Responsive(
+        mobile: HomeScreenMobile(
+            scrollController: controller.trackingScrollController),
+        desktop: HomeScreenDesktop(
+            scrollController: controller.trackingScrollController),
       ),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  @override
-  _HomeScreenState createState() => _HomeScreenState();
-}
-
-class _HomeScreenDesktop extends HookWidget {
+class HomeScreenDesktop extends GetView<UserController> {
   final TrackingScrollController scrollController;
 
-  const _HomeScreenDesktop({
+  const HomeScreenDesktop({
     Key key,
     @required this.scrollController,
   }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final user = useProvider(userProvider).data.value;
-    final refresh = useState(true);
-    var anonFuture =
-        useMemoized(() => ApiServices.instance.getAnonFeeds(), [refresh.value]);
-    AsyncSnapshot<FeedModel> snapshot = useFuture(anonFuture);
-    print(snapshot.connectionState);
-    switch (snapshot.connectionState) {
-      case ConnectionState.done:
-        return Row(
-          children: [
-            Flexible(
-              flex: 2,
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: MoreOptionsList(currentUser: currentUser),
-                ),
-              ),
+    return Row(
+      children: [
+        Flexible(
+          flex: 2,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: MoreOptionsList(currentUser: controller.user.value),
             ),
-            const Spacer(),
-            Container(
-              width: 600.0,
-              child: CustomScrollView(
-                controller: scrollController,
-                slivers: [
-                  SliverToBoxAdapter(
-                    child: CreatePostContainer(currentUser: user),
-                  ),
-                  SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        final FeedData post = snapshot?.data?.feedData[index] ??
-                            FeedData.fromJson({});
-                        return PostContainer(
-                          post: post,
-                        );
-                      },
-                      childCount: snapshot?.data?.feedData?.length ?? 0,
+          ),
+        ),
+        const Spacer(),
+        Container(
+          width: 600.0,
+          child: GetX<AnonFeedController>(
+            init: Get.find(),
+            builder: (aController) {
+              if (aController.feeds() != null) {
+                print('inside');
+                return CustomScrollView(
+                  controller: scrollController,
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: CreatePostContainer(
+                          currentUser: controller.user.value),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const Spacer(),
-            Flexible(
-              flex: 2,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: ContactsList(users: onlineUsers),
-                ),
-              ),
-            ),
-          ],
-        );
-      case ConnectionState.active:
-      case ConnectionState.none:
-      case ConnectionState.waiting:
-      default:
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-    }
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final FeedData post =
+                              aController.feeds.value.feedData[index] ??
+                                  FeedData.fromJson({});
+                          return PostContainer(
+                            post: post,
+                          );
+                        },
+                        childCount:
+                            aController?.feeds?.value?.feedData?.length ?? 0,
+                      ),
+                    ),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            },
+          ),
+          // child:
+        ),
+        // const Spacer(),
+        // Flexible(
+        //   flex: 2,
+        //   child: Align(
+        //     alignment: Alignment.centerRight,
+        //     child: Padding(
+        //       padding: const EdgeInsets.all(12.0),
+        //       child: ContactsList(users: onlineUsers),
+        //     ),
+        //   ),
+        // ),
+      ],
+    );
   }
 }
 
-class _HomeScreenMobile extends HookWidget {
+class HomeScreenMobile extends GetView<UserController> {
   final TrackingScrollController scrollController;
 
-  const _HomeScreenMobile({
+  const HomeScreenMobile({
     Key key,
     @required this.scrollController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final user = useProvider(userProvider).data.value;
-    final refresh = useState(true);
-    var anonFuture =
-        useMemoized(() => ApiServices.instance.getAnonFeeds(), [refresh.value]);
-    AsyncSnapshot<FeedModel> snapshot = useFuture(anonFuture);
-    print(user == null);
-    print(user);
-    switch (snapshot.connectionState) {
-      case ConnectionState.done:
-        print(snapshot?.data?.feedData[0]?.caption ?? 'none');
+    return GetX<AnonFeedController>(
+      builder: (_) {
+        if (_.feeds() == null) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
         return CustomScrollView(
           controller: scrollController,
           slivers: [
@@ -149,7 +125,7 @@ class _HomeScreenMobile extends HookWidget {
               brightness: Brightness.light,
               backgroundColor: Colors.white,
               title: Text(
-                'Bridge',
+                'bridge',
                 style: const TextStyle(
                   color: Palette.facebookBlue,
                   fontSize: 28.0,
@@ -173,49 +149,22 @@ class _HomeScreenMobile extends HookWidget {
               ],
             ),
             SliverToBoxAdapter(
-              child: CreatePostContainer(currentUser: user),
+              child: CreatePostContainer(currentUser: controller.user.value),
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final FeedData post = snapshot.data.feedData[index];
+                  final FeedData post = _.feeds.value.feedData[index];
                   return PostContainer(
                     post: post,
                   );
                 },
-                childCount: snapshot.data.feedData.length,
+                childCount: _.feeds.value.feedData.length,
               ),
             ),
           ],
         );
-      case ConnectionState.active:
-      case ConnectionState.waiting:
-      case ConnectionState.none:
-      default:
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-    }
-  }
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  final TrackingScrollController _trackingScrollController =
-      TrackingScrollController();
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Home(
-        trackingScrollController: _trackingScrollController,
-      ),
+      },
     );
-  }
-
-  @override
-  void dispose() {
-    _trackingScrollController.dispose();
-    super.dispose();
   }
 }

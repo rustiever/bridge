@@ -1,4 +1,4 @@
-import 'package:Bridge/models/models.dart';
+import 'package:Bridge/models/Users.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets.dart';
@@ -18,11 +18,11 @@ class UserCard extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ProfileAvatar(imageUrl: user.imageUrl),
+          ProfileAvatar(imageUrl: user?.userData?.photoUrl ?? null),
           const SizedBox(width: 6.0),
           Flexible(
             child: Text(
-              user.name,
+              user?.userData?.name ?? '',
               style: const TextStyle(fontSize: 16.0),
               overflow: TextOverflow.ellipsis,
             ),

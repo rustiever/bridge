@@ -8,30 +8,9 @@ class FirebaseAuthService {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
 
-  // _userFromFirebase(
-  //     FirebaseUser user, GoogleSignInAuthentication gAuth, AuthResult auth) {
-  //   if (user == null) {
-  //     return null;
-  //   }
-  //   return [
-  //     user.displayName,
-  //     user.email,
-  //     user.isEmailVerified.toString(),
-  //     user.metadata.lastSignInTime.toIso8601String(),
-  //     user.phoneNumber,
-  //     gAuth.accessToken,
-  //     gAuth.idToken,
-  //     gAuth.serverAuthCode,
-  //     auth.additionalUserInfo.isNewUser.toString(),
-  //     // auth.additionalUserInfo.profile,
-  //     auth.additionalUserInfo.providerId,
-  //     auth.additionalUserInfo.username
-  //   ];
-  // }
-
-  // Stream<List<dynamic>> get onAuthStateChanged {
-  //   return _firebaseAuth.onAuthStateChanged.map(_userFromFirebase);
-  // }
+  Stream get onAuthStateChanged {
+    return _firebaseAuth.onAuthStateChanged;
+  }
 
   Future<List<dynamic>> signInWithGoogle() async {
     final googleUser = await _googleSignIn.signIn();
@@ -54,8 +33,6 @@ class FirebaseAuthService {
       authResult.user,
       await authResult.user.getIdToken()
     ];
-
-    // return _userFromFirebase(authResult.user, googleAuth, authResult);
   }
 
   Future<void> signOut() async {
@@ -68,9 +45,4 @@ class FirebaseAuthService {
       print(e);
     }
   }
-
-  // Future<List<dynamic>> currentUser() async {
-  //   final user = await _firebaseAuth.currentUser();
-  //   return _userFromFirebase(user);
-  // }
 }

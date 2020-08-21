@@ -1,11 +1,24 @@
+import 'package:Bridge/models/Feeds.dart';
+import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/services/Service.dart';
-import 'package:meta/meta.dart';
 
 class Repository {
-  final ApiService service;
-  Repository({@required this.service}) : assert(service != null);
+  Repository._instance();
+  static final instance = Repository._instance();
+  final ApiService service = ApiService.instance;
 
-  login() => service.login();
+  Future<bool> login() async => await service.login();
 
-  logout() => service.serverLogout();
+  Future<bool> logout() async {
+    return await service.serverLogout();
+  }
+
+  User getUser() => service.getUserDetails();
+
+  Future<FeedModel> anonFeeds() async {
+    print('in anon repo ');
+    var t = await service.getAnonFeeds();
+    print(t?.feedData[0]?.caption ?? 'hello');
+    return t;
+  }
 }

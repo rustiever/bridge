@@ -1,5 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/models/models.dart';
+import 'package:Bridge/models/Users.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 

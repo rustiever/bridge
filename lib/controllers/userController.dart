@@ -1,7 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:Bridge/models/Users.dart';
+import 'package:Bridge/models/repository/repository.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  final RelativePositionedTransition repository;
-  UserController({@required this.repository}) : assert(repository != null);
+  final Repository repository = Repository.instance;
+
+  final user = User().obs;
+
+  @override
+  void onInit() => getuser();
+
+  getuser() {
+    user.value = repository.getUser();
+  }
 }

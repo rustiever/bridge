@@ -5,7 +5,7 @@ import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get_storage/get_storage.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -20,13 +20,12 @@ class _SplashScreenState extends State<SplashScreen>
   Animation<double> animation;
 
   startTime() async {
-    var _duration = Duration(seconds: 3);
+    var _duration = Duration(seconds: 2);
     return Timer(_duration, navigationPage);
   }
 
   Future<void> navigationPage() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    var user = prefs.getString('user');
+    var user = GetStorage('userContainer').hasData('user');
     print('In splashscreen');
     if (user != null)
       Get.offNamed(Homeroute);
