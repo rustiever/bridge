@@ -51,9 +51,14 @@ class NavScreen extends StatelessWidget {
     MdiIcons.bellOutline,
     Icons.menu,
   ];
-  final AnonFeedController aController = Get.put(AnonFeedController());
+  final AnonFeedController aController = Get.find();
   final NavController nav = Get.put(NavController());
-  final UserController controller = Get.put(UserController());
+  final UserController controller = Get.find();
+  // final AnonFeedController aController = Get.put(AnonFeedController(
+  //     repository: Repository(service: ApiService(httpClient: Client()))));
+  // final NavController nav = Get.put(NavController());
+  // final UserController controller = Get.put(UserController(
+  //     repository: Repository(service: ApiService(httpClient: Client()))));
 
   final List<Widget> _screens = [
     Homee(),

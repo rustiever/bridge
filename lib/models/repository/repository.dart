@@ -1,11 +1,11 @@
 import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/services/Service.dart';
+import 'package:meta/meta.dart';
 
 class Repository {
-  Repository._instance();
-  static final instance = Repository._instance();
-  final ApiService service = ApiService.instance;
+  final ApiService service;
+  Repository({@required this.service}) : assert(service != null);
 
   Future<bool> login() async => await service.login();
 

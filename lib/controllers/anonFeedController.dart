@@ -4,7 +4,9 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 
 class AnonFeedController extends GetxController {
-  final Repository repository = Repository.instance;
+  final Repository repository;
+
+  AnonFeedController({this.repository});
 
   Rx<FeedModel> feeds = Rx<FeedModel>();
 

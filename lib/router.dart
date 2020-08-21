@@ -1,6 +1,5 @@
 import 'package:Bridge/bindings/anonFeedBinding.dart';
 import 'package:Bridge/bindings/authBinding.dart';
-import 'package:Bridge/bindings/commonBinding.dart';
 import 'package:Bridge/bindings/userBinding.dart';
 import 'package:Bridge/screens/screens.dart';
 import 'package:flutter/material.dart';

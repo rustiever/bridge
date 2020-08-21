@@ -5,6 +5,7 @@ import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,8 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/Apis.dart';
 
 class ApiService {
-  ApiService._instance();
-  static final ApiService instance = ApiService._instance();
+  final http.Client httpClient;
+
+  ApiService({@required this.httpClient});
   final storage = GetStorage('userContainer');
 
   Future<bool> login() async {
@@ -38,7 +40,7 @@ class ApiService {
     print('In server Login Func');
     http.Response res;
     if (newUser) {
-      res = await http.post(
+      res = await httpClient.post(
         student + registerApi,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -54,7 +56,7 @@ class ApiService {
       } else
         return Future.error('something went wrong');
     } else {
-      res = await http.post(
+      res = await httpClient.post(
         student + loginApi,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -86,7 +88,7 @@ class ApiService {
     User user = getUserDetails();
     if (user != null) {
       print('In server Logout Func');
-      var res = await http.get(student + logoutApi, headers: {
+      var res = await httpClient.get(student + logoutApi, headers: {
         HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}'
       });
       if (res.statusCode == 200) {
@@ -104,7 +106,7 @@ class ApiService {
 
   Future<FeedModel> getAnonFeeds() async {
     print('IN getAnonFeeds Func');
-    var res = await http.get(
+    var res = await httpClient.get(
         'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home');
 
     if (res.statusCode == 200) {
