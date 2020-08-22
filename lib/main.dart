@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/utils.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'constants/constants.dart';
 import 'router.dart' as router;
 
@@ -11,7 +10,7 @@ import 'router.dart' as router;
 // }
 void main() async {
   await GetStorage.init();
-  runApp(ProviderScope(child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +18,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      // onGenerateRoute: router.generateRoute,
       getPages: router.routes(),
       initialRoute:
           GetPlatform.isAndroid ? router.Splashroute : router.Homeroute,

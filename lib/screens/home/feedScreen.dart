@@ -1,5 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/controllers/anonFeedController.dart';
+import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/controllers/userController.dart';
 import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/widgets/widgets.dart';
@@ -48,7 +48,7 @@ class HomeScreenDesktop extends GetView<UserController> {
         const Spacer(),
         Container(
           width: 600.0,
-          child: GetX<AnonFeedController>(
+          child: GetX<FeedController>(
             init: Get.find(),
             builder: (aController) {
               if (aController.feeds() != null) {
@@ -85,17 +85,17 @@ class HomeScreenDesktop extends GetView<UserController> {
           ),
           // child:
         ),
-        // const Spacer(),
-        // Flexible(
-        //   flex: 2,
-        //   child: Align(
-        //     alignment: Alignment.centerRight,
-        //     child: Padding(
-        //       padding: const EdgeInsets.all(12.0),
-        //       child: ContactsList(users: onlineUsers),
-        //     ),
-        //   ),
-        // ),
+        const Spacer(),
+        Flexible(
+          flex: 2,
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              // child: ContactsList(users: onlineUsers),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -111,7 +111,7 @@ class HomeScreenMobile extends GetView<UserController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<AnonFeedController>(
+    return GetX<FeedController>(
       builder: (_) {
         if (_.feeds() == null) {
           return Center(

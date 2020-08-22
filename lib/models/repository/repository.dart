@@ -17,7 +17,7 @@ class Repository {
 
   Future<FeedModel> anonFeeds() async {
     print('in anon repo ');
-    var t = await service.getAnonFeeds();
+    var t = await service.getFeeds();
     print(t?.feedData[0]?.caption ?? 'hello');
     return t;
   }

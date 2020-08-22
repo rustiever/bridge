@@ -1,43 +1,27 @@
-import 'package:Bridge/controllers/anonFeedController.dart';
-import 'package:Bridge/controllers/authController.dart';
-import 'package:Bridge/controllers/userController.dart';
+import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/models/Users.dart';
-import 'package:Bridge/models/repository/repository.dart';
 import 'package:Bridge/router.dart';
 import 'package:Bridge/screens/screens.dart';
-import 'package:Bridge/services/Service.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
-import 'package:http/http.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class Settings extends StatelessWidget {
-  final AuthController authController = Get.find<AuthController>();
+class NavController extends GetxController {
+  var selectedIndex = 0.obs;
+  TrackingScrollController trackingScrollController;
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          RaisedButton(
-            onPressed: Get.find<UserController>().user != null
-                ? () async {
-                    try {
-                      var status = await authController.logout();
-                      print(status);
-                      Get.offAllNamed(Authroute);
-                    } catch (e) {
-                      print(e);
-                    }
-                  }
-                : null,
-            child: Text('logout'),
-          )
-        ],
-      ),
-    );
+  onClose() {
+    print('nav onclose func');
+    trackingScrollController?.dispose();
+    super.onClose();
+  }
+
+  @override
+  void onInit() {
+    trackingScrollController = TrackingScrollController();
+    super.onInit();
   }
 }
 
@@ -46,26 +30,21 @@ class NavScreen extends StatelessWidget {
   final List<IconData> _icons = const [
     Icons.home,
     // Icons.ondemand_video,
-    // MdiIcons.accountCircleOutline,
     // MdiIcons.accountGroupOutline,
     MdiIcons.bellOutline,
+    MdiIcons.accountCircleOutline,
     Icons.menu,
   ];
-  final AnonFeedController aController = Get.find();
+  final FeedController aController = Get.find();
   final NavController nav = Get.put(NavController());
   final UserController controller = Get.find();
-  // final AnonFeedController aController = Get.put(AnonFeedController(
-  //     repository: Repository(service: ApiService(httpClient: Client()))));
-  // final NavController nav = Get.put(NavController());
-  // final UserController controller = Get.put(UserController(
-  //     repository: Repository(service: ApiService(httpClient: Client()))));
 
   final List<Widget> _screens = [
     Homee(),
     // Scaffold(),
     // Scaffold(),
-    // Scaffold(),
     Scaffold(),
+    Profile(),
     Settings()
   ];
 
@@ -114,19 +93,30 @@ class NavScreen extends StatelessWidget {
   }
 }
 
-class NavController extends GetxController {
-  var selectedIndex = 0.obs;
-  TrackingScrollController trackingScrollController;
+class Settings extends StatelessWidget {
+  final AuthController authController = Get.find<AuthController>();
   @override
-  void onInit() {
-    trackingScrollController = TrackingScrollController();
-    super.onInit();
-  }
-
-  @override
-  onClose() {
-    print('nav onclose func');
-    trackingScrollController?.dispose();
-    super.onClose();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          RaisedButton(
+            onPressed: Get.find<UserController>().user != null
+                ? () async {
+                    try {
+                      var status = await authController.logout();
+                      print(status);
+                      Get.offAllNamed(Authroute);
+                    } catch (e) {
+                      print(e);
+                    }
+                  }
+                : null,
+            child: Text('logout'),
+          )
+        ],
+      ),
+    );
   }
 }
