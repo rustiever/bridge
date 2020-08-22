@@ -1,11 +1,8 @@
 import 'package:Bridge/controllers/authController.dart';
-import 'package:Bridge/models/repository/repository.dart';
 import 'package:Bridge/router.dart';
-import 'package:Bridge/services/Service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 class Auth extends GetWidget<AuthController> {
   @override

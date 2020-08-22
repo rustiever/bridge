@@ -29,6 +29,7 @@ dependencies:
   device_preview:
   cached_network_image:
   material_design_icons_flutter: 
+  # remove and add own timeago 
   timeago:
 
 dev_dependencies:

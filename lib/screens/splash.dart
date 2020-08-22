@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:Bridge/constants/Assets.dart';
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +23,14 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> navigationPage() async {
+    // GetStorage('userContainer').erase();
     var user = GetStorage('userContainer').hasData('user');
     print('In splashscreen');
-    if (user != null)
+    if (user) {
       Get.offNamed(Homeroute);
-    else
+    } else {
       Get.offNamed(Authroute);
+    }
   }
 
   @override
@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Image.asset(
-                appIcon,
+                Assets.appIcon,
                 width: animation.value * 250,
                 height: animation.value * 250,
               ),

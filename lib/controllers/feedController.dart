@@ -3,10 +3,10 @@ import 'package:Bridge/models/repository/repository.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 
-class AnonFeedController extends GetxController {
+class FeedController extends GetxController {
   final Repository repository;
 
-  AnonFeedController({this.repository});
+  FeedController({this.repository});
 
   Rx<FeedModel> feeds = Rx<FeedModel>();
 
