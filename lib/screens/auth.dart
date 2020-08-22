@@ -1,24 +1,13 @@
+import 'package:Bridge/controllers/authController.dart';
+import 'package:Bridge/models/repository/repository.dart';
 import 'package:Bridge/router.dart';
-import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:Bridge/services/Service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 
-class Auth extends StatelessWidget {
-  Future<void> login() async {
-    List<dynamic> res = await FirebaseAuthService().signInWithGoogle();
-    try {
-      var user = await ApiServices.instance
-          .login(newUser: res[0], user: res[1], tokenResult: res[2]);
-      print(user.userData.email);
-      print(user.authorizeToken);
-      // Navigator.of(context).pushReplacementNamed(Homeroute);
-      Get.offNamed(Homeroute);
-    } catch (e) {
-      print(e);
-    }
-  }
-
+class Auth extends GetWidget<AuthController> {
   @override
   Widget build(BuildContext context) {
     // final _media = MediaQuery.of(context).size;
@@ -27,7 +16,16 @@ class Auth extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          UserButton(user: "Student", ontap: login),
+          UserButton(
+              user: "Student",
+              ontap: () async {
+                if (await controller.login()) {
+                  print('sucessful login');
+                  Get.offAndToNamed(Homeroute);
+                } else {
+                  Get.snackbar('Sorry', 'Can\'t login from server side');
+                }
+              }),
           UserButton(
             user: "Faculty",
             ontap: () {

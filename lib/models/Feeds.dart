@@ -24,9 +24,8 @@ class FeedModel {
 class FeedData {
   String postId;
   String caption;
-  List<String> likes;
+  int likes;
   String photoUrl;
-  String scope;
   String ownerName;
   String ownerPhotoUrl;
   String ownerUid;
@@ -38,7 +37,6 @@ class FeedData {
       this.caption,
       this.likes,
       this.photoUrl,
-      this.scope,
       this.ownerName,
       this.ownerPhotoUrl,
       this.ownerUid,
@@ -48,9 +46,8 @@ class FeedData {
   FeedData.fromJson(Map<String, dynamic> json) {
     postId = json['postId'];
     caption = json['caption'];
-    likes = json['likes'].cast<String>();
+    likes = json['likes'];
     photoUrl = json['photoUrl'];
-    scope = json['scope'];
     ownerName = json['ownerName'];
     ownerPhotoUrl = json['ownerPhotoUrl'];
     ownerUid = json['ownerUid'];
@@ -64,7 +61,6 @@ class FeedData {
     data['caption'] = this.caption;
     data['likes'] = this.likes;
     data['photoUrl'] = this.photoUrl;
-    data['scope'] = this.scope;
     data['ownerName'] = this.ownerName;
     data['ownerPhotoUrl'] = this.ownerPhotoUrl;
     data['ownerUid'] = this.ownerUid;

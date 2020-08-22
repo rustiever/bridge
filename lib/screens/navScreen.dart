@@ -1,28 +1,48 @@
-import 'package:Bridge/models/models.dart';
+import 'package:Bridge/controllers/anonFeedController.dart';
+import 'package:Bridge/controllers/authController.dart';
+import 'package:Bridge/controllers/userController.dart';
+import 'package:Bridge/models/Users.dart';
+import 'package:Bridge/models/repository/repository.dart';
 import 'package:Bridge/router.dart';
 import 'package:Bridge/screens/screens.dart';
-import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:Bridge/services/Service.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
+import 'package:http/http.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class NavScreen extends StatefulWidget {
+class Settings extends StatelessWidget {
+  final AuthController authController = Get.find<AuthController>();
   @override
-  _NavScreenState createState() => _NavScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          RaisedButton(
+            onPressed: Get.find<UserController>().user != null
+                ? () async {
+                    try {
+                      var status = await authController.logout();
+                      print(status);
+                      Get.offAllNamed(Authroute);
+                    } catch (e) {
+                      print(e);
+                    }
+                  }
+                : null,
+            child: Text('logout'),
+          )
+        ],
+      ),
+    );
+  }
 }
 
-class _NavScreenState extends State<NavScreen> {
-  final List<Widget> _screens = [
-    HomeScreen(),
-    // Scaffold(),
-    // Scaffold(),
-    // Scaffold(),
-    Scaffold(),
-    Settings()
-  ];
+class NavScreen extends StatelessWidget {
+  final User user;
   final List<IconData> _icons = const [
     Icons.home,
     // Icons.ondemand_video,
@@ -31,66 +51,29 @@ class _NavScreenState extends State<NavScreen> {
     MdiIcons.bellOutline,
     Icons.menu,
   ];
-  int _selectedIndex = 0;
+  final AnonFeedController aController = Get.find();
+  final NavController nav = Get.put(NavController());
+  final UserController controller = Get.find();
+  // final AnonFeedController aController = Get.put(AnonFeedController(
+  //     repository: Repository(service: ApiService(httpClient: Client()))));
+  // final NavController nav = Get.put(NavController());
+  // final UserController controller = Get.put(UserController(
+  //     repository: Repository(service: ApiService(httpClient: Client()))));
 
-  @override
-  Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size;
-    return DefaultTabController(
-      length: _icons.length,
-      child: Scaffold(
-        appBar: Responsive.isDesktop(context)
-            ? PreferredSize(
-                preferredSize: Size(screenSize.width, 100.0),
-                child: CustomAppBar(
-                  currentUser: currentUser,
-                  icons: _icons,
-                  selectedIndex: _selectedIndex,
-                  onTap: (index) => setState(() => _selectedIndex = index),
-                ),
-              )
-            : null,
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _screens,
-        ),
-        bottomNavigationBar: !Responsive.isDesktop(context)
-            ? Container(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                color: Colors.white,
-                child: CustomTabBar(
-                  icons: _icons,
-                  selectedIndex: _selectedIndex,
-                  onTap: (index) => setState(() => _selectedIndex = index),
-                ),
-              )
-            : const SizedBox.shrink(),
-      ),
-    );
-  }
-}
-
-class Nav extends HookWidget {
   final List<Widget> _screens = [
-    HomeScreen(),
+    Homee(),
+    // Scaffold(),
+    // Scaffold(),
+    // Scaffold(),
     Scaffold(),
-    Scaffold(),
-    Scaffold(),
-    Scaffold(),
-    Scaffold(),
+    Settings()
   ];
-  final List<IconData> _icons = const [
-    Icons.home,
-    Icons.ondemand_video,
-    MdiIcons.accountCircleOutline,
-    MdiIcons.accountGroupOutline,
-    MdiIcons.bellOutline,
-    Icons.menu,
-  ];
+
+  NavScreen({Key key, this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    var _selectedIndex = useState(0);
+
     return DefaultTabController(
       length: _icons.length,
       child: Scaffold(
@@ -98,16 +81,22 @@ class Nav extends HookWidget {
             ? PreferredSize(
                 preferredSize: Size(screenSize.width, 100.0),
                 child: CustomAppBar(
-                  currentUser: currentUser,
+                  // currentUser: controller.user.value,
+                  currentUser: null,
                   icons: _icons,
-                  selectedIndex: _selectedIndex.value,
-                  onTap: (index) => _selectedIndex.value = index,
+                  selectedIndex: nav.selectedIndex.value,
+                  onTap: (index) {
+                    nav.selectedIndex.value = index;
+                    print(nav.selectedIndex.value);
+                  },
                 ),
               )
             : null,
-        body: IndexedStack(
-          index: _selectedIndex.value,
-          children: _screens,
+        body: Obx(
+          () => IndexedStack(
+            index: nav.selectedIndex.value,
+            children: _screens,
+          ),
         ),
         bottomNavigationBar: !Responsive.isDesktop(context)
             ? Container(
@@ -115,8 +104,8 @@ class Nav extends HookWidget {
                 color: Colors.white,
                 child: CustomTabBar(
                   icons: _icons,
-                  selectedIndex: _selectedIndex.value,
-                  onTap: (index) => _selectedIndex.value = index,
+                  selectedIndex: nav.selectedIndex.value,
+                  onTap: (index) => nav.selectedIndex.value = index,
                 ),
               )
             : const SizedBox.shrink(),
@@ -125,39 +114,19 @@ class Nav extends HookWidget {
   }
 }
 
-class Settings extends StatelessWidget {
+class NavController extends GetxController {
+  var selectedIndex = 0.obs;
+  TrackingScrollController trackingScrollController;
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          RaisedButton(
-            onPressed: () async {
-              try {
-                var rr =
-                    (await SharedPreferences.getInstance()).getString('token');
-                var rrt =
-                    (await SharedPreferences.getInstance()).getString('user');
-                print(rrt);
-                await (await SharedPreferences.getInstance())
-                    .clear(); // TODO refactor pls
-                var res = await ApiServices.instance.logout(token: rr);
-                print(res);
-                await FirebaseAuthService().signOut();
-                Navigator.of(context)
-                    .pushNamedAndRemoveUntil(Authroute, (route) => false);
-                // user = null;
-                // setState(() {});
-              } catch (e) {
-                print(e);
-              }
-              // Navigator.pop(context);
-            },
-            child: Text('logout'),
-          )
-        ],
-      ),
-    );
+  void onInit() {
+    trackingScrollController = TrackingScrollController();
+    super.onInit();
+  }
+
+  @override
+  onClose() {
+    print('nav onclose func');
+    trackingScrollController?.dispose();
+    super.onClose();
   }
 }

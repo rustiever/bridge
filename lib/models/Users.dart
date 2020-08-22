@@ -1,67 +1,63 @@
 class User {
-  String authorizeToken;
   UserData userData;
+  String authorizeToken;
 
-  User({this.authorizeToken, this.userData});
+  User({this.userData, this.authorizeToken});
 
   User.fromJson(Map<String, dynamic> json) {
-    authorizeToken = json['authorizeToken'];
     userData = json['userData'] != null
         ? new UserData.fromJson(json['userData'])
         : null;
+    authorizeToken = json['authorizeToken'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['authorizeToken'] = this.authorizeToken;
     if (this.userData != null) {
       data['userData'] = this.userData.toJson();
     }
+    data['authorizeToken'] = this.authorizeToken;
     return data;
   }
 }
 
 class UserData {
-  int batch;
-  String uSN;
-  String email;
-  String branch;
-  String userID;
-  String photoURL;
+  String uid;
   String name;
-  List<String> token;
+  String email;
+  String photoUrl;
+  String usn;
+  String branch;
+  int batch;
 
   UserData(
-      {this.batch,
-      this.uSN,
-      this.email,
-      this.branch,
-      this.userID,
-      this.photoURL,
+      {this.uid,
       this.name,
-      this.token});
+      this.email,
+      this.photoUrl,
+      this.usn,
+      this.branch,
+      this.batch});
 
   UserData.fromJson(Map<String, dynamic> json) {
-    batch = json['Batch'];
-    uSN = json['USN'];
-    email = json['Email'];
-    branch = json['Branch'];
-    userID = json['UserID'];
-    photoURL = json['PhotoURL'];
-    name = json['Name'];
-    token = json['token'].cast<String>();
+    uid = json['uid'];
+    name = json['name'];
+    email = json['email'];
+    photoUrl = json['photoUrl'];
+    usn = json['usn'];
+    branch = json['branch'];
+    batch = json['batch'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Batch'] = this.batch;
-    data['USN'] = this.uSN;
-    data['Email'] = this.email;
-    data['Branch'] = this.branch;
-    data['UserID'] = this.userID;
-    data['PhotoURL'] = this.photoURL;
-    data['Name'] = this.name;
-    data['token'] = this.token;
+    data['uid'] = this.uid;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['photoUrl'] = this.photoUrl;
+    data['usn'] = this.usn;
+    data['branch'] = this.branch;
+    data['batch'] = this.batch;
     return data;
   }
 }

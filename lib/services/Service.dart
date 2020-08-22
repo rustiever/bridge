@@ -6,37 +6,38 @@ import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/Apis.dart';
-import '../router.dart';
 
 class ApiService {
   final http.Client httpClient;
 
   ApiService({@required this.httpClient});
-  final storage = GetStorage('user');
+  final storage = GetStorage('userContainer');
 
-  Future<void> login() async {
+  Future<bool> login() async {
+    print('login func');
     List<dynamic> res = await FirebaseAuthService().signInWithGoogle();
     try {
-      var user =
+      User user =
           await serverLogin(newUser: res[0], user: res[1], tokenResult: res[2]);
+      await storage.write('user', user);
+      print(storage.read('user'));
       print(user.userData.email);
       print(user.authorizeToken);
-      Get.offNamed(Homeroute);
+      return true;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
   Future<User> serverLogin(
       {bool newUser, FirebaseUser user, IdTokenResult tokenResult}) async {
-    print('In Login Func');
-    // var auth = await FirebaseAuthService().signInWithGoogle();
+    print('In server Login Func');
     http.Response res;
     if (newUser) {
       res = await httpClient.post(
@@ -50,8 +51,6 @@ class ApiService {
       );
       if (res.statusCode == 201) {
         var user = User.fromJson(jsonDecode(res.body));
-
-        await storage.write('user', res.body);
         print('logging in new user');
         return user;
       } else
@@ -70,7 +69,6 @@ class ApiService {
       );
       if (res.statusCode == 200) {
         var user = User.fromJson(jsonDecode(res.body));
-        await storage.write('user', res.body);
         print('logging in old user');
         return user;
       } else
@@ -80,15 +78,16 @@ class ApiService {
 
   User getUserDetails() {
     var user = storage.read('user');
+    // print(user);
     print('In getuserDetails()');
-    if (user != null) return User.fromJson(json.decode(user));
+    if (user != null) return User.fromJson(user);
     return null;
   }
 
   Future<bool> serverLogout() async {
     User user = getUserDetails();
     if (user != null) {
-      print('In Logout Func');
+      print('In server Logout Func');
       var res = await httpClient.get(student + logoutApi, headers: {
         HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}'
       });
@@ -100,8 +99,8 @@ class ApiService {
         return Future.error('something went wrong');
     } else {
       print('error from local storage');
-      Get.snackbar('Sorry', 'Can\'t logout from server side');
       return false;
+      // TODO handle the logout
     }
   }
 

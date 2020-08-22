@@ -413,7 +413,7 @@ class _HomePState extends State<HomeP> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                              image: NetworkImage(user.userData.photoURL),
+                              image: NetworkImage(user.userData.photoUrl),
                               fit: BoxFit.fill),
                         ),
                       ),

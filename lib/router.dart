@@ -1,3 +1,6 @@
+import 'package:Bridge/bindings/anonFeedBinding.dart';
+import 'package:Bridge/bindings/authBinding.dart';
+import 'package:Bridge/bindings/userBinding.dart';
 import 'package:Bridge/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
@@ -39,8 +42,21 @@ Route<dynamic> generateRoute(RouteSettings settings) {
 
 List<GetPage> routes() {
   return [
-    GetPage(name: Splashroute, page: () => SplashScreen()),
-    GetPage(name: Authroute, page: () => Auth()),
-    GetPage(name: Homeroute, page: () => NavScreen()),
+    GetPage(
+      name: Splashroute,
+      page: () => SplashScreen(),
+    ),
+    GetPage(name: Authroute, page: () => Auth(), binding: AuthBinding()),
+    // GetPage(
+    //   name: Authroute,
+    //   page: () => Auth(),
+    // ),
+
+    GetPage(name: Homeroute, page: () => NavScreen(), bindings: [
+      // AuthBinding(),
+      UserBinding(),
+      AnonFeedBinding(),
+    ]),
+    // GetPage(name: Homeroute, page: () => NavScreen())
   ];
 }
