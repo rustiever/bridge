@@ -1,7 +1,7 @@
 import 'package:Bridge/controllers/authController.dart';
+import 'package:Bridge/models/models.dart';
 import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
 import 'package:get/get.dart';
 
 class Auth extends GetWidget<AuthController> {
@@ -16,7 +16,7 @@ class Auth extends GetWidget<AuthController> {
           UserButton(
               user: "Student",
               ontap: () async {
-                if (await controller.login()) {
+                if (await controller.login(UserType.Student)) {
                   print('sucessful login');
                   Get.offAndToNamed(Homeroute);
                 } else {
@@ -25,16 +25,20 @@ class Auth extends GetWidget<AuthController> {
               }),
           UserButton(
             user: "Faculty",
-            ontap: () {
-              Get.snackbar(
-                  'Sorry', 'soon you\'ll able to login! not now sorry');
+            ontap: () async {
+              if (await controller.login(UserType.Faculty)) {
+                print('sucessful login');
+                Get.offAndToNamed(Homeroute);
+              } else {
+                Get.snackbar('Sorry', 'Can\'t login from server side');
+              }
             },
           ),
           UserButton(
             user: "Alumni",
             ontap: () {
-              Get.snackbar(
-                  'Sorry', 'soon you\'ll able to login! not now sorry');
+              Get.snackbar('Sorry', 'soon you\'ll able to login! not now sorry',
+                  snackPosition: SnackPosition.BOTTOM);
             },
           ),
         ],

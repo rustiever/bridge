@@ -15,61 +15,91 @@ class ApiService {
   ApiService({@required this.httpClient});
   final storage = GetStorage('userContainer');
 
-  Future<bool> login() async {
+  Future<bool> login(UserType userType) async {
     print('login func');
     List<dynamic> res = await FirebaseAuthService().signInWithGoogle();
     try {
-      User user =
-          await serverLogin(newUser: res[0], user: res[1], tokenResult: res[2]);
+      User user = await serverLogin(
+          newUser: res[0],
+          user: res[1],
+          tokenResult: res[2],
+          userType: userType);
       await storage.write('user', user);
       print(user.userData.email);
       print(user.authorizeToken);
       return true;
     } catch (e) {
       print(e);
+      FirebaseAuthService().signOut();
       return false;
     }
   }
 
   Future<User> serverLogin(
-      {bool newUser, FirebaseUser user, IdTokenResult tokenResult}) async {
+      {bool newUser,
+      FirebaseUser user,
+      IdTokenResult tokenResult,
+      UserType userType}) async {
     print('In server Login Func');
-    http.Response res;
-    if (newUser) {
-      res = await httpClient.post(
-        Api.student + Api.registerApi,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
-          <String, String>{"token": tokenResult.token, "email": user.email},
-        ),
-      );
-      if (res.statusCode == 201) {
-        var user = User.fromJson(jsonDecode(res.body));
-        print('logging in new user');
-        return user;
-      } else
-        return Future.error('something went wrong');
-    } else {
-      res = await httpClient.post(
-        Api.student + Api.loginApi,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(
+
+    String url;
+    int statusCode;
+    String body;
+
+    switch (userType) {
+      case UserType.Alumni:
+        break;
+      case UserType.Faculty:
+        if (newUser) {
+          print('new fac');
+          url = Api.facultyRegister;
+          statusCode = 201;
+          body = jsonEncode(
+            <String, String>{"token": tokenResult.token, "email": user.email},
+          );
+        }
+        print('old fac');
+        url = Api.facultyLogin;
+        statusCode = 200;
+        body = jsonEncode(
           <String, String>{
             "token": tokenResult.token,
           },
-        ),
-      );
-      if (res.statusCode == 200) {
-        var user = User.fromJson(jsonDecode(res.body));
-        print('logging in old user');
-        return user;
-      } else
-        return Future.error('not valid user');
+        );
+        break;
+      case UserType.Student:
+        if (newUser) {
+          url = Api.studentRegister;
+          statusCode = 201;
+          body = jsonEncode(
+            <String, String>{"token": tokenResult.token, "email": user.email},
+          );
+        }
+        url = Api.studentLogin;
+        statusCode = 200;
+        body = jsonEncode(
+          <String, String>{
+            "token": tokenResult.token,
+          },
+        );
     }
+
+    //Api call
+    http.Response res = await httpClient.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: body,
+    );
+
+    // response result
+    if (res.statusCode == statusCode) {
+      var user = User.fromJson(jsonDecode(res.body));
+      print('logging in the $newUser user');
+      return user;
+    } else
+      return Future.error('something went wrong');
   }
 
   User getUserDetails() {
@@ -81,6 +111,7 @@ class ApiService {
   }
 
   Future<bool> serverLogout() async {
+    // TODO implement the faculty logout before using this method
     User user = getUserDetails();
     if (user != null) {
       print('In server Logout Func');
@@ -94,7 +125,8 @@ class ApiService {
       } else
         return Future.error('something went wrong');
     } else {
-      print('error from local storage');
+      print(
+          'error from local storage user info is not available in local storage');
       return false;
       // TODO handle the logout
     }
