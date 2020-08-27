@@ -1,3 +1,4 @@
+import 'package:Bridge/tmpsExps/home.dart';
 import 'package:get/route_manager.dart';
 import 'bindings/bindings.dart';
 import 'screens/screens.dart';
@@ -13,9 +14,13 @@ List<GetPage> routes() {
     GetPage(name: Authroute, page: () => Auth(), bindings: [
       AuthBinding(),
     ]),
+    // GetPage(
+    //     name: Homeroute,
+    //     page: () => NavScreen(),
+    //     bindings: [AuthBinding(), FeedBinding(), HomeBinding()]),
     GetPage(
-        name: Homeroute,
-        page: () => NavScreen(),
-        bindings: [AuthBinding(), FeedBinding(), HomeBinding()]),
+      name: Homeroute,
+      page: () => Home(),
+    )
   ];
 }

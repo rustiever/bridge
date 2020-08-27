@@ -20,7 +20,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: router.routes(),
-      initialRoute: GetPlatform.isAndroid ? router.Authroute : router.Homeroute,
+      // initialRoute:
+      // GetPlatform.isAndroid ? router.Splashroute : router.Homeroute,
+      initialRoute: router.Authroute,
       title: 'Bridge',
       theme: ThemeData(
         primarySwatch: Colors.blue,

@@ -82,12 +82,11 @@ class Settings extends GetView<HomeController> {
           RaisedButton(
             onPressed: controller.user != null
                 ? () async {
-                    try {
-                      var status = await controller.logout();
-                      print(status);
+                    if (await controller.logout()) {
                       Get.offAllNamed(Authroute);
-                    } catch (e) {
-                      print(e);
+                    } else {
+                      Get.snackbar('Sorry',
+                          'Looks like no connection, Try with proper connection');
                     }
                   }
                 : null,

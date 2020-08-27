@@ -42,46 +42,38 @@ class ApiService {
       UserType userType}) async {
     print('In server Login Func');
 
-    String url;
-    int statusCode;
+    String url = Api.login;
+    int statusCode = 200;
+    int type;
     String body;
-
     switch (userType) {
       case UserType.Alumni:
+        type = 303;
+        // pending implementation
         break;
       case UserType.Faculty:
-        if (newUser) {
-          print('new fac');
-          url = Api.facultyRegister;
-          statusCode = 201;
-          body = jsonEncode(
-            <String, String>{"token": tokenResult.token, "email": user.email},
-          );
-        }
-        print('old fac');
-        url = Api.facultyLogin;
-        statusCode = 200;
-        body = jsonEncode(
-          <String, String>{
-            "token": tokenResult.token,
-          },
-        );
+        type = 101;
         break;
       case UserType.Student:
-        if (newUser) {
-          url = Api.studentRegister;
-          statusCode = 201;
-          body = jsonEncode(
-            <String, String>{"token": tokenResult.token, "email": user.email},
-          );
-        }
-        url = Api.studentLogin;
-        statusCode = 200;
-        body = jsonEncode(
-          <String, String>{
-            "token": tokenResult.token,
-          },
-        );
+        type = 202;
+    }
+
+    if (newUser) {
+      print('new user');
+      url = Api.register;
+      statusCode = 201;
+      body = jsonEncode(
+        <String, dynamic>{
+          "token": tokenResult.token,
+          "email": user.email,
+          "usertype": type
+        },
+      );
+    } else {
+      print('old user');
+      body = jsonEncode(
+        <String, dynamic>{"token": tokenResult.token, "usertype": type},
+      );
     }
 
     //Api call
@@ -106,29 +98,30 @@ class ApiService {
     var user = storage.read('user');
     // print(user);
     print('In getuserDetails()');
-    if (user != null) return User.fromJson(user);
+    if (user != null) {
+      print(user);
+      return User.fromJson(user);
+    }
     return null;
   }
 
   Future<bool> serverLogout() async {
-    // TODO implement the faculty logout before using this method
     User user = getUserDetails();
-    if (user != null) {
-      print('In server Logout Func');
-      var res = await httpClient.get(Api.student + Api.logoutApi, headers: {
+    print('In server Logout Func');
+    http.Response res;
+    try {
+      res = await httpClient.put(Api.logout, headers: {
         HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}'
       });
       if (res.statusCode == 200) {
+        print('logout');
         await FirebaseAuthService().signOut();
         await storage.erase();
         return true;
       } else
-        return Future.error('something went wrong');
-    } else {
-      print(
-          'error from local storage user info is not available in local storage');
+        return false;
+    } catch (e) {
       return false;
-      // TODO handle the logout
     }
   }
 

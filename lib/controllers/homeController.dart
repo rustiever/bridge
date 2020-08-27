@@ -39,5 +39,8 @@ class HomeController extends GetxController {
 
   Future<bool> logout() async => await repository.logout();
 
-  void getUser() => user.value = repository.getUser();
+  void getUser() {
+    user.value = repository.getUser();
+    print(user?.value);
+  }
 }
