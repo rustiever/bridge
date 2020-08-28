@@ -1,3 +1,4 @@
+import 'package:Bridge/tmpsExps/home.dart';
 import 'package:get/route_manager.dart';
 import 'bindings/bindings.dart';
 import 'screens/screens.dart';
@@ -9,15 +10,17 @@ const String Splashroute = 'splash';
 
 List<GetPage> routes() {
   return [
-    GetPage(
-      name: Splashroute,
-      page: () => SplashScreen(),
-    ),
-    GetPage(name: Authroute, page: () => Auth(), binding: AuthBinding()),
-    GetPage(name: Homeroute, page: () => NavScreen(), bindings: [
+    GetPage(name: Splashroute, page: () => SplashScreen()),
+    GetPage(name: Authroute, page: () => Auth(), bindings: [
       AuthBinding(),
-      UserBinding(),
-      FeedBinding(),
     ]),
+    // GetPage(
+    //     name: Homeroute,
+    //     page: () => NavScreen(),
+    //     bindings: [AuthBinding(), FeedBinding(), HomeBinding()]),
+    GetPage(
+      name: Homeroute,
+      page: () => Home(),
+    )
   ];
 }

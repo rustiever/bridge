@@ -1,6 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
-import 'package:Bridge/controllers/userController.dart';
 import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,7 @@ import 'package:get/get.dart';
 
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../navScreen.dart';
-
-class Homee extends GetWidget<NavController> {
+class HomeScreen extends GetWidget<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +21,7 @@ class Homee extends GetWidget<NavController> {
   }
 }
 
-class HomeScreenDesktop extends GetView<UserController> {
+class HomeScreenDesktop extends GetView<HomeController> {
   final TrackingScrollController scrollController;
 
   const HomeScreenDesktop({
@@ -50,8 +47,8 @@ class HomeScreenDesktop extends GetView<UserController> {
           width: 600.0,
           child: GetX<FeedController>(
             init: Get.find(),
-            builder: (aController) {
-              if (aController.feeds() != null) {
+            builder: (feedController) {
+              if (feedController.feeds() != null) {
                 print('inside');
                 return CustomScrollView(
                   controller: scrollController,
@@ -64,14 +61,14 @@ class HomeScreenDesktop extends GetView<UserController> {
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
                           final FeedData post =
-                              aController.feeds.value.feedData[index] ??
+                              feedController.feeds.value.feedData[index] ??
                                   FeedData.fromJson({});
                           return PostContainer(
                             post: post,
                           );
                         },
                         childCount:
-                            aController?.feeds?.value?.feedData?.length ?? 0,
+                            feedController?.feeds?.value?.feedData?.length ?? 0,
                       ),
                     ),
                   ],
@@ -101,7 +98,7 @@ class HomeScreenDesktop extends GetView<UserController> {
   }
 }
 
-class HomeScreenMobile extends GetView<UserController> {
+class HomeScreenMobile extends GetView<HomeController> {
   final TrackingScrollController scrollController;
 
   const HomeScreenMobile({

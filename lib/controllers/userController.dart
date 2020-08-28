@@ -10,9 +10,11 @@ class UserController extends GetxController {
   final user = User().obs;
 
   @override
-  void onInit() => getuser();
+  void onInit() {
+    getuser();
+  }
 
-  getuser() {
+  void getuser() {
     user.value = repository.getUser();
   }
 }

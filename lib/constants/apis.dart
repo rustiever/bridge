@@ -1,18 +1,12 @@
-// Login API's
 class Api {
-  //Anonymous User Section...
-  //Anonymous Feeds in Home Page...
-  static const anonymousHome =
-      'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home';
-
   //Auth Section...
   //User Register...
-  static const userRegister =
+  static const register =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/auth/register';
   //User Login...
-  static const userLogin =
+  static const login =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/auth/login';
   //User Logout...
-  static const userLogout =
+  static const logout =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/auth/logout';
 }

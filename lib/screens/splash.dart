@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> navigationPage() async {
-    // GetStorage('userContainer').erase();
+    GetStorage('userContainer').erase();
     var user = GetStorage('userContainer').hasData('user');
     print('In splashscreen');
     if (user) {

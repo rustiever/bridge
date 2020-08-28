@@ -1,3 +1,4 @@
+import 'package:Bridge/bindings/bindings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/utils.dart';
@@ -19,14 +20,16 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: router.routes(),
-      initialRoute:
-          GetPlatform.isAndroid ? router.Splashroute : router.Homeroute,
+      // initialRoute:
+      // GetPlatform.isAndroid ? router.Splashroute : router.Homeroute,
+      initialRoute: router.Authroute,
       title: 'Bridge',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Palette.scaffold,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      initialBinding: InitialBinding(),
     );
   }
 }

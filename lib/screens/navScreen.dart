@@ -5,42 +5,21 @@ import 'package:Bridge/screens/screens.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/state_manager.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class NavController extends GetxController {
-  var selectedIndex = 0.obs;
-  TrackingScrollController trackingScrollController;
-  @override
-  onClose() {
-    print('nav onclose func');
-    trackingScrollController?.dispose();
-    super.onClose();
-  }
-
-  @override
-  void onInit() {
-    trackingScrollController = TrackingScrollController();
-    super.onInit();
-  }
-}
-
-class NavScreen extends StatelessWidget {
+class NavScreen extends GetWidget<HomeController> {
   final User user;
   final List<IconData> _icons = const [
-    Icons.home,
+    MdiIcons.home,
     // Icons.ondemand_video,
     // MdiIcons.accountGroupOutline,
     MdiIcons.bellOutline,
     MdiIcons.accountCircleOutline,
     Icons.menu,
   ];
-  final FeedController aController = Get.find();
-  final NavController nav = Get.put(NavController());
-  final UserController controller = Get.find();
 
   final List<Widget> _screens = [
-    Homee(),
+    HomeScreen(),
     // Scaffold(),
     // Scaffold(),
     Scaffold(),
@@ -48,11 +27,12 @@ class NavScreen extends StatelessWidget {
     Settings()
   ];
 
+  // final UserController u = Get.find();
+
   NavScreen({Key key, this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-
     return DefaultTabController(
       length: _icons.length,
       child: Scaffold(
@@ -60,20 +40,19 @@ class NavScreen extends StatelessWidget {
             ? PreferredSize(
                 preferredSize: Size(screenSize.width, 100.0),
                 child: CustomAppBar(
-                  // currentUser: controller.user.value,
-                  currentUser: null,
+                  currentUser: controller.user.value,
                   icons: _icons,
-                  selectedIndex: nav.selectedIndex.value,
+                  selectedIndex: controller.selectedIndex.value,
                   onTap: (index) {
-                    nav.selectedIndex.value = index;
-                    print(nav.selectedIndex.value);
+                    controller.selectedIndex.value = index;
+                    print(controller.selectedIndex.value);
                   },
                 ),
               )
             : null,
         body: Obx(
           () => IndexedStack(
-            index: nav.selectedIndex.value,
+            index: controller.selectedIndex.value,
             children: _screens,
           ),
         ),
@@ -83,8 +62,8 @@ class NavScreen extends StatelessWidget {
                 color: Colors.white,
                 child: CustomTabBar(
                   icons: _icons,
-                  selectedIndex: nav.selectedIndex.value,
-                  onTap: (index) => nav.selectedIndex.value = index,
+                  selectedIndex: controller.selectedIndex.value,
+                  onTap: (index) => controller.selectedIndex.value = index,
                 ),
               )
             : const SizedBox.shrink(),
@@ -93,8 +72,7 @@ class NavScreen extends StatelessWidget {
   }
 }
 
-class Settings extends StatelessWidget {
-  final AuthController authController = Get.find<AuthController>();
+class Settings extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,14 +80,13 @@ class Settings extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           RaisedButton(
-            onPressed: Get.find<UserController>().user != null
+            onPressed: controller.user != null
                 ? () async {
-                    try {
-                      var status = await authController.logout();
-                      print(status);
+                    if (await controller.logout()) {
                       Get.offAllNamed(Authroute);
-                    } catch (e) {
-                      print(e);
+                    } else {
+                      Get.snackbar('Sorry',
+                          'Looks like no connection, Try with proper connection');
                     }
                   }
                 : null,
