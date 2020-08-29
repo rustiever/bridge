@@ -60,9 +60,9 @@ class HomeScreenDesktop extends GetView<HomeController> {
                     SliverList(
                       delegate: SliverChildBuilderDelegate(
                         (context, index) {
-                          final FeedData post =
+                          final FeedDatum post =
                               feedController.feeds.value.feedData[index] ??
-                                  FeedData.fromJson({});
+                                  FeedDatum.fromJson({});
                           return PostContainer(
                             post: post,
                           );
@@ -110,12 +110,13 @@ class HomeScreenMobile extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return GetX<FeedController>(
       builder: (_) {
-        if (_.feeds() == null) {
+        if (controller.feeds() == null) {
           return Center(
             child: CircularProgressIndicator(),
           );
         }
         return CustomScrollView(
+          physics: BouncingScrollPhysics(),
           controller: scrollController,
           slivers: [
             SliverAppBar(
@@ -151,14 +152,24 @@ class HomeScreenMobile extends GetView<HomeController> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final FeedData post = _.feeds.value.feedData[index];
+                  final FeedDatum post = controller.feedList[index];
+                  // print(controller.feedList.length);
                   return PostContainer(
                     post: post,
                   );
                 },
-                childCount: _.feeds.value.feedData.length,
+                childCount: controller.feedList.length,
               ),
             ),
+            SliverToBoxAdapter(
+              child: Container(
+                child: controller.isLoading.value
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : null,
+              ),
+            )
           ],
         );
       },

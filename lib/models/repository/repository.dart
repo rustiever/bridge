@@ -14,9 +14,9 @@ class Repository {
 
   User getUser() => service.getUserDetails();
 
-  Future<FeedModel> anonFeeds() async {
+  Future<FeedModel> getFeeds(dynamic time) async {
     print('in anon repo ');
-    var t = await service.getFeeds();
+    FeedModel t = await service.getFeeds(time);
     print(t?.feedData[0]?.caption ?? 'hello');
     return t;
   }

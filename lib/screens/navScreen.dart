@@ -2,9 +2,11 @@ import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/router.dart';
 import 'package:Bridge/screens/screens.dart';
+
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class NavScreen extends GetWidget<HomeController> {
@@ -63,7 +65,10 @@ class NavScreen extends GetWidget<HomeController> {
                 child: CustomTabBar(
                   icons: _icons,
                   selectedIndex: controller.selectedIndex.value,
-                  onTap: (index) => controller.selectedIndex.value = index,
+                  onTap: (index) {
+                    // controller.trackingScrollController.position. = controller.trackingScrollController.position.minScrollExtent;
+                    return controller.selectedIndex.value = index;
+                  },
                 ),
               )
             : const SizedBox.shrink(),
@@ -79,6 +84,9 @@ class Settings extends GetView<HomeController> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          RaisedButton(onPressed: () async {
+            // await ApiService(httpClient: Client()).getFeeds();
+          }),
           RaisedButton(
             onPressed: controller.user != null
                 ? () async {

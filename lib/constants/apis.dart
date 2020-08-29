@@ -15,6 +15,8 @@ class Api {
       'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home';
 
   //Feeds Section...
+  static const feeds =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/feeds';
   //Do the Post...
   static const post =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/home/post';
@@ -33,6 +35,7 @@ class Api {
   //Get the Comments of a specific Post...
   static const getComments =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/home/getComments';
+
   //Delete the specific Post...
   static const delPost =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/home/deletePost';
