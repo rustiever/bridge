@@ -87,7 +87,8 @@ class ApiService {
 
     // response result
     if (res.statusCode == statusCode) {
-      var user = User.fromJson(jsonDecode(res.body));
+      // var user = User.fromJson(jsonDecode(res.body));
+      User user = User.fromRawJson(res.body);
       print('logging in the $newUser user');
       return user;
     } else
@@ -125,22 +126,56 @@ class ApiService {
     }
   }
 
-  Future<FeedModel> getFeeds() async {
+  Future<FeedModel> getFeeds(dynamic time) async {
+    User user = getUserDetails();
     print('IN getFeeds Func');
-    String url;
+    String url = Api.feeds;
+    String body = jsonEncode(
+      <String, dynamic>{
+        "time": null,
+        "userScope": {
+          "batch": user.userData.batch,
+          "branch": user.userData.branch,
+          "groups": user.userData.groups
+        }
+      },
+    );
+    Map headers;
 
-    // if (storage.hasData('user')) {
-    //   url =  Api.anonymousHome;
-    // } else {
-
-    // }
-    http.Response res = await httpClient.get(
-        'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home');
-
-    if (res.statusCode == 200) {
-      return FeedModel.fromJson(jsonDecode(res.body));
+    if (user != null) {
+      url = Api.feeds;
+      headers = <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}',
+      };
+      body = jsonEncode(
+        <String, dynamic>{
+          "time": time,
+          "userScope": {
+            "batch": 2016,
+            "branch": user.userData.branch,
+            "groups": user.userData.groups
+          }
+        },
+      );
     } else {
-      return Future.error("Error from server");
+      url = '';
+      headers = {};
+      body = jsonEncode(
+        <String, dynamic>{
+          "time": null,
+        },
+      );
+    }
+    http.Response res =
+        await httpClient.post(url, headers: headers, body: body);
+    if (res.statusCode == 200) {
+      FeedModel f = FeedModel.fromRawJson(res.body);
+      print(f);
+      print(f.feedData[0].scope.runtimeType == ScopeClass);
+      return f;
+    } else {
+      return Future.error('server error');
     }
   }
 }

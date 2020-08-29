@@ -8,7 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'widgets.dart';
 
 class PostContainer extends StatelessWidget {
-  final FeedData post;
+  final FeedDatum post;
 
   const PostContainer({
     Key key,
@@ -75,7 +75,7 @@ class PostContainer extends StatelessWidget {
 }
 
 class _PostHeader extends StatelessWidget {
-  final FeedData post;
+  final FeedDatum post;
 
   const _PostHeader({
     Key key,
@@ -101,7 +101,7 @@ class _PostHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(post.timeStamp * 1000), locale: 'en_short')} • ',
+                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(post.timeStamp.seconds * 1000), locale: 'en_short')} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,
@@ -127,7 +127,7 @@ class _PostHeader extends StatelessWidget {
 }
 
 class _PostStats extends StatelessWidget {
-  final FeedData post;
+  final FeedDatum post;
 
   const _PostStats({
     Key key,

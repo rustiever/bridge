@@ -10,20 +10,43 @@ class HomeController extends GetxController {
 
   var selectedIndex = 0.obs; // tab index used to navigate the tabs
   final Rx<User> user = User().obs;
+  final Rx<FeedModel> feeds = Rx<FeedModel>();
+  List feedList = [];
   TrackingScrollController trackingScrollController;
+  var time;
+  final isLoading = false.obs;
+  FeedModel v = FeedModel();
 
   @override
   void onInit() {
+    time = null;
     trackingScrollController = TrackingScrollController();
+    trackingScrollController.addListener(() {
+      // var triggerFetchMoreSize =
+      //     0.9 * trackingScrollController.position.maxScrollExtent;
+      if (trackingScrollController.position.pixels >=
+          trackingScrollController.position.maxScrollExtent) {
+        // fetchFeeds();
+        // print(feeds.value.length);
+        getMe();
+      }
+    });
     getUser();
-    // ever(listener, callback)
+    fetchFeeds();
+    // ever(, (d) {});
     debugPrint('on init of HomeController');
     super.onInit();
   }
 
+  var ff = 2;
+  getMe() async {
+    // feedList.add(ff++);
+    fetchFeeds();
+    print(ff);
+  }
+
   @override
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
   }
 
@@ -41,6 +64,26 @@ class HomeController extends GetxController {
 
   void getUser() {
     user.value = repository.getUser();
-    print(user?.value);
+    print(user.value.userData.usn);
+  }
+
+  var isMoreAvailable = true;
+  fetchFeeds({inot}) async {
+    if (isMoreAvailable) {
+      isLoading.value = true;
+      feeds.value = await repository.getFeeds(time);
+      time = feeds.value.lastTime;
+      if (time == null) {
+        isMoreAvailable = false;
+      }
+      feedList.addAll(feeds.value.feedData);
+      if (feeds.value == null) {
+        Get.snackbar("Error", "Can't connect to server");
+      }
+      isLoading.value = false;
+    } else {
+      // Get.snackbar("Cool", "all posts are finished");
+      print('done');
+    }
   }
 }

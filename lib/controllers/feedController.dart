@@ -11,10 +11,10 @@ class FeedController extends GetxController {
   Rx<FeedModel> feeds = Rx<FeedModel>();
 
   @override
-  void onInit() => fetchFeeds();
+  void onInit() => fetchFeeds(inot: 34);
 
-  void fetchFeeds() async {
-    feeds.value = await repository.anonFeeds();
+  void fetchFeeds({inot}) async {
+    feeds.value = await repository.getFeeds(null);
     if (feeds.value == null) {
       Get.snackbar("Error", "Can't connect to server");
     }

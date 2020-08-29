@@ -11,16 +11,24 @@ class Api {
       'https://us-central1-bridge-fd58f.cloudfunctions.net/auth/logout';
 
   //Feeds Section...
+  static const feeds =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/feeds';
   //Do the Post...
-  static const post = 'https://us-central1-bridge-fd58f.cloudfunctions.net/home/post';
+  static const post =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/post';
   //Like or Dislike the post...
-  static const like = 'https://us-central1-bridge-fd58f.cloudfunctions.net/home/like';
+  static const like =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/like';
   //Bookmark or Un-Bookmark the Post...
-  static const bookmark = 'https://us-central1-bridge-fd58f.cloudfunctions.net/home/bookmark';
+  static const bookmark =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/bookmark';
   //Delete the specific Comment of a Post...
-  static const delComment = 'https://us-central1-bridge-fd58f.cloudfunctions.net/home/deleteComment';
+  static const delComment =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/deleteComment';
   //Edit the specific Comment of a Post...
-  static const editComment = 'https://us-central1-bridge-fd58f.cloudfunctions.net/home/editComment';
+  static const editComment =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/editComment';
   //Get the Comments of a specific Post...
-  static const getComments = 'https://us-central1-bridge-fd58f.cloudfunctions.net/home/getComments';
+  static const getComments =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/home/getComments';
 }

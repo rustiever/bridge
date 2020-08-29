@@ -1,63 +1,109 @@
+// To parse this JSON data, do
+//
+//     final user = userFromJson(jsonString);
+
+import 'package:meta/meta.dart';
+import 'dart:convert';
+
 class User {
-  UserData userData;
-  String authorizeToken;
+  User({
+    this.userData,
+    this.authorizeToken,
+  });
 
-  User({this.userData, this.authorizeToken});
+  final UserData userData;
+  final String authorizeToken;
 
-  User.fromJson(Map<String, dynamic> json) {
-    userData = json['userData'] != null
-        ? new UserData.fromJson(json['userData'])
-        : null;
-    authorizeToken = json['authorizeToken'];
-  }
+  User copyWith({
+    UserData userData,
+    String authorizeToken,
+  }) =>
+      User(
+        userData: userData ?? this.userData,
+        authorizeToken: authorizeToken ?? this.authorizeToken,
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.userData != null) {
-      data['userData'] = this.userData.toJson();
-    }
-    data['authorizeToken'] = this.authorizeToken;
-    return data;
-  }
+  factory User.fromRawJson(String str) => User.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory User.fromJson(Map<String, dynamic> json) => User(
+        userData: UserData.fromJson(json["userData"]),
+        authorizeToken: json["authorizeToken"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "userData": userData.toJson(),
+        "authorizeToken": authorizeToken,
+      };
 }
 
 class UserData {
-  String uid;
-  String name;
-  String email;
-  String photoUrl;
-  String usn;
-  String branch;
-  int batch;
+  UserData({
+    @required this.uid,
+    @required this.name,
+    @required this.email,
+    @required this.photoUrl,
+    @required this.branch,
+    @required this.groups,
+    @required this.usn,
+    @required this.batch,
+  });
 
-  UserData(
-      {this.uid,
-      this.name,
-      this.email,
-      this.photoUrl,
-      this.usn,
-      this.branch,
-      this.batch});
+  final String uid;
+  final String name;
+  final String email;
+  final String photoUrl;
+  final String branch;
+  final List<String> groups;
+  final String usn;
+  final int batch;
 
-  UserData.fromJson(Map<String, dynamic> json) {
-    uid = json['uid'];
-    name = json['name'];
-    email = json['email'];
-    photoUrl = json['photoUrl'];
-    usn = json['usn'];
-    branch = json['branch'];
-    batch = json['batch'];
-  }
+  UserData copyWith({
+    String uid,
+    String name,
+    String email,
+    String photoUrl,
+    String branch,
+    List<String> groups,
+    String usn,
+    int batch,
+  }) =>
+      UserData(
+        uid: uid ?? this.uid,
+        name: name ?? this.name,
+        email: email ?? this.email,
+        photoUrl: photoUrl ?? this.photoUrl,
+        branch: branch ?? this.branch,
+        groups: groups ?? this.groups,
+        usn: usn ?? this.usn,
+        batch: batch ?? this.batch,
+      );
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['uid'] = this.uid;
-    data['name'] = this.name;
-    data['email'] = this.email;
-    data['photoUrl'] = this.photoUrl;
-    data['usn'] = this.usn;
-    data['branch'] = this.branch;
-    data['batch'] = this.batch;
-    return data;
-  }
+  factory UserData.fromRawJson(String str) =>
+      UserData.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+        uid: json["uid"],
+        name: json["name"],
+        email: json["email"],
+        photoUrl: json["photoUrl"],
+        branch: json["branch"],
+        groups: List<String>.from(json["groups"].map((x) => x)),
+        usn: json["usn"],
+        batch: json["batch"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "uid": uid,
+        "name": name,
+        "email": email,
+        "photoUrl": photoUrl,
+        "branch": branch,
+        "groups": List<dynamic>.from(groups.map((x) => x)),
+        "usn": usn,
+        "batch": batch,
+      };
 }
