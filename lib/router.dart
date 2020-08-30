@@ -17,7 +17,7 @@ List<GetPage> routes() {
     GetPage(
         name: Homeroute,
         page: () => NavScreen(),
-        bindings: [AuthBinding(), FeedBinding(), HomeBinding()]),
+        bindings: [AuthBinding(), HomeBinding()]),
     // GetPage(
     //   name: Homeroute,
     //   page: () => Home(),

@@ -22,8 +22,6 @@ class HomeController extends GetxController {
     time = null;
     trackingScrollController = TrackingScrollController();
     trackingScrollController.addListener(() {
-      // var triggerFetchMoreSize =
-      //     0.9 * trackingScrollController.position.maxScrollExtent;
       if (trackingScrollController.position.pixels >=
           trackingScrollController.position.maxScrollExtent) {
         // fetchFeeds();
@@ -41,7 +39,10 @@ class HomeController extends GetxController {
   var ff = 2;
   getMe() async {
     // feedList.add(ff++);
-    fetchFeeds();
+    if (!isLoading.value && isMoreAvailable.value)
+      fetchFeeds();
+    else
+      print('done');
     print(ff);
   }
 
@@ -67,14 +68,15 @@ class HomeController extends GetxController {
     print(user.value.userData.usn);
   }
 
-  var isMoreAvailable = true;
-  fetchFeeds({inot}) async {
-    if (isMoreAvailable) {
+  var isMoreAvailable = true.obs;
+  void fetchFeeds({inot}) async {
+    print(isMoreAvailable.toString() + 'st');
+    if (isMoreAvailable.value) {
       isLoading.value = true;
       feeds.value = await repository.getFeeds(time);
       time = feeds.value.lastTime;
       if (time == null) {
-        isMoreAvailable = false;
+        isMoreAvailable.value = false;
       }
       feedList.addAll(feeds.value.feedData);
       if (feeds.value == null) {

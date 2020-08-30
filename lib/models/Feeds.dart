@@ -1,75 +1,3 @@
-// class FeedModel {
-//   List<FeedData> feedData;
-
-//   FeedModel({this.feedData});
-
-//   FeedModel.fromJson(Map<String, dynamic> json) {
-//     if (json['feedData'] != null) {
-//       feedData = new List<FeedData>();
-//       json['feedData'].forEach((v) {
-//         feedData.add(new FeedData.fromJson(v));
-//       });
-//     }
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     if (this.feedData != null) {
-//       data['feedData'] = this.feedData.map((v) => v.toJson()).toList();
-//     }
-//     return data;
-//   }
-// }
-
-// class FeedData {
-//   String postId;
-//   String caption;
-//   int likes;
-//   String photoUrl;
-//   String ownerName;
-//   String ownerPhotoUrl;
-//   String ownerUid;
-//   int timeStamp;
-//   int comments;
-
-//   FeedData(
-//       {this.postId,
-//       this.caption,
-//       this.likes,
-//       this.photoUrl,
-//       this.ownerName,
-//       this.ownerPhotoUrl,
-//       this.ownerUid,
-//       this.timeStamp,
-//       this.comments});
-
-//   FeedData.fromJson(Map<String, dynamic> json) {
-//     postId = json['postId'];
-//     caption = json['caption'];
-//     likes = json['likes'];
-//     photoUrl = json['photoUrl'];
-//     ownerName = json['ownerName'];
-//     ownerPhotoUrl = json['ownerPhotoUrl'];
-//     ownerUid = json['ownerUid'];
-//     timeStamp = json['timeStamp'];
-//     comments = json['comments'];
-//   }
-
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = new Map<String, dynamic>();
-//     data['postId'] = this.postId;
-//     data['caption'] = this.caption;
-//     data['likes'] = this.likes;
-//     data['photoUrl'] = this.photoUrl;
-//     data['ownerName'] = this.ownerName;
-//     data['ownerPhotoUrl'] = this.ownerPhotoUrl;
-//     data['ownerUid'] = this.ownerUid;
-//     data['timeStamp'] = this.timeStamp;
-//     data['comments'] = this.comments;
-//     return data;
-//   }
-// }
-
 // To parse this JSON data, do
 //
 //     final feedModel = feedModelFromJson(jsonString);
@@ -209,7 +137,6 @@ class FeedModel {
 
 class ScopeClass {
   final dynamic branch;
-
   final dynamic batch;
   final bool groups;
   ScopeClass({

@@ -174,8 +174,11 @@ class ApiService {
       print(f);
       print(f.feedData[0].scope.runtimeType == ScopeClass);
       return f;
-    } else {
+    } else if (res.statusCode == 404) {
       return Future.error('server error');
+    } else {
+      print(res.statusCode);
+      return Future.error('server error from else');
     }
   }
 }

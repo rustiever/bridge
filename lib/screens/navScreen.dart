@@ -2,11 +2,9 @@ import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/router.dart';
 import 'package:Bridge/screens/screens.dart';
-
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class NavScreen extends GetWidget<HomeController> {
@@ -28,8 +26,6 @@ class NavScreen extends GetWidget<HomeController> {
     Profile(),
     Settings()
   ];
-
-  // final UserController u = Get.find();
 
   NavScreen({Key key, this.user}) : super(key: key);
   @override
@@ -66,8 +62,14 @@ class NavScreen extends GetWidget<HomeController> {
                   icons: _icons,
                   selectedIndex: controller.selectedIndex.value,
                   onTap: (index) {
-                    // controller.trackingScrollController.position. = controller.trackingScrollController.position.minScrollExtent;
-                    return controller.selectedIndex.value = index;
+                    if (controller.selectedIndex.value == index)
+                      controller.trackingScrollController.animateTo(
+                          controller.trackingScrollController.position
+                              .minScrollExtent,
+                          duration: Duration(milliseconds: 650),
+                          curve: Curves.fastLinearToSlowEaseIn);
+                    else
+                      controller.selectedIndex.value = index;
                   },
                 ),
               )

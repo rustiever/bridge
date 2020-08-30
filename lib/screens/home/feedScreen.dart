@@ -167,7 +167,11 @@ class HomeScreenMobile extends GetView<HomeController> {
                     ? Center(
                         child: CircularProgressIndicator(),
                       )
-                    : null,
+                    : !controller.isMoreAvailable.value
+                        ? Center(
+                            child: Text('End'),
+                          )
+                        : null,
               ),
             )
           ],
