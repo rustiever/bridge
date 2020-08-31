@@ -100,7 +100,7 @@ class ApiService {
     // print(user);
     print('In getuserDetails()');
     if (user != null) {
-      print(user);
+      // print(user);
       return User.fromJson(user);
       // return User.fromRawJson(
       //     '{"userData":{"uid":"U8ht9o9YeYc32rCeTykEYHNoV9r2","name":"Sharan","email":"sharanneeded@gmail.com","photoUrl":"https://lh3.googleusercontent.com/a-/AOh14GiO_mUuTIe-4tQMFwCCNZ9y5ZIyL_cbmYRIRqpRxEM=s96-c","branch":"COMPUTER SCIENCE AND ENGINEERING","groups":["pop","push","abcd","abdc","bc","yuu"],"usn":"4MT17CS000","batch":2017},"authorizeToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlU4aHQ5bzlZZVljMzJyQ2VUeWtFWUhOb1Y5cjIiLCJ1c2VyIjoic3R1ZGVudCIsImlhdCI6MTU5ODg4Mjk4Nn0.9Q6L8ZtEPVz4HZbo1O_o60AVBH33tLDXbltTgPz_rQY"}');
@@ -132,19 +132,11 @@ class ApiService {
     User user = getUserDetails();
     print('IN getFeeds Func');
     String url = Api.feeds;
-    String body = jsonEncode(
-      <String, dynamic>{
-        "time": null,
-        "userScope": {
-          "batch": user.userData.batch,
-          "branch": user.userData.branch,
-          "groups": user.userData.groups
-        }
-      },
-    );
+    String body;
     Map headers;
 
     if (user != null) {
+      print('user present');
       url = Api.feeds;
       headers = <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -154,9 +146,9 @@ class ApiService {
         <String, dynamic>{
           "time": time,
           "userScope": {
-            "batch": 2016,
-            "branch": user.userData.branch,
-            "groups": user.userData.groups
+            "batch": user.userData.batch ?? '',
+            "branch": user.userData.branch ?? '',
+            "groups": user.userData.groups ?? ''
           }
         },
       );

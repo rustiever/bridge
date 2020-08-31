@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class NavScreen extends GetWidget<HomeController> {
-  final User user;
   final List<IconData> _icons = const [
     MdiIcons.home,
     // Icons.ondemand_video,
@@ -22,12 +21,15 @@ class NavScreen extends GetWidget<HomeController> {
     HomeScreen(),
     // Scaffold(),
     // Scaffold(),
-    Scaffold(),
+    Scaffold(
+      body:
+          Center(child: RaisedButton(onPressed: () => Get.offNamed(Authroute))),
+    ),
     Profile(),
     Settings()
   ];
 
-  NavScreen({Key key, this.user}) : super(key: key);
+  NavScreen({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;

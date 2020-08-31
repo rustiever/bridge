@@ -86,56 +86,6 @@ class HomeScreenDesktop extends GetView<HomeController> {
                   ),
           ),
         ),
-        // Container(
-        //   width: 600.0,
-        //   child: GetBuilder<HomeController>(
-        //     // init: Get.find(),
-        //     builder: (feedController) {
-        //       if (feedController.feeds() != null) {
-        //         print('inside');
-        //         return CustomScrollView(
-        //           controller: scrollController,
-        //           slivers: [
-        //             SliverToBoxAdapter(
-        //               child: CreatePostContainer(
-        //                   currentUser: controller.user.value),
-        //             ),
-        //             SliverList(
-        //               delegate: SliverChildBuilderDelegate(
-        //                 (context, index) {
-        //                   final FeedDatum post = controller.feedList[index];
-        //                   // print(controller.feedList.length);
-        //                   return PostContainer(
-        //                     post: post,
-        //                   );
-        //                 },
-        //                 childCount: controller.feedList.length,
-        //               ),
-        //             ),
-        //             SliverToBoxAdapter(
-        //               child: Container(
-        //                 child: controller.isLoading.value
-        //                     ? Center(
-        //                         child: CircularProgressIndicator(),
-        //                       )
-        //                     : !controller.isMoreAvailable.value
-        //                         ? Center(
-        //                             child: Text('End'),
-        //                           )
-        //                         : null,
-        //               ),
-        //             ),
-        //           ],
-        //         );
-        //       } else {
-        //         return Center(
-        //           child: CircularProgressIndicator(),
-        //         );
-        //       }
-        //     },
-        //   ),
-        //   // child:
-        // ),
         const Spacer(),
         Flexible(
           flex: 2,
@@ -162,7 +112,7 @@ class HomeScreenMobile extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<FeedController>(
+    return GetX<HomeController>(
       builder: (_) {
         if (controller.feeds() == null) {
           return Center(

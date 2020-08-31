@@ -41,6 +41,12 @@ class Auth extends GetWidget<AuthController> {
                   snackPosition: SnackPosition.BOTTOM);
             },
           ),
+          UserButton(
+            user: "Explore as Guest",
+            ontap: () {
+              Get.offNamed(Homeroute);
+            },
+          ),
         ],
       ),
     );
