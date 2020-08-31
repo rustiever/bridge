@@ -45,43 +45,97 @@ class HomeScreenDesktop extends GetView<HomeController> {
         const Spacer(),
         Container(
           width: 600.0,
-          child: GetX<FeedController>(
-            init: Get.find(),
-            builder: (feedController) {
-              if (feedController.feeds() != null) {
-                print('inside');
-                return CustomScrollView(
-                  controller: scrollController,
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: CreatePostContainer(
-                          currentUser: controller.user.value),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          final FeedDatum post =
-                              feedController.feeds.value.feedData[index] ??
-                                  FeedDatum.fromJson({});
-                          return PostContainer(
-                            post: post,
-                          );
-                        },
-                        childCount:
-                            feedController?.feeds?.value?.feedData?.length ?? 0,
+          child: Obx(
+            () => controller.feeds() != null
+                ? CustomScrollView(
+                    controller: scrollController,
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: CreatePostContainer(
+                            currentUser: controller.user.value),
                       ),
-                    ),
-                  ],
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final FeedDatum post = controller.feedList[index];
+                            // print(controller.feedList.length);
+                            return PostContainer(
+                              post: post,
+                            );
+                          },
+                          childCount: controller.feedList.length,
+                        ),
+                      ),
+                      SliverToBoxAdapter(
+                        child: Container(
+                          child: controller.isLoading.value
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : !controller.isMoreAvailable.value
+                                  ? Center(
+                                      child: Text('End'),
+                                    )
+                                  : null,
+                        ),
+                      ),
+                    ],
+                  )
+                : Center(
+                    child: CircularProgressIndicator(),
+                  ),
           ),
-          // child:
         ),
+        // Container(
+        //   width: 600.0,
+        //   child: GetBuilder<HomeController>(
+        //     // init: Get.find(),
+        //     builder: (feedController) {
+        //       if (feedController.feeds() != null) {
+        //         print('inside');
+        //         return CustomScrollView(
+        //           controller: scrollController,
+        //           slivers: [
+        //             SliverToBoxAdapter(
+        //               child: CreatePostContainer(
+        //                   currentUser: controller.user.value),
+        //             ),
+        //             SliverList(
+        //               delegate: SliverChildBuilderDelegate(
+        //                 (context, index) {
+        //                   final FeedDatum post = controller.feedList[index];
+        //                   // print(controller.feedList.length);
+        //                   return PostContainer(
+        //                     post: post,
+        //                   );
+        //                 },
+        //                 childCount: controller.feedList.length,
+        //               ),
+        //             ),
+        //             SliverToBoxAdapter(
+        //               child: Container(
+        //                 child: controller.isLoading.value
+        //                     ? Center(
+        //                         child: CircularProgressIndicator(),
+        //                       )
+        //                     : !controller.isMoreAvailable.value
+        //                         ? Center(
+        //                             child: Text('End'),
+        //                           )
+        //                         : null,
+        //               ),
+        //             ),
+        //           ],
+        //         );
+        //       } else {
+        //         return Center(
+        //           child: CircularProgressIndicator(),
+        //         );
+        //       }
+        //     },
+        //   ),
+        //   // child:
+        // ),
         const Spacer(),
         Flexible(
           flex: 2,
@@ -173,7 +227,7 @@ class HomeScreenMobile extends GetView<HomeController> {
                           )
                         : null,
               ),
-            )
+            ),
           ],
         );
       },

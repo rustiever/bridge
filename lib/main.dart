@@ -1,6 +1,7 @@
 import 'package:Bridge/bindings/bindings.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
+
 import 'package:get_storage/get_storage.dart';
 import 'constants/constants.dart';
 import 'router.dart' as router;
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       getPages: router.routes(),
       // initialRoute:
       // GetPlatform.isAndroid ? router.Splashroute : router.Homeroute,
-      initialRoute: router.Authroute,
+      initialRoute: router.Splashroute,
       title: 'Bridge',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialBinding: InitialBinding(),
+      // home: SplashScreen,
     );
   }
 }

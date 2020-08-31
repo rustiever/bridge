@@ -15,7 +15,6 @@ dependencies:
   flutter:
     sdk: flutter
   http:
-  shared_preferences:
   get:
   get_storage:
   firebase_auth:
@@ -31,6 +30,8 @@ dependencies:
   material_design_icons_flutter: 
   # remove and add own timeago 
   timeago:
+  flare_splash_screen:
+  shimmer_animation:
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +57,7 @@ flutter:
   assets:
     - assets/appIcon/
     - assets/png/
+    - assets/splash/
   
   # fonts:
   #   - family: Schyler

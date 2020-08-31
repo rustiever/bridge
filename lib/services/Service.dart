@@ -13,7 +13,7 @@ class ApiService {
   final http.Client httpClient;
 
   ApiService({@required this.httpClient});
-  final storage = GetStorage('userContainer');
+  final storage = GetStorage();
 
   Future<bool> login(UserType userType) async {
     print('login func');
@@ -102,6 +102,8 @@ class ApiService {
     if (user != null) {
       print(user);
       return User.fromJson(user);
+      // return User.fromRawJson(
+      //     '{"userData":{"uid":"U8ht9o9YeYc32rCeTykEYHNoV9r2","name":"Sharan","email":"sharanneeded@gmail.com","photoUrl":"https://lh3.googleusercontent.com/a-/AOh14GiO_mUuTIe-4tQMFwCCNZ9y5ZIyL_cbmYRIRqpRxEM=s96-c","branch":"COMPUTER SCIENCE AND ENGINEERING","groups":["pop","push","abcd","abdc","bc","yuu"],"usn":"4MT17CS000","batch":2017},"authorizeToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlU4aHQ5bzlZZVljMzJyQ2VUeWtFWUhOb1Y5cjIiLCJ1c2VyIjoic3R1ZGVudCIsImlhdCI6MTU5ODg4Mjk4Nn0.9Q6L8ZtEPVz4HZbo1O_o60AVBH33tLDXbltTgPz_rQY"}');
     }
     return null;
   }
@@ -159,11 +161,11 @@ class ApiService {
         },
       );
     } else {
-      url = '';
-      headers = {};
+      url = Api.anonymousPage;
+      headers = <String, String>{};
       body = jsonEncode(
         <String, dynamic>{
-          "time": null,
+          "time": time,
         },
       );
     }

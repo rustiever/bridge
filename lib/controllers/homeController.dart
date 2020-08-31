@@ -53,7 +53,7 @@ class HomeController extends GetxController {
 
   @override
   onClose() {
-    print('on close ');
+    // print('on close ');
     trackingScrollController?.dispose();
     super.onClose();
   }
@@ -83,9 +83,7 @@ class HomeController extends GetxController {
         Get.snackbar("Error", "Can't connect to server");
       }
       isLoading.value = false;
-    } else {
-      // Get.snackbar("Cool", "all posts are finished");
-      print('done');
     }
+    update();
   }
 }
