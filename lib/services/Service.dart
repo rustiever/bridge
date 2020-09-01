@@ -1,13 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:Bridge/constants/Apis.dart';
+import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import '../constants/Apis.dart';
 
 class ApiService {
   final http.Client httpClient;
@@ -37,11 +36,10 @@ class ApiService {
 
   Future<User> serverLogin(
       {bool newUser,
-      FirebaseUser user,
-      IdTokenResult tokenResult,
+      firebase.User user,
+      firebase.IdTokenResult tokenResult,
       UserType userType}) async {
     print('In server Login Func');
-
     String url = Api.login;
     int statusCode = 200;
     int type;
@@ -97,14 +95,11 @@ class ApiService {
 
   User getUserDetails() {
     var user = storage.read('user');
-    // print(user);
     print('In getuserDetails()');
     if (user != null) {
-      // print(user);
       return User.fromJson(user);
-      // return User.fromRawJson(
-      //     '{"userData":{"uid":"U8ht9o9YeYc32rCeTykEYHNoV9r2","name":"Sharan","email":"sharanneeded@gmail.com","photoUrl":"https://lh3.googleusercontent.com/a-/AOh14GiO_mUuTIe-4tQMFwCCNZ9y5ZIyL_cbmYRIRqpRxEM=s96-c","branch":"COMPUTER SCIENCE AND ENGINEERING","groups":["pop","push","abcd","abdc","bc","yuu"],"usn":"4MT17CS000","batch":2017},"authorizeToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlU4aHQ5bzlZZVljMzJyQ2VUeWtFWUhOb1Y5cjIiLCJ1c2VyIjoic3R1ZGVudCIsImlhdCI6MTU5ODg4Mjk4Nn0.9Q6L8ZtEPVz4HZbo1O_o60AVBH33tLDXbltTgPz_rQY"}');
     }
+
     return null;
   }
 
@@ -129,7 +124,7 @@ class ApiService {
   }
 
   Future<FeedModel> getFeeds(dynamic time) async {
-    User user = getUserDetails();
+    var user = getUserDetails();
     print('IN getFeeds Func');
     String url = Api.feeds;
     String body;

@@ -22,8 +22,6 @@ dependencies:
   cupertino_icons:
   file_picker:
   font_awesome_flutter:
-  hooks_riverpod:
-  flutter_hooks:
   connectivity: ^0.4.9
   device_preview:
   cached_network_image:

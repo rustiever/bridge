@@ -8,26 +8,27 @@ class FirebaseAuthService {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
 
-  Stream get onAuthStateChanged {
-    return _firebaseAuth.onAuthStateChanged;
-  }
+  // Stream get onAuthStateChanged {
+  //   return _firebaseAuth.onAuthStateChanged;
+  // }
 
   Future<List<dynamic>> signInWithGoogle() async {
     try {
       final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-      final credential = GoogleAuthProvider.getCredential(
+      final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      final authResult = await _firebaseAuth.signInWithCredential(credential);
+      final UserCredential authResult =
+          await _firebaseAuth.signInWithCredential(credential);
       print(authResult.additionalUserInfo.isNewUser);
       print(authResult.additionalUserInfo.profile);
       print(authResult.additionalUserInfo.providerId);
       print(authResult.additionalUserInfo.username);
       var dd = await authResult.user.getIdToken();
-      print(dd.token);
+      print(dd);
 
       return [
         authResult.additionalUserInfo.isNewUser,

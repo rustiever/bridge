@@ -1,9 +1,8 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 
-class ProfileAvatar extends HookWidget {
+class ProfileAvatar extends StatelessWidget {
   final String imageUrl;
   final bool isActive;
   final bool hasBorder;

@@ -1,5 +1,4 @@
 import 'package:Bridge/controllers/controllers.dart';
-import 'package:Bridge/models/Users.dart';
 import 'package:Bridge/router.dart';
 import 'package:Bridge/screens/screens.dart';
 import 'package:Bridge/widgets/widgets.dart';
