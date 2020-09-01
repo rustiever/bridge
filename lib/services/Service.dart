@@ -37,7 +37,7 @@ class ApiService {
   Future<User> serverLogin(
       {bool newUser,
       firebase.User user,
-      firebase.IdTokenResult tokenResult,
+      String tokenResult,
       UserType userType}) async {
     print('In server Login Func');
     String url = Api.login;
@@ -62,7 +62,7 @@ class ApiService {
       statusCode = 201;
       body = jsonEncode(
         <String, dynamic>{
-          "token": tokenResult.token,
+          "token": tokenResult,
           "email": user.email,
           "usertype": type
         },
@@ -70,7 +70,7 @@ class ApiService {
     } else {
       print('old user');
       body = jsonEncode(
-        <String, dynamic>{"token": tokenResult.token, "usertype": type},
+        <String, dynamic>{"token": tokenResult, "usertype": type},
       );
     }
 
@@ -99,7 +99,6 @@ class ApiService {
     if (user != null) {
       return User.fromJson(user);
     }
-
     return null;
   }
 
@@ -120,6 +119,32 @@ class ApiService {
         return false;
     } catch (e) {
       return false;
+    }
+  }
+
+  getLike(String postId) async {
+    print('In getLike');
+    var user = getUserDetails();
+    String url = Api.like;
+    Map<String, String> headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}',
+    };
+    String body = jsonEncode(
+      <String, dynamic>{
+        "postId": postId,
+      },
+    );
+
+    http.Response res = await httpClient.put(url, headers: headers, body: body);
+    if (res.statusCode == 200) {
+      print(res.body);
+      return jsonDecode(res.body);
+    } else if (res.statusCode == 404) {
+      return Future.error('server error');
+    } else {
+      print(res.statusCode);
+      return Future.error('server error from else');
     }
   }
 

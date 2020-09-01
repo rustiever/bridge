@@ -1,18 +1,19 @@
 import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/models/Feeds.dart';
+import 'package:Bridge/controllers/controllers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'widgets.dart';
 
-class PostContainer extends StatelessWidget {
-  final FeedDatum post;
+class PostContainer extends GetView<HomeController> {
+  final int index;
 
   const PostContainer({
     Key key,
-    @required this.post,
+    this.index,
   }) : super(key: key);
 
   @override
@@ -38,21 +39,23 @@ class PostContainer extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _PostHeader(
-                    post: post,
+                    index: index,
+
+                    // post: controller.feedList[index],
                   ),
                   const SizedBox(height: 4.0),
-                  Text(post.caption),
-                  post.photoUrl != null
+                  Text(controller.feedList[index].caption),
+                  controller.feedList[index].photoUrl != null
                       ? const SizedBox.shrink()
                       : const SizedBox(height: 6.0),
                 ],
               ),
             ),
-            post.photoUrl != null
+            controller.feedList[index].photoUrl != null
                 ? Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: CachedNetworkImage(
-                      imageUrl: post.photoUrl,
+                      imageUrl: controller.feedList[index].photoUrl,
                       progressIndicatorBuilder:
                           (context, url, downloadProgress) =>
                               CircularProgressIndicator(
@@ -65,7 +68,9 @@ class PostContainer extends StatelessWidget {
                 : const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _PostStats(post: post),
+              child: _PostStats(
+                index: index,
+              ),
             ),
           ],
         ),
@@ -74,26 +79,27 @@ class PostContainer extends StatelessWidget {
   }
 }
 
-class _PostHeader extends StatelessWidget {
-  final FeedDatum post;
+class _PostHeader extends GetView<HomeController> {
+  final int index;
 
   const _PostHeader({
     Key key,
-    @required this.post,
+    @required this.index,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ProfileAvatar(imageUrl: post.ownerPhotoUrl),
+        // ProfileAvatar(imageUrl: post.ownerPhotoUrl),
+        ProfileAvatar(imageUrl: controller.feedList[index].ownerPhotoUrl),
         const SizedBox(width: 8.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post.ownerName,
+                controller.feedList[index].ownerName,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -101,7 +107,7 @@ class _PostHeader extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(post.timeStamp.seconds * 1000), locale: 'en_short')} • ',
+                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(controller.feedList[index].timeStamp.seconds * 1000), locale: 'en_short')} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,
@@ -126,12 +132,12 @@ class _PostHeader extends StatelessWidget {
   }
 }
 
-class _PostStats extends StatelessWidget {
-  final FeedDatum post;
+class _PostStats extends GetView<HomeController> {
+  final int index;
 
   const _PostStats({
     Key key,
-    @required this.post,
+    @required this.index,
   }) : super(key: key);
 
   @override
@@ -153,23 +159,25 @@ class _PostStats extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4.0),
-            Expanded(
-              child: Text(
-                '${post.likes}',
-                style: TextStyle(
-                  color: Colors.grey[600],
+            Obx(
+              () => Expanded(
+                child: Text(
+                  controller.feedList[index].likes.toString(),
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                  ),
                 ),
               ),
             ),
             Text(
-              '${post.comments} Comments',
+              '${controller.feedList[index].comments} Comments',
               style: TextStyle(
                 color: Colors.grey[600],
               ),
             ),
             const SizedBox(width: 8.0),
             Text(
-              '${post.comments} Shares',
+              '${controller.feedList[index].comments} Shares',
               style: TextStyle(
                 color: Colors.grey[600],
               ),
@@ -186,7 +194,10 @@ class _PostStats extends StatelessWidget {
                 size: 20.0,
               ),
               label: 'Like',
-              onTap: () => print('Like'),
+              onTap: () {
+                print('Like');
+                if (controller.user.value != null) controller.getLikes(index);
+              },
             ),
             _PostButton(
               icon: Icon(

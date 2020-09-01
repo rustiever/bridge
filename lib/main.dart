@@ -1,4 +1,5 @@
 import 'package:Bridge/bindings/bindings.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +11,8 @@ import 'router.dart' as router;
 //   runApp(DevicePreview(builder: (context) => MyApp()));
 // }
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await GetStorage.init();
   runApp(MyApp());
 }
