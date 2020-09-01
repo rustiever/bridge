@@ -14,6 +14,10 @@ class Api {
   static const anonymousPage =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home';
 
+  //User Profile API Section...
+  static const profile =
+      'https://us-central1-bridge-fd58f.cloudfunctions.net/user/profile';
+
   //Feeds Section...
   static const feeds =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/home/feeds';
@@ -35,7 +39,6 @@ class Api {
   //Get the Comments of a specific Post...
   static const getComments =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/home/getComments';
-
   //Delete the specific Post...
   static const delPost =
       'https://us-central1-bridge-fd58f.cloudfunctions.net/home/deletePost';
