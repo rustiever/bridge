@@ -1,0 +1,16 @@
+Request Type     : [POST]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+request body : 
+{
+    "postId": "7aJf4bUYfIvJhWd0p9Za"
+}
+
+
+Headers :
+Authorization : bearer <token>
+
+
+response body :
+{}

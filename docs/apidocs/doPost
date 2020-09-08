@@ -1,0 +1,22 @@
+Request Type     : [POST]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+request body : 
+{
+    "caption":"THIS IS A POST WITH NUMBER-1001",
+	"photoUrl":"https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+	"ownerName":"Sharan",
+	"ownerPhotoUrl":"https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+	"scope":<```false``` or the ```scope value of the feed```>
+}
+
+
+Headers :
+Authorization : bearer <token>
+
+
+response body :
+{
+    "postId": "7aJf4bUYfIvJhWd0p9Za"
+}

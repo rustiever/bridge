@@ -1,0 +1,12 @@
+Request Type     : [PUT]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+request body : 
+{}
+
+Headers :
+Authorization : bearer <token>
+
+response body :
+{}

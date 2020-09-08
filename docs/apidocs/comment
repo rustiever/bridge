@@ -1,0 +1,20 @@
+Request Type     : [POST]
+Sucees Code      : 201
+Unsucees Code    : 401, 404
+
+request body : 
+{
+    "postId":<feed ID>,
+	"data":"Super Post",
+	"name":"Sharan"
+}
+
+
+Headers :
+Authorization : bearer <token>
+
+
+response body :
+{
+    "comments": <number of comments>
+}
