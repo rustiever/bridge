@@ -1,0 +1,36 @@
+Request Type     : [POST]
+Sucees Code      : 201
+Unsucees Code    : 400
+
+request body - 1 : For Students
+{
+	"token":<firebase-token>,
+    "usertype":202,
+    "email":"sharanrdude@gmail.com"
+}
+
+request body - 2 : For Faculties
+{
+	"token":<firebase-token>,
+    "email":"sharanneeded@gmail.com",
+    "usertype":101
+}
+
+
+response body - 1 :
+{
+    "userData": {
+        "uid": "ElgzDkGfcNbSwzOF6rpZTQDzTqn1","name": "sharan R","email": "sharanrdude@gmail.com",
+        "photoUrl": "https://lh4.googleusercontent.com/-EP-LaOAFpdA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnqdg6lYPf7P-CRiuSyY_8b3SMqeA/s96-c/photo.jpg",
+        "branch": "COMPUTER SCIENCE AND ENGINEERING","groups": [],"usn": "4MT17CS000","batch": 2017
+    },"authorizeToken": <token>
+}
+
+response body - 2 :
+{
+    "userData": {
+        "uid": "H3KOr0tq8Wcg5cK8HIY6AeRRZj73","name": "Sharan","email": "sharanneeded@gmail.com",
+        "photoUrl": "https://lh3.googleusercontent.com/a-/AOh14GiO_mUuTIe-4tQMFwCCNZ9y5ZIyL_cbmYRIRqpRxEM=s96-c",
+        "branch": "COMPUTER SCIENCE AND ENGINEERING","groups": [],"phone": "9966885577","facultyId": "CSE999"
+    },"authorizeToken": <token>
+}
