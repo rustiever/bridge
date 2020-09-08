@@ -18,29 +18,31 @@ API Response Codes :
 
 Sucess Codes :
 
-1) Register API         =       201
-2)Login API             =       200
-3)Logout API            =       200
-4)Like API              =       200
-5)Comment API           =       200
-6)Bookmark API          =       200
-7)Profile API           =       200
-8)Anonymous Home API    =       200
-9)getComments API       =       200
-10)Edit Comment API     =       200
-11)Delete Comment       =       200
-12)Profile API          =       200
+ 1) Register API         =       201
+ 2) Login API            =       200
+ 3) Logout API           =       200
+ 4) Like API             =       200
+ 5) Comment API          =       200
+ 6) Bookmark API         =       200
+ 7) Profile API          =       200
+ 8) Anonymous Home API   =       200
+ 9) getComments API      =       200
+10) Edit Comment API     =       200
+11) Delete Comment       =       200
+12) Profile API          =       200
+13) Doing the Post       =       201
 
 Unsucess codes:
 
-1) Register API         =       400
-2)Login API             =       401, 400
-3)Logout API            =       401, 404
-4)Like API              =       401, 404
-5)Comment API           =       401, 404
-6)getComments API       =       202, 404
-7)Bookmark API          =       401, 404
-8)Profile API           =       401, 404
-9)Edit Comment API     =        401,401
-10)Delete Comment       =       401, 404, 400
-11)Profile API          =       401, 404
+ 1) Register API         =       400
+ 2) Login API            =       401, 400
+ 3) Logout API           =       401, 404
+ 4) Like API             =       401, 404
+ 5) Comment API          =       401, 404
+ 6) getComments API      =       401, 404
+ 7) Bookmark API         =       401, 404
+ 8) Profile API          =       401, 404
+ 9) Edit Comment API     =       401, 404
+10) Delete Comment       =       401, 404, 400
+11) Profile API          =       401, 404
+12) Doing the Post       =       401, 404
