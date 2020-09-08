@@ -1,6 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
-import 'package:Bridge/models/Feeds.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,10 +56,9 @@ class HomeScreenDesktop extends GetView<HomeController> {
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            final FeedDatum post = controller.feedList[index];
                             // print(controller.feedList.length);
                             return PostContainer(
-                              post: post,
+                              index: index,
                             );
                           },
                           childCount: controller.feedList.length,
@@ -156,10 +154,10 @@ class HomeScreenMobile extends GetView<HomeController> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  final FeedDatum post = controller.feedList[index];
+                  // final FeedDatum post = controller.feedList[index];
                   // print(controller.feedList.length);
                   return PostContainer(
-                    post: post,
+                    index: index,
                   );
                 },
                 childCount: controller.feedList.length,

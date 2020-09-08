@@ -6,6 +6,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+class Notes extends GetView<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Obx(() => Text(controller.feedList[0].likes.toString())),
+          Center(child: RaisedButton(onPressed: () => Get.offNamed(Authroute))),
+        ],
+      ),
+    );
+  }
+}
+
 class NavScreen extends GetWidget<HomeController> {
   final List<IconData> _icons = const [
     MdiIcons.home,
@@ -20,10 +36,7 @@ class NavScreen extends GetWidget<HomeController> {
     HomeScreen(),
     // Scaffold(),
     // Scaffold(),
-    Scaffold(
-      body:
-          Center(child: RaisedButton(onPressed: () => Get.offNamed(Authroute))),
-    ),
+    Notes(),
     Profile(),
     Settings()
   ];

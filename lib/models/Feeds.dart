@@ -9,17 +9,17 @@ import 'package:meta/meta.dart';
 class FeedDatum {
   final String usertype;
 
-  final String ownerPhotoUrl;
-  final Time timeStamp;
-  final String ownerName;
-  final int comlen;
-  final String caption;
-  final String photoUrl;
-  final int likes;
-  final String ownerUid;
-  final dynamic scope;
-  final String postId;
-  final int comments;
+  String ownerPhotoUrl;
+  Time timeStamp;
+  String ownerName;
+  int comlen;
+  String caption;
+  String photoUrl;
+  int likes;
+  String ownerUid;
+  dynamic scope;
+  String postId;
+  int comments;
   FeedDatum({
     this.usertype,
     this.ownerPhotoUrl,

@@ -14,6 +14,8 @@ class Repository {
 
   User getUser() => service.getUserDetails();
 
+  getLike(String postId) async => await service.getLike(postId);
+
   Future<FeedModel> getFeeds(dynamic time) async {
     print('in anon repo ');
     FeedModel t = await service.getFeeds(time);

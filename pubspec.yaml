@@ -19,6 +19,7 @@ dependencies:
   get_storage:
   firebase_auth:
   google_sign_in:
+  firebase_core:
   cupertino_icons:
   file_picker:
   font_awesome_flutter:

@@ -11,7 +11,7 @@ class HomeController extends GetxController {
   var selectedIndex = 0.obs; // tab index used to navigate the tabs
   final Rx<User> user = User().obs;
   final Rx<FeedModel> feeds = Rx<FeedModel>();
-  List feedList = [];
+  List feedList = [].obs;
   TrackingScrollController trackingScrollController;
   var time;
   final isLoading = false.obs;
@@ -34,6 +34,13 @@ class HomeController extends GetxController {
     // ever(, (d) {});
     debugPrint('on init of HomeController');
     super.onInit();
+  }
+
+  Future getLikes(int index) async {
+    // enhance the like method
+    var likes = await repository.getLike(feedList[index].postId);
+    feedList[index].likes = likes['likes'];
+    print(likes);
   }
 
   var ff = 2;
@@ -86,5 +93,10 @@ class HomeController extends GetxController {
       isLoading.value = false;
     }
     update();
+  }
+
+  updateFeeds() async {
+    feeds.value = await repository.getFeeds(time);
+    time = feeds.value.lastTime;
   }
 }
