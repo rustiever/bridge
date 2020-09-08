@@ -1,0 +1,19 @@
+Request Type     : [PUT]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+request body : 
+{
+    "postId": "OcPGExXMHEUOGg4Jfj04",
+    "commentId":"HbSRgzVHGhrw6h4tjvOr"
+}
+
+
+Headers :
+Authorization : bearer <token>
+
+
+response body :
+{
+    "comments": <number of comments>
+}

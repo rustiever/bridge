@@ -22,7 +22,7 @@ Sucess Codes :
  2) Login API            =       200
  3) Logout API           =       200
  4) Like API             =       200
- 5) Comment API          =       200
+ 5) Comment API          =       201
  6) Bookmark API         =       200
  7) Profile API          =       200
  8) Anonymous Home API   =       200
