@@ -110,75 +110,73 @@ class HomeScreenMobile extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<HomeController>(
-      builder: (_) {
-        if (controller.feeds() == null) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return CustomScrollView(
-          physics: BouncingScrollPhysics(),
-          controller: scrollController,
-          slivers: [
-            SliverAppBar(
-              brightness: Brightness.light,
-              backgroundColor: Colors.white,
-              title: Text(
-                'bridge',
-                style: const TextStyle(
-                  color: Palette.facebookBlue,
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -1.2,
-                ),
-              ),
-              centerTitle: false,
-              floating: true,
-              actions: [
-                CircleButton(
-                  icon: Icons.search,
-                  iconSize: 30.0,
-                  onPressed: () => print('Search'),
-                ),
-                CircleButton(
-                  icon: MdiIcons.filter,
-                  iconSize: 30.0,
-                  onPressed: () => print('filter'),
-                ),
-              ],
-            ),
-            SliverToBoxAdapter(
-              child: CreatePostContainer(currentUser: controller.user.value),
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  // final FeedDatum post = controller.feedList[index];
-                  // print(controller.feedList.length);
-                  return PostContainer(
-                    index: index,
-                  );
-                },
-                childCount: controller.feedList.length,
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Container(
-                child: controller.isLoading.value
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : !controller.isMoreAvailable.value
-                        ? Center(
-                            child: Text('End'),
-                          )
-                        : null,
-              ),
-            ),
-          ],
+    return GetBuilder(builder: (_) {
+      if (controller.feeds() == null) {
+        return Center(
+          child: CircularProgressIndicator(),
         );
-      },
-    );
+      }
+      return CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        controller: scrollController,
+        slivers: [
+          SliverAppBar(
+            brightness: Brightness.light,
+            backgroundColor: Colors.white,
+            title: Text(
+              'bridge',
+              style: const TextStyle(
+                color: Palette.facebookBlue,
+                fontSize: 28.0,
+                fontWeight: FontWeight.bold,
+                letterSpacing: -1.2,
+              ),
+            ),
+            centerTitle: false,
+            floating: true,
+            actions: [
+              CircleButton(
+                icon: Icons.search,
+                iconSize: 30.0,
+                onPressed: () => print('Search'),
+              ),
+              CircleButton(
+                icon: MdiIcons.filter,
+                iconSize: 30.0,
+                onPressed: () => print('filter'),
+              ),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: CreatePostContainer(currentUser: controller.user.value),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                // final FeedDatum post = controller.feedList[index];
+                // print(controller.feedList.length);
+                return PostContainer(
+                  index: index,
+                );
+              },
+              childCount: controller.feedList.length,
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              child: controller.isLoading.value
+                  ? Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : !controller.isMoreAvailable.value
+                      ? Center(
+                          child: Text('End'),
+                        )
+                      : null,
+            ),
+          ),
+        ],
+      );
+    });
   }
 }
