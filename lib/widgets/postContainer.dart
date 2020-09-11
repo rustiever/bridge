@@ -8,7 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'widgets.dart';
 
-class PostContainer extends GetView<HomeControllers> {
+class PostContainer extends GetView<HomeController> {
   final int index;
 
   const PostContainer({
@@ -19,67 +19,79 @@ class PostContainer extends GetView<HomeControllers> {
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
-    return Card(
-      margin: EdgeInsets.symmetric(
-        vertical: 5.0,
-        horizontal: isDesktop ? 5.0 : 0.0,
-      ),
-      elevation: isDesktop ? 1.0 : 0.0,
-      shape: isDesktop
-          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0))
-          : null,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _PostHeader(
-                    index: index,
+    return GetBuilder<HomeController>(
+      builder: (_) {
+        if (controller.status == Status.Loading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Card(
+          margin: EdgeInsets.symmetric(
+            vertical: 5.0,
+            horizontal: isDesktop ? 5.0 : 0.0,
+          ),
+          elevation: isDesktop ? 1.0 : 0.0,
+          shape: isDesktop
+              ? RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0))
+              : null,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            color: Colors.white,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _PostHeader(
+                        index: index,
 
-                    // post: controller.feedList[index],
+                        // post: controller.feedList[index],
+                      ),
+                      const SizedBox(height: 4.0),
+                      Text(controller.feeds[index].caption),
+                      controller.feeds[index].photoUrl != null
+                          ? const SizedBox.shrink()
+                          : const SizedBox(height: 6.0),
+                    ],
                   ),
-                  const SizedBox(height: 4.0),
-                  Text(controller.feedList[index].caption),
-                  controller.feedList[index].photoUrl != null
-                      ? const SizedBox.shrink()
-                      : const SizedBox(height: 6.0),
-                ],
-              ),
+                ),
+                controller.feeds[index].photoUrl != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: CachedNetworkImage(
+                          imageUrl: controller.feeds[index].photoUrl,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                                  CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                          placeholderFadeInDuration:
+                              Duration(milliseconds: 400),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                        // child: Image.network(post.photoUrl),
+                      )
+                    : const SizedBox.shrink(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: _PostStats(
+                    index: index,
+                  ),
+                ),
+              ],
             ),
-            controller.feedList[index].photoUrl != null
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: CachedNetworkImage(
-                      imageUrl: controller.feedList[index].photoUrl,
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                      placeholderFadeInDuration: Duration(milliseconds: 400),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
-                    // child: Image.network(post.photoUrl),
-                  )
-                : const SizedBox.shrink(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: _PostStats(
-                index: index,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
-class _PostHeader extends GetView<HomeControllers> {
+class _PostHeader extends GetView<HomeController> {
   final int index;
 
   const _PostHeader({
@@ -92,14 +104,14 @@ class _PostHeader extends GetView<HomeControllers> {
     return Row(
       children: [
         // ProfileAvatar(imageUrl: post.ownerPhotoUrl),
-        ProfileAvatar(imageUrl: controller.feedList[index].ownerPhotoUrl),
+        ProfileAvatar(imageUrl: controller.feeds[index].ownerPhotoUrl),
         const SizedBox(width: 8.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                controller.feedList[index].ownerName,
+                controller.feeds[index].ownerName,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -107,7 +119,7 @@ class _PostHeader extends GetView<HomeControllers> {
               Row(
                 children: [
                   Text(
-                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(controller.feedList[index].timeStamp.seconds * 1000), locale: 'en_short')} • ',
+                    '${timeago.format(DateTime.fromMillisecondsSinceEpoch(controller.feeds[index].timeStamp.seconds * 1000), locale: 'en_short')} • ',
                     style: TextStyle(
                       color: Colors.grey[600],
                       fontSize: 12.0,
@@ -132,7 +144,7 @@ class _PostHeader extends GetView<HomeControllers> {
   }
 }
 
-class _PostStats extends GetView<HomeControllers> {
+class _PostStats extends GetView<HomeController> {
   final int index;
 
   const _PostStats({
@@ -159,25 +171,23 @@ class _PostStats extends GetView<HomeControllers> {
               ),
             ),
             const SizedBox(width: 4.0),
-            Obx(
-              () => Expanded(
-                child: Text(
-                  controller.feedList[index].likes.toString(),
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                  ),
+            Expanded(
+              child: Text(
+                controller.feeds[index].likes.toString(),
+                style: TextStyle(
+                  color: Colors.grey[600],
                 ),
               ),
             ),
             Text(
-              '${controller.feedList[index].comments} Comments',
+              '${controller.feeds[index].comments} Comments',
               style: TextStyle(
                 color: Colors.grey[600],
               ),
             ),
             const SizedBox(width: 8.0),
             Text(
-              '${controller.feedList[index].comments} Shares',
+              '${controller.feeds[index].comments} Shares',
               style: TextStyle(
                 color: Colors.grey[600],
               ),
@@ -196,7 +206,7 @@ class _PostStats extends GetView<HomeControllers> {
               label: 'Like',
               onTap: () {
                 print('Like');
-                if (controller.user.value != null) controller.getLikes(index);
+                if (controller.user != null) controller.getLikes(index);
               },
             ),
             _PostButton(

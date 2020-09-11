@@ -1,33 +1,72 @@
+import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
-import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class HomeView extends GetView<HomeController> {
+  final List<IconData> _icons = const [
+    MdiIcons.home,
+    // Icons.ondemand_video,
+    // MdiIcons.accountGroupOutline,
+    MdiIcons.bellOutline,
+    MdiIcons.accountCircleOutline,
+    // Icons.menu,
+  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Center(
-            child: Container(
-              child: Text(controller.user.authorizeToken),
-            ),
+    return GetBuilder<PagesController>(
+      builder: (_) => DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          body: _.currentPage,
+          bottomNavigationBar: CustomTabBar(icons: _icons),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomTabBar extends StatelessWidget {
+  const CustomTabBar({
+    Key key,
+    @required List<IconData> icons,
+  })  : _icons = icons,
+        super(key: key);
+
+  final List<IconData> _icons;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      color: Colors.white,
+      child: TabBar(
+        indicatorPadding: EdgeInsets.zero,
+        indicator: BoxDecoration(
+          border: Border(
+            top: BorderSide(color: Palette.facebookBlue, width: 3.0),
           ),
-          RaisedButton(
-            onPressed: controller.user != null
-                ? () async {
-                    if (await controller.logout()) {
-                      Get.offAllNamed(Authroute);
-                    } else {
-                      Get.snackbar('Sorry',
-                          'Looks like no connection, Try with proper connection');
-                    }
-                  }
-                : null,
-            child: Text('logout'),
-          )
-        ],
+        ),
+        onTap: (value) => PagesController.to.changeIndex(value),
+        tabs: _icons
+            .asMap()
+            .map(
+              (i, e) => MapEntry(
+                i,
+                Tab(
+                  icon: Icon(
+                    e,
+                    color: i == PagesController.to.tabIndex
+                        ? Palette.facebookBlue
+                        : Colors.black45,
+                    size: 30.0,
+                  ),
+                ),
+              ),
+            )
+            .values
+            .toList(),
       ),
     );
   }

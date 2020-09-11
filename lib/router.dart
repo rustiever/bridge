@@ -22,7 +22,7 @@ List<GetPage> routes() {
       page: () => HomeView(),
       bindings: [
         AuthBinding(),
-        BindingsBuilder(() => {Get.lazyPut(() => PageController())}),
+        BindingsBuilder(() => {Get.lazyPut(() => PagesController())}),
         HomeBinding()
       ],
     ),

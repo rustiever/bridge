@@ -2,8 +2,8 @@ import 'package:Bridge/views/views.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-class PageController extends GetxController {
-  static PageController get to => Get.find();
+class PagesController extends GetxController {
+  static PagesController get to => Get.find();
 
   int tabIndex;
   Widget currentPage;

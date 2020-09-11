@@ -1,5 +1,4 @@
 import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/controllers/authController.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/models/repository/repository.dart';
 import 'package:flutter/widgets.dart';
@@ -110,16 +109,71 @@ class HomeController extends GetxController {
   final Repository repository;
   HomeController({@required this.repository}) : assert(repository != null);
   User user;
+  TrackingScrollController trackingScrollController;
+  FeedModel feedModel;
+  List<FeedDatum> feeds = [];
+  bool isMoreAvailable = true;
+  Status status;
+  var time;
+
+  int count = 0;
+
+  inc() {
+    count++;
+    update();
+  }
 
   @override
   void onInit() {
+    time = null;
+    status = Status.Loading;
     getUser();
+    _getFeeds();
+    trackingScrollController = TrackingScrollController()
+      ..addListener(() {
+        if (trackingScrollController.position.pixels >=
+            trackingScrollController.position.maxScrollExtent) {
+          print('hello');
+          _getFeeds();
+        }
+      });
     super.onInit();
+  }
+
+  @override
+  Future<void> onClose() {
+    // print('on close ');
+    trackingScrollController?.dispose();
+    return super.onClose();
+  }
+
+  getLikes(int index) async {
+    feeds[index].likes =
+        (await repository.getLike(feeds[index].postId))['likes'];
+
+    update();
+    print(feeds[index].likes.toString());
+  }
+
+  _getFeeds() async {
+    if (isMoreAvailable) {
+      this.status = Status.Loading;
+      this.feedModel = await repository.getFeeds(time);
+      this.time = feedModel.lastTime;
+      this.feeds.addAll(feedModel.feedData);
+      if (time == null) {
+        isMoreAvailable = false;
+      }
+      this.status = Status.Success;
+    } else {
+      print('nothing');
+    }
+    update();
   }
 
   getUser() {
     this.user = repository.getUser();
-    // update();
+    update();
   }
 
   Future<bool> logout() => repository.logout();
