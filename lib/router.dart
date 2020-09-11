@@ -1,9 +1,8 @@
-// import 'package:Bridge/tmpsExps/home.dart';
 import 'package:Bridge/screens/errorScreen.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 import 'bindings/bindings.dart';
-import 'screens/screens.dart';
-import 'tmpsExps/home.dart';
+import 'controllers/controllers.dart';
+import 'views/views.dart';
 
 const String Authroute = '/';
 const String Feedroute = 'feed';
@@ -17,17 +16,15 @@ List<GetPage> routes() {
       name: Errorroute,
       page: () => ErrorScreen(),
     ),
-    // GetPage(name: Splashroute, page: () => SplashScreen()),
-    GetPage(name: Authroute, page: () => Auth(), bindings: [
-      AuthBinding(),
-    ]),
-    // GetPage(
-    //     name: Homeroute,
-    //     page: () => NavScreen(),
-    //     bindings: [AuthBinding(), HomeBinding()]),
+    GetPage(name: Authroute, page: () => AuthView(), binding: AuthBinding()),
     GetPage(
       name: Homeroute,
-      page: () => Home(),
-    )
+      page: () => HomeView(),
+      bindings: [
+        AuthBinding(),
+        BindingsBuilder(() => {Get.lazyPut(() => PageController())}),
+        HomeBinding()
+      ],
+    ),
   ];
 }

@@ -1,1 +1,2 @@
-enum Status { loading, success, error }
+enum Status { Loading, Success, Error }
+enum UserType { Student, Faculty, Alumni }

@@ -1,12 +1,14 @@
+import 'package:Bridge/constants/constants.dart';
+import 'package:Bridge/controllers/authController.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/models/repository/repository.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-class HomeController extends GetxController {
-  static HomeController get to => Get.find();
+class HomeControllers extends GetxController {
+  static HomeControllers get to => Get.find();
   final Repository repository;
-  HomeController({@required this.repository}) : assert(repository != null);
+  HomeControllers({@required this.repository}) : assert(repository != null);
 
   var selectedIndex = 0.obs; // tab index used to navigate the tabs
   final Rx<User> user = User().obs;
@@ -101,4 +103,24 @@ class HomeController extends GetxController {
     }
     update();
   }
+}
+
+class HomeController extends GetxController {
+  static HomeController get to => Get.find();
+  final Repository repository;
+  HomeController({@required this.repository}) : assert(repository != null);
+  User user;
+
+  @override
+  void onInit() {
+    getUser();
+    super.onInit();
+  }
+
+  getUser() {
+    this.user = repository.getUser();
+    // update();
+  }
+
+  Future<bool> logout() => repository.logout();
 }

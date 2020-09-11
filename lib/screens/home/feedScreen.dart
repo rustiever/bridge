@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class HomeScreen extends GetWidget<HomeController> {
+class HomeScreen extends GetWidget<HomeControllers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +20,7 @@ class HomeScreen extends GetWidget<HomeController> {
   }
 }
 
-class HomeScreenDesktop extends GetView<HomeController> {
+class HomeScreenDesktop extends GetView<HomeControllers> {
   final TrackingScrollController scrollController;
 
   const HomeScreenDesktop({
@@ -100,7 +100,7 @@ class HomeScreenDesktop extends GetView<HomeController> {
   }
 }
 
-class HomeScreenMobile extends GetView<HomeController> {
+class HomeScreenMobile extends GetView<HomeControllers> {
   final TrackingScrollController scrollController;
 
   const HomeScreenMobile({

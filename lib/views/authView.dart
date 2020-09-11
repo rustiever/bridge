@@ -1,13 +1,13 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/authController.dart';
-import 'package:Bridge/router.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class Auth extends GetWidget<AuthController> {
+import '../router.dart';
+
+class AuthView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
-    // final _media = MediaQuery.of(context).size;
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

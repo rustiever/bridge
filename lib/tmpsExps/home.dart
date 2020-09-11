@@ -21,7 +21,7 @@ class MyController extends GetxController {
 }
 
 class Home extends StatelessWidget {
-  final controller = Get.put<HomeController>(HomeController(
+  final controller = Get.put<HomeControllers>(HomeControllers(
       repository: Repository(service: ApiService(httpClient: Client()))));
 
   @override

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class Notes extends GetView<HomeController> {
+class Notes extends GetView<HomeControllers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +22,7 @@ class Notes extends GetView<HomeController> {
   }
 }
 
-class NavScreens extends GetWidget<HomeController> {
+class NavScreens extends GetWidget<HomeControllers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +41,7 @@ class NavScreens extends GetWidget<HomeController> {
             ),
             GetBuilder(
               // init: HomeController(repository: Get.find()),
-              builder: (HomeController _) => Column(
+              builder: (HomeControllers _) => Column(
                 children: [
                   RaisedButton(onPressed: () {
                     // print(_.feedList[0].likes++);
@@ -60,7 +60,7 @@ class NavScreens extends GetWidget<HomeController> {
   }
 }
 
-class NavScreen extends GetWidget<HomeController> {
+class NavScreen extends GetWidget<HomeControllers> {
   final List<IconData> _icons = const [
     MdiIcons.home,
     // Icons.ondemand_video,
@@ -131,7 +131,7 @@ class NavScreen extends GetWidget<HomeController> {
   }
 }
 
-class Settings extends GetView<HomeController> {
+class Settings extends GetView<HomeControllers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

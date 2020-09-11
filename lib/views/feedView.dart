@@ -1,0 +1,11 @@
+import 'package:flutter/material.dart';
+
+class FeedView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('FeedPage')),
+      body: Container(),
+    );
+  }
+}

@@ -8,7 +8,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import 'widgets.dart';
 
-class PostContainer extends GetView<HomeController> {
+class PostContainer extends GetView<HomeControllers> {
   final int index;
 
   const PostContainer({
@@ -79,7 +79,7 @@ class PostContainer extends GetView<HomeController> {
   }
 }
 
-class _PostHeader extends GetView<HomeController> {
+class _PostHeader extends GetView<HomeControllers> {
   final int index;
 
   const _PostHeader({
@@ -132,7 +132,7 @@ class _PostHeader extends GetView<HomeController> {
   }
 }
 
-class _PostStats extends GetView<HomeController> {
+class _PostStats extends GetView<HomeControllers> {
   final int index;
 
   const _PostStats({

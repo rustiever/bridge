@@ -1,4 +1,4 @@
-import 'package:Bridge/models/models.dart';
+import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/models/repository/repository.dart';
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
