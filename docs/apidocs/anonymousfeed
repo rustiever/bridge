@@ -1,7 +1,8 @@
-
 Request Type     : [POST]
 Sucees Code      : 200
-Unsucees Code    : 
+Unsucees Code    : ---
+
+URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/anonymous/home
 
 request body - 1 :
 

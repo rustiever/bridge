@@ -2,6 +2,8 @@ Request Type     : [POST]
 Sucees Code      : 201
 Unsucees Code    : 400
 
+URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/auth/register
+
 request body - 1 : For Students
 {
 	"token":<firebase-token>,
