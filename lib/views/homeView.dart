@@ -1,5 +1,6 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
+import 'package:Bridge/views/views.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -19,7 +20,10 @@ class HomeView extends GetView<HomeController> {
       builder: (_) => DefaultTabController(
         length: 3,
         child: Scaffold(
-          body: _.currentPage,
+          body: IndexedStack(
+            index: _.tabIndex,
+            children: [FeedView(), ProfileView(), SettingsView()],
+          ),
           bottomNavigationBar: CustomTabBar(icons: _icons),
         ),
       ),

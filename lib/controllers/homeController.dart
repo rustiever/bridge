@@ -164,7 +164,7 @@ class HomeController extends GetxController {
       if (time == null) {
         isMoreAvailable = false;
       }
-      this.status = Status.Success;
+      this.status = Status.SUCCESS;
     } else {
       print('nothing');
     }

@@ -6,16 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../router.dart';
+
 class FeedView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Responsive(
-            mobile: FeedMobile(
-                scrollController: controller.trackingScrollController),
-            desktop: FeedDesktop(
-              scrollController: controller.trackingScrollController,
-            )));
+      body: Responsive(
+        mobile:
+            FeedMobile(scrollController: controller.trackingScrollController),
+        desktop: FeedDesktop(
+          scrollController: controller.trackingScrollController,
+        ),
+      ),
+    );
   }
 }
 
@@ -56,12 +60,23 @@ class FeedMobile extends GetView<HomeController> {
                 CircleButton(
                   icon: Icons.search,
                   iconSize: 30.0,
-                  onPressed: () => print('Search'),
+                  onPressed: () async {
+                    print('Search');
+                    if (await controller.logout()) {
+                      await Get.offAllNamed(Authroute);
+                    } else {
+                      Get.snackbar('Sorry',
+                          'Looks like no connection, Try with proper connection');
+                    }
+                  },
                 ),
                 CircleButton(
                   icon: MdiIcons.filter,
                   iconSize: 30.0,
-                  onPressed: () => print('filter'),
+                  onPressed: () async {
+                    print('filter');
+                    await Get.offAllNamed(Authroute);
+                  },
                 ),
               ],
             ),
@@ -71,8 +86,6 @@ class FeedMobile extends GetView<HomeController> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
-                  // final FeedDatum post = controller.feedList[index];
-                  // print(controller.feedList.length);
                   return PostContainer(
                     index: index,
                   );
