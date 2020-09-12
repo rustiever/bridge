@@ -22,6 +22,44 @@ class Notes extends GetView<HomeController> {
   }
 }
 
+class NavScreens extends GetWidget<HomeController> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            Obx(
+              () => RaisedButton(
+                padding: EdgeInsets.all(40),
+                onPressed: () {
+                  print(controller.feedList[0].likes++);
+                },
+                child: Text(controller.feedList[0].likes.toString()),
+                // child: Text(controller.ff.toString()),
+              ),
+            ),
+            GetBuilder(
+              // init: HomeController(repository: Get.find()),
+              builder: (HomeController _) => Column(
+                children: [
+                  RaisedButton(onPressed: () {
+                    // print(_.feedList[0].likes++);
+                    _.getLikes(0);
+                  }),
+                  Text(
+                    '${_.feedList[0].likes.toString()}',
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class NavScreen extends GetWidget<HomeController> {
   final List<IconData> _icons = const [
     MdiIcons.home,
