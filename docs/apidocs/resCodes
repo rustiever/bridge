@@ -1,5 +1,6 @@
 Response Codes : 
 
+
 200 - OK
 201 - CREATED
 202 - ACCEPTED
@@ -16,6 +17,7 @@ Response Codes :
 
 API Response Codes : 
 
+
 Sucess Codes :
 
  1) Register API         =       201
@@ -31,6 +33,7 @@ Sucess Codes :
 11) Delete Comment       =       200
 12) Profile API          =       200
 13) Doing the Post       =       201
+
 
 Unsucess codes:
 

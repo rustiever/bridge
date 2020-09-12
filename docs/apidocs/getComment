@@ -1,0 +1,43 @@
+Request Type     : [POST]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+request body - 1 :
+{
+    "postId": "OcPGExXMHEUOGg4Jfj04",
+    "time":null
+}
+
+request body - 2 :
+{
+    "postId": "OcPGExXMHEUOGg4Jfj04",
+    "time":{"seconds": 1599492218,"nanoseconds": 528000000}
+}
+
+
+Headers :
+Authorization : bearer <token>
+
+
+response body - 1 :
+{
+    "lastTime": null,
+    "commentData": []
+}
+
+response body - 2 :
+{
+    "lastTime": null,
+    "commentData": [{
+            "id": "60rkbAdgICN97Z5v072g",
+            "time": {"seconds": 1599923485,"nanoseconds": 856000000},
+            "edited": false,
+            "name": "You"
+        },{
+            "id": "PWiSn36y68qKkkWhfPKP",
+            "time": {"seconds": 1599492218,"nanoseconds": 528000000},
+            "edited": false,
+            "name": "You"
+        }
+    ]
+}
