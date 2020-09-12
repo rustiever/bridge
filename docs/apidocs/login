@@ -2,6 +2,8 @@ Request Type     : [POST]
 Sucees Code      : 200
 Unsucees Code    : 400, 401
 
+URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/auth/login
+
 request body - 1 : For Faculty
 {
 	"token":<firebase-token>,
