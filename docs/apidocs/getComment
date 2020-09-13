@@ -2,6 +2,8 @@ Request Type     : [POST]
 Sucees Code      : 200
 Unsucees Code    : 401, 404
 
+URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/home/getComments
+
 request body - 1 :
 {
     "postId": "OcPGExXMHEUOGg4Jfj04",
