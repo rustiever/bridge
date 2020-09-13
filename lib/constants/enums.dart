@@ -1,5 +1,5 @@
 enum Status {
-  Loading,
+  LOADING,
   SUCCESS,
   ERROR,
   NONE,

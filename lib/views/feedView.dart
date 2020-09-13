@@ -1,5 +1,4 @@
 import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/constants/enums.dart';
 import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class FeedMobile extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (_) {
-        if (controller.status == Status.Loading) {
+        if (controller.isFeedLoading) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -86,6 +85,7 @@ class FeedMobile extends GetView<HomeController> {
             SliverList(
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
+                  // print(controller.feeds.length);
                   return PostContainer(
                     index: index,
                   );
@@ -95,15 +95,13 @@ class FeedMobile extends GetView<HomeController> {
             ),
             SliverToBoxAdapter(
               child: Container(
-                child: controller.status == Status.Loading
+                child: controller.isFeedMoreAvailable
                     ? Center(
                         child: CircularProgressIndicator(),
                       )
-                    : !controller.isMoreAvailable
-                        ? Center(
-                            child: Text('End'),
-                          )
-                        : null,
+                    : Center(
+                        child: Text('End'),
+                      ),
               ),
             ),
           ],

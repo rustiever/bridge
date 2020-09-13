@@ -21,7 +21,6 @@ dependencies:
   google_sign_in:
   firebase_core:
   cupertino_icons:
-  file_picker:
   font_awesome_flutter:
   connectivity: ^0.4.9
   device_preview:

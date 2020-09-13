@@ -18,10 +18,11 @@ class PostContainer extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.index = index;
     final bool isDesktop = Responsive.isDesktop(context);
     return GetBuilder<HomeController>(
       builder: (_) {
-        if (controller.status == Status.Loading) {
+        if (controller.status == Status.LOADING) {
           return Center(
             child: CircularProgressIndicator(),
           );
@@ -206,7 +207,10 @@ class _PostStats extends GetView<HomeController> {
               label: 'Like',
               onTap: () {
                 print('Like');
-                if (controller.user != null) controller.getLikes(index);
+                if (controller.user != null) {
+                  controller.index = index;
+                  controller.getLikes();
+                }
               },
             ),
             _PostButton(
@@ -216,7 +220,13 @@ class _PostStats extends GetView<HomeController> {
                 size: 20.0,
               ),
               label: 'Comment',
-              onTap: () => print('Comment'),
+              onTap: () async {
+                print('Comment');
+                if (controller.user != null) {
+                  // controller.index = index;
+                  controller.getComments();
+                }
+              },
             ),
             _PostButton(
               icon: Icon(

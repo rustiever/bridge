@@ -11,7 +11,8 @@ class ProfileView extends StatelessWidget {
         body: Column(
           children: [
             Container(
-              child: Text(HomeController.to.count.toString()),
+              child: Text(HomeController.to.count.toString() +
+                  HomeController.to.isFeedMoreAvailable.toString()),
             ),
             RaisedButton(onPressed: () {
               HomeController.to.inc();

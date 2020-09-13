@@ -1,4 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
+import 'package:Bridge/models/comments.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/models/repository/repository.dart';
 import 'package:flutter/widgets.dart';
@@ -15,6 +16,7 @@ class HomeControllers extends GetxController {
   final feedList = [].obs;
   final RxInt likes = 0.obs;
   TrackingScrollController trackingScrollController;
+  ScrollController commentScrollController;
   var time;
   final isLoading = false.obs;
   FeedModel v = FeedModel();
@@ -31,6 +33,7 @@ class HomeControllers extends GetxController {
         getMe();
       }
     });
+
     getUser();
     fetchFeeds();
     // ever(, (d) {});
@@ -110,23 +113,34 @@ class HomeController extends GetxController {
   HomeController({@required this.repository}) : assert(repository != null);
   User user;
   TrackingScrollController trackingScrollController;
+  ScrollController commentScrollController;
   FeedModel feedModel;
   List<FeedDatum> feeds = [];
-  bool isMoreAvailable = true;
+  CommentModel commentModel;
+  List<CommentDatum> comments = [];
+  bool isFeedMoreAvailable = true,
+      isCommentMoreAvailable = true,
+      isFeedLoading = true,
+      isCommentLoading = true;
   Status status;
-  var time;
+  var feedTime, commentTime;
+  int feedIndex;
+
+  set index(int index) => {this.feedIndex = index};
 
   int count = 0;
 
   inc() {
     count++;
+    isFeedMoreAvailable = !isFeedMoreAvailable;
     update();
   }
 
   @override
   void onInit() {
-    time = null;
-    status = Status.Loading;
+    print('oninit ');
+    feedTime = commentTime = null;
+
     getUser();
     _getFeeds();
     trackingScrollController = TrackingScrollController()
@@ -134,10 +148,28 @@ class HomeController extends GetxController {
         if (trackingScrollController.position.pixels >=
             trackingScrollController.position.maxScrollExtent) {
           print('hello');
-          _getFeeds();
+          _gett();
+        }
+      });
+    commentScrollController = ScrollController()
+      ..addListener(() {
+        if (commentScrollController.position.pixels >=
+            commentScrollController.position.maxScrollExtent) {
+          _fetchComments();
         }
       });
     super.onInit();
+  }
+
+  _gett() {
+    if (!isFeedLoading && isFeedMoreAvailable) {
+      print('feeds');
+      _getFeeds();
+    }
+  }
+
+  getComments() {
+    _fetchComments();
   }
 
   @override
@@ -147,24 +179,37 @@ class HomeController extends GetxController {
     return super.onClose();
   }
 
-  getLikes(int index) async {
-    feeds[index].likes =
-        (await repository.getLike(feeds[index].postId))['likes'];
+  getLikes() async {
+    feeds[feedIndex].likes =
+        (await repository.getLike(feeds[feedIndex].postId))['likes'];
 
     update();
-    print(feeds[index].likes.toString());
+    print(feeds[feedIndex].likes.toString());
+  }
+
+  _fetchComments() async {
+    if (isCommentMoreAvailable) {
+      // this.status = Status.LOADING;
+      this.commentModel = await repository.getComments(
+          time: commentTime, user: user, postId: feeds[feedIndex].postId);
+      print(commentModel.commentData[0].edited);
+    }
+
+    update();
   }
 
   _getFeeds() async {
-    if (isMoreAvailable) {
-      this.status = Status.Loading;
-      this.feedModel = await repository.getFeeds(time);
-      this.time = feedModel.lastTime;
-      this.feeds.addAll(feedModel.feedData);
-      if (time == null) {
-        isMoreAvailable = false;
+    if (this.isFeedMoreAvailable) {
+      // this.isFeedMoreAvailable = false;
+      isFeedLoading = true;
+      this.feedModel = await repository.getFeeds(feedTime);
+      this.feedTime = feedModel.lastTime;
+      print(feedTime);
+      if (feedTime == null) {
+        isFeedMoreAvailable = false;
       }
-      this.status = Status.SUCCESS;
+      this.feeds.addAll(feedModel.feedData);
+      isFeedLoading = false;
     } else {
       print('nothing');
     }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:Bridge/constants/constants.dart';
+import 'package:Bridge/models/comments.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/services/FirebaseAuth.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase;
@@ -122,7 +123,7 @@ class ApiService {
     }
   }
 
-  getLike(String postId) async {
+  Future getLike(String postId) async {
     print('In getLike');
     var user = getUserDetails();
     String url = Api.like;
@@ -140,6 +141,32 @@ class ApiService {
     if (res.statusCode == 200) {
       print(res.body);
       return jsonDecode(res.body);
+    } else if (res.statusCode == 404) {
+      return Future.error('server error');
+    } else {
+      print(res.statusCode);
+      return Future.error('server error from else');
+    }
+  }
+
+  Future<CommentModel> getComments(
+      {dynamic time, String postId, User user}) async {
+    var user = getUserDetails();
+    print('IN getComments Func');
+    String url = Api.getComments;
+    String body = jsonEncode(
+      <String, dynamic>{"time": time, "postId": "OcPGExXMHEUOGg4Jfj04"},
+    );
+    Map headers = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}',
+    };
+    http.Response res =
+        await httpClient.post(url, headers: headers, body: body);
+    if (res.statusCode == 200) {
+      CommentModel f = CommentModel.fromRawJson(res.body);
+      print(f);
+      return f;
     } else if (res.statusCode == 404) {
       return Future.error('server error');
     } else {

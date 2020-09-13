@@ -1,4 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
+import 'package:Bridge/models/comments.dart';
 import 'package:Bridge/models/models.dart';
 import 'package:Bridge/services/Service.dart';
 import 'package:meta/meta.dart';
@@ -15,7 +16,11 @@ class Repository {
 
   User getUser() => service.getUserDetails();
 
-  getLike(String postId) async => await service.getLike(postId);
+  Future getLike(String postId) async => await service.getLike(postId);
+
+  Future<CommentModel> getComments(
+          {dynamic time, User user, String postId}) async =>
+      await service.getComments(time: time, user: user, postId: postId);
 
   Future<FeedModel> getFeeds(dynamic time) async {
     print('in anon repo ');
