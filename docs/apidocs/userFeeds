@@ -1,0 +1,137 @@
+Request Type     : [POST]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/home/feeds
+
+request body - 1 :
+{
+	"time" :null,
+	"userScope":{
+            "branch": "Computer science and Engineering",
+            "batch": 2017,
+            "groups": ["abcd","vv"]
+        }
+}
+
+request body - 2 :
+{   "time" :{"seconds": 1598708945,"nanoseconds": 25000000},
+	"userScope":{
+        "branch": "Computer science and Engineering",
+        "batch": 2017,
+        "groups": ["abcd","vv"]
+    }
+}
+
+Headers :
+Authorization : bearer <token>
+
+
+response body - 1:
+{
+    "lastTime": {"seconds": 1598710757,"nanoseconds": 441000000},"feedData": [{
+            "postId": "9Ncg5Hf0rqsXcHeKQOPA","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1005","scope": {"groups": ["abcd"],"branch": false,"batch": false},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710819,"nanoseconds": 971000000}
+        },{
+            "postId": "rwfi7MoOGRz0UHpOy2lz","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1004","scope": {"groups": false,"batch": true,"branch": ["CS"]},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710797,"nanoseconds": 497000000}
+        },{
+            "postId": "lIZv6t8Lpaxj9491SeUH","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1002","scope": {"groups": false,"batch": [2017],"branch": ["CS"]},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710775,"nanoseconds": 850000000}
+        },{
+            "postId": "A7aIqVNQqAOrcab7pjGL","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1002","scope": {"groups": false,"branch": true,"batch": [2017]},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710768,"nanoseconds": 76000000}
+        },{
+            "postId": "gE5HvVpQEoK1TuNwDdCV","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1002","scope": {"groups": false,"branch": true,"batch": true},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710757,"nanoseconds": 441000000}
+        },{
+            "postId": "oIQctj0d046DNqVMmTrn","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1001","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710717,"nanoseconds": 216000000}
+        },{
+            "postId": "vHiSGRH7xLobHRWoNJGQ","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-100","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709534,"nanoseconds": 3000000}
+        },{
+            "postId": "ux6kLXTqwLsQg8WaMVFg","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-99","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709528,"nanoseconds": 528000000}
+        },{
+            "postId": "pkqQNxrgwRPvuvFWXx8E","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-98","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709523,"nanoseconds": 963000000}
+        },{
+            "postId": "0ER40iQgXexOXZ89fnZ4","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-97","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709519,"nanoseconds": 330000000}
+        }]
+}
+
+response body - 2 :
+{
+    "lastTime": {"seconds": 1598708058,"nanoseconds": 537000000},"feedData": [{
+            "postId": "9Ncg5Hf0rqsXcHeKQOPA","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1005","scope": {"groups": ["abcd"],"branch": false,"batch": false},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710819,"nanoseconds": 971000000}
+        },{
+            "postId": "rwfi7MoOGRz0UHpOy2lz","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1004","scope": {"groups": false,"batch": true,"branch": ["CS"]},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710797,"nanoseconds": 497000000}
+        },{
+            "postId": "lIZv6t8Lpaxj9491SeUH","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1002","scope": {"groups": false,"batch": [2017],"branch": ["CS"]},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710775,"nanoseconds": 850000000}
+        },{
+            "postId": "A7aIqVNQqAOrcab7pjGL","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1002","scope": {"groups": false,"branch": true,"batch": [2017]},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710768,"nanoseconds": 76000000}
+        },{
+            "postId": "gE5HvVpQEoK1TuNwDdCV","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1002","scope": {"groups": false,"branch": true,"batch": true},
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710757,"nanoseconds": 441000000}
+        },{
+            "postId": "oIQctj0d046DNqVMmTrn","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-1001","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598710717,"nanoseconds": 216000000}
+        },{
+            "postId": "vHiSGRH7xLobHRWoNJGQ","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-100","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709534,"nanoseconds": 3000000}
+        },{
+            "postId": "ux6kLXTqwLsQg8WaMVFg","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-99","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709528,"nanoseconds": 528000000}
+        },{
+            "postId": "pkqQNxrgwRPvuvFWXx8E","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-98","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709523,"nanoseconds": 963000000}
+        },{
+            "postId": "0ER40iQgXexOXZ89fnZ4","likes": 0,"comments": 0,"caption": "THIS IS A POST WITH NUMBER-97","scope": false,
+            "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","usertype": "faculty","ownerName": "Sharan",
+            "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+            "timeStamp": {"seconds": 1598709519,"nanoseconds": 330000000}}]
+}
