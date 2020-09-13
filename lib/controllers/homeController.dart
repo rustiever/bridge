@@ -81,7 +81,7 @@ class HomeControllers extends GetxController {
   Future<bool> login(UserType userType) async =>
       await repository.login(userType);
 
-  Future<bool> logout() async => await repository.logout();
+  // Future<bool> logout() async => await repository.logout();
 
   void getUser() {
     user.value = repository.getUser();
@@ -92,7 +92,7 @@ class HomeControllers extends GetxController {
   void fetchFeeds({inot}) async {
     if (isMoreAvailable.value) {
       isLoading.value = true;
-      feeds.value = await repository.getFeeds(time);
+      // feeds.value = await repository.getFeeds(time);
       time = feeds.value.lastTime;
       if (time == null) {
         isMoreAvailable.value = false;
@@ -121,8 +121,8 @@ class HomeController extends GetxController {
   bool isFeedMoreAvailable = true,
       isCommentMoreAvailable = true,
       isFeedLoading = true,
-      isCommentLoading = true;
-  Status status;
+      isCommentLoading = false;
+
   var feedTime, commentTime;
   int feedIndex;
 
@@ -148,61 +148,74 @@ class HomeController extends GetxController {
         if (trackingScrollController.position.pixels >=
             trackingScrollController.position.maxScrollExtent) {
           print('hello');
-          _gett();
+          _fetchFeeds();
         }
       });
     commentScrollController = ScrollController()
       ..addListener(() {
         if (commentScrollController.position.pixels >=
             commentScrollController.position.maxScrollExtent) {
+          print('comments scroll end  ');
           _fetchComments();
         }
       });
     super.onInit();
   }
 
-  _gett() {
+  _fetchFeeds() {
     if (!isFeedLoading && isFeedMoreAvailable) {
       print('feeds');
       _getFeeds();
     }
   }
 
-  getComments() {
-    _fetchComments();
-  }
-
   @override
   Future<void> onClose() {
     // print('on close ');
     trackingScrollController?.dispose();
+    commentScrollController?.dispose();
     return super.onClose();
   }
 
   getLikes() async {
-    feeds[feedIndex].likes =
-        (await repository.getLike(feeds[feedIndex].postId))['likes'];
+    feeds[feedIndex].likes = (await repository.getLike(
+        postId: feeds[feedIndex].postId,
+        authorizeToken: user.authorizeToken))['likes'];
 
     update();
     print(feeds[feedIndex].likes.toString());
   }
 
-  _fetchComments() async {
-    if (isCommentMoreAvailable) {
-      // this.status = Status.LOADING;
-      this.commentModel = await repository.getComments(
-          time: commentTime, user: user, postId: feeds[feedIndex].postId);
-      print(commentModel.commentData[0].edited);
+  getComments() {
+    print('comments $isCommentMoreAvailable ${Get.isBottomSheetOpen}');
+    if (!Get.isBottomSheetOpen ||
+        (!isCommentLoading && isCommentMoreAvailable)) {
+      _fetchComments();
     }
+    // if (Get.isBottomSheetOpen) _fetchComments();
+  }
+
+  _fetchComments() async {
+    isCommentLoading = true;
+    this.commentModel = await repository.getComments(
+        time: commentTime,
+        authorizeToken: user.authorizeToken,
+        postId: feeds[feedIndex].postId);
+    if (commentTime == null) isCommentMoreAvailable = false;
+    comments.addAll(commentModel.commentData);
+
+    comments.forEach((element) {
+      print(element.id);
+    });
+    isCommentLoading = false;
 
     update();
   }
 
   _getFeeds() async {
     if (this.isFeedMoreAvailable) {
-      // this.isFeedMoreAvailable = false;
       isFeedLoading = true;
-      this.feedModel = await repository.getFeeds(feedTime);
+      this.feedModel = await repository.getFeeds(time: feedTime, user: user);
       this.feedTime = feedModel.lastTime;
       print(feedTime);
       if (feedTime == null) {
@@ -221,5 +234,5 @@ class HomeController extends GetxController {
     update();
   }
 
-  Future<bool> logout() => repository.logout();
+  Future<bool> logout() => repository.logout(user.authorizeToken);
 }

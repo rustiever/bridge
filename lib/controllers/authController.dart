@@ -10,5 +10,5 @@ class AuthController extends GetxController {
   Future<bool> login(UserType userType) async =>
       await repository.login(userType);
 
-  Future<bool> logout() async => await repository.logout();
+  // Future<bool> logout() async => await repository.logout();
 }

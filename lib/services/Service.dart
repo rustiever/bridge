@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/models/comments.dart';
 import 'package:Bridge/models/models.dart';
@@ -103,14 +104,12 @@ class ApiService {
     return null;
   }
 
-  Future<bool> serverLogout() async {
-    User user = getUserDetails();
+  Future<bool> serverLogout(String authorizeToken) async {
     print('In server Logout Func');
     http.Response res;
     try {
-      res = await httpClient.put(Api.logout, headers: {
-        HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}'
-      });
+      res = await httpClient.put(Api.logout,
+          headers: {HttpHeaders.authorizationHeader: 'bearer $authorizeToken'});
       if (res.statusCode == 200) {
         print('logout');
         await FirebaseAuthService().signOut();
@@ -123,13 +122,13 @@ class ApiService {
     }
   }
 
-  Future getLike(String postId) async {
+  Future getLike({String postId, String authorizeToken}) async {
     print('In getLike');
-    var user = getUserDetails();
+
     String url = Api.like;
     Map<String, String> headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-      HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}',
+      HttpHeaders.authorizationHeader: 'bearer $authorizeToken',
     };
     String body = jsonEncode(
       <String, dynamic>{
@@ -150,16 +149,15 @@ class ApiService {
   }
 
   Future<CommentModel> getComments(
-      {dynamic time, String postId, User user}) async {
-    var user = getUserDetails();
+      {dynamic time, String postId, String authorizeToken}) async {
     print('IN getComments Func');
     String url = Api.getComments;
     String body = jsonEncode(
-      <String, dynamic>{"time": time, "postId": "OcPGExXMHEUOGg4Jfj04"},
+      <String, dynamic>{"time": time, "postId": postId},
     );
     Map headers = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
-      HttpHeaders.authorizationHeader: 'bearer ${user.authorizeToken}',
+      HttpHeaders.authorizationHeader: 'bearer $authorizeToken',
     };
     http.Response res =
         await httpClient.post(url, headers: headers, body: body);
@@ -175,8 +173,7 @@ class ApiService {
     }
   }
 
-  Future<FeedModel> getFeeds(dynamic time) async {
-    var user = getUserDetails();
+  Future<FeedModel> getFeeds({dynamic time, User user}) async {
     print('IN getFeeds Func');
     String url = Api.feeds;
     String body;

@@ -144,12 +144,12 @@ class Settings extends GetView<HomeControllers> {
           RaisedButton(
             onPressed: controller.user != null
                 ? () async {
-                    if (await controller.logout()) {
-                      Get.offAllNamed(Authroute);
-                    } else {
-                      Get.snackbar('Sorry',
-                          'Looks like no connection, Try with proper connection');
-                    }
+                    // if (await controller.logout()) {
+                    //   Get.offAllNamed(Authroute);
+                    // } else {
+                    //   Get.snackbar('Sorry',
+                    //       'Looks like no connection, Try with proper connection');
+                    // }
                   }
                 : null,
             child: Text('logout'),

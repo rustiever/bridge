@@ -44,7 +44,7 @@ class CommentDatum {
   });
 
   String id;
-  Time time;
+  dynamic time;
   bool edited;
   String name;
 
@@ -55,7 +55,7 @@ class CommentDatum {
 
   factory CommentDatum.fromJson(Map<String, dynamic> json) => CommentDatum(
         id: json["id"] == null ? null : json["id"],
-        time: json["time"] == null ? null : Time.fromJson(json["time"]),
+        time: json["time"] == null ? null : json["time"],
         edited: json["edited"] == null ? null : json["edited"],
         name: json["name"] == null ? null : json["name"],
       );
@@ -65,29 +65,5 @@ class CommentDatum {
         "time": time == null ? null : time.toJson(),
         "edited": edited == null ? null : edited,
         "name": name == null ? null : name,
-      };
-}
-
-class Time {
-  Time({
-    @required this.seconds,
-    @required this.nanoseconds,
-  });
-
-  int seconds;
-  int nanoseconds;
-
-  factory Time.fromRawJson(String str) => Time.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Time.fromJson(Map<String, dynamic> json) => Time(
-        seconds: json["seconds"] == null ? null : json["seconds"],
-        nanoseconds: json["nanoseconds"] == null ? null : json["nanoseconds"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "seconds": seconds == null ? null : seconds,
-        "nanoseconds": nanoseconds == null ? null : nanoseconds,
       };
 }

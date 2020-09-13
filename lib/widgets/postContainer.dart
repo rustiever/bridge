@@ -2,6 +2,7 @@ import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,15 +19,15 @@ class PostContainer extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.index = index;
     final bool isDesktop = Responsive.isDesktop(context);
+    controller.index = index;
     return GetBuilder<HomeController>(
       builder: (_) {
-        if (controller.status == Status.LOADING) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
+        // if (controller.status == Status.LOADING) {
+        //   return Center(
+        //     child: CircularProgressIndicator(),
+        //   );
+        // }
         return Card(
           margin: EdgeInsets.symmetric(
             vertical: 5.0,
@@ -222,9 +223,12 @@ class _PostStats extends GetView<HomeController> {
               label: 'Comment',
               onTap: () async {
                 print('Comment');
+                controller.getComments();
+
                 if (controller.user != null) {
                   // controller.index = index;
-                  controller.getComments();
+                  // Get.bottomSheet(_CommentBuild(),
+                  //     isScrollControlled: true, ignoreSafeArea: false);
                 }
               },
             ),
@@ -277,6 +281,119 @@ class _PostButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _CommentBuild extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        ListView.builder(
+            itemCount: HomeController.to.feeds.length,
+            itemBuilder: (context, index) {
+              return Row(
+                children: [
+                  ProfileAvatar(
+                    imageUrl: HomeController.to.feeds[index].ownerPhotoUrl,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${HomeController.to.feeds[index].caption}",
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                      Container(
+                        constraints: BoxConstraints(
+                            maxWidth: MediaQuery.of(context).size.width * .6),
+                        padding: const EdgeInsets.all(15.0),
+                        decoration: BoxDecoration(
+                          color: Color(0xfff9f9f9),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(25),
+                            bottomLeft: Radius.circular(25),
+                            bottomRight: Radius.circular(25),
+                          ),
+                        ),
+                        child: Text(
+                          "${HomeController.to.feeds[index].caption}",
+                          style: Theme.of(context).textTheme.bodyText1.apply(
+                                color: Colors.black87,
+                              ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 15),
+                  Text(
+                    "{messages}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .apply(color: Colors.grey),
+                  ),
+                ],
+              );
+            }),
+        Container(
+          margin: EdgeInsets.all(15.0),
+          height: 61,
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(35.0),
+                    boxShadow: [
+                      BoxShadow(
+                          offset: Offset(0, 3),
+                          blurRadius: 5,
+                          color: Colors.grey)
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      IconButton(icon: Icon(Icons.face), onPressed: () {}),
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                              hintText: "Type Something...",
+                              border: InputBorder.none),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.photo_camera),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.attach_file),
+                        onPressed: () {},
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: 15),
+              Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration:
+                    BoxDecoration(color: Colors.green, shape: BoxShape.circle),
+                child: InkWell(
+                  child: Icon(
+                    Icons.keyboard_voice,
+                    color: Colors.white,
+                  ),
+                  onLongPress: () {},
+                ),
+              )
+            ],
+          ),
+        )
+      ],
     );
   }
 }

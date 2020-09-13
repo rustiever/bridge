@@ -1,5 +1,6 @@
 import 'package:Bridge/controllers/controllers.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 
 class ProfileView extends StatelessWidget {
@@ -14,9 +15,11 @@ class ProfileView extends StatelessWidget {
               child: Text(HomeController.to.count.toString() +
                   HomeController.to.isFeedMoreAvailable.toString()),
             ),
-            RaisedButton(onPressed: () {
-              HomeController.to.inc();
-            })
+            RaisedButton(
+              onPressed: () {
+                // HomeController.to.inc();
+              },
+            )
           ],
         ),
       ),

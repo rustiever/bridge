@@ -10,21 +10,23 @@ class Repository {
 
   Future<bool> login(UserType userType) async => await service.login(userType);
 
-  Future<bool> logout() async {
-    return await service.serverLogout();
+  Future<bool> logout(String token) async {
+    return await service.serverLogout(token);
   }
 
   User getUser() => service.getUserDetails();
 
-  Future getLike(String postId) async => await service.getLike(postId);
+  Future getLike({String postId, String authorizeToken}) async =>
+      await service.getLike(postId: postId, authorizeToken: authorizeToken);
 
   Future<CommentModel> getComments(
-          {dynamic time, User user, String postId}) async =>
-      await service.getComments(time: time, user: user, postId: postId);
+          {dynamic time, String postId, String authorizeToken}) async =>
+      await service.getComments(
+          time: time, postId: postId, authorizeToken: authorizeToken);
 
-  Future<FeedModel> getFeeds(dynamic time) async {
+  Future<FeedModel> getFeeds({dynamic time, User user}) async {
     print('in anon repo ');
-    FeedModel t = await service.getFeeds(time);
+    FeedModel t = await service.getFeeds(time: time, user: user);
     // FeedModel t = FeedModel.fromRawJson('{"lastTime":null,"feedData":[{"postId":"MDVmVt1YPOzrvxrRfg8v","caption":"THIS IS A POST WITH NUMBER-20","likes":0,"photoUrl":"https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","ownerName":"Sharan","ownerPhotoUrl":"https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4","ownerUid":"H3KOr0tq8Wcg5cK8HIY6AeRRZj73","timeStamp":{"seconds":1598800417,"nanoseconds":438000000},"scope":false,"comments":0},{"postId":"vrZq7qU8LyecdjKeDy0F","caption":"THIS IS A POST WITH NUMBER-11","likes":0,"photoUrl":"https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80","ownerName":"Sharan","ownerPhotoUrl":"https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4","ownerUid":"H3KOr0tq8Wcg5cK8HIY6AeRRZj73","timeStamp":{"seconds":1598800188,"nanoseconds":941000000},"scope":false,"comments":0}]}');
     print(t?.feedData[0]?.caption ?? 'hello');
     return t;
