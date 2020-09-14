@@ -1,0 +1,68 @@
+Request Type     : [POST]
+Sucees Code      : 200
+Unsucees Code    : 401, 404
+
+URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/user/profile
+
+request body - 1 : For Getting Feeds which are liked by the User.
+{
+"requestData":1,
+"time":null
+}
+
+request body - 2 : For Getting Feeds which are bookmarked by the User.
+{
+"requestData":0,
+"time":null
+}
+
+request body - 3 : For Getting Feeds which are posted by the User.
+{
+"requestData":2,
+"time": {"seconds": 1598800354,"nanoseconds": 695000000}
+}
+
+Headers :
+Authorization : bearer <token>
+
+
+response body - 1 :
+{
+    "lastTime": {"seconds": 1598800354,"nanoseconds": 695000000},
+    "profileData": {
+        "data": []
+    }
+}
+
+response body - 2 :
+{
+    "lastTime": null,
+    "profileData": {
+        "data": [
+            {
+                "caption": "THIS IS A POST WITH NUMBER-18","cooments": 2,"likes": 1,
+                "postUserType": "faculty","ownerUid": "H3KOr0tq8Wcg5cK8HIY6AeRRZj73","ownerName": "Sharan",
+                "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+                "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+                "scope": {"branch": false,"groups": ["abcd","wer"],"batch": false},
+                "timeStamp": {"seconds": 1598800354,"nanoseconds": 695000000}
+            }
+        ]
+    }
+}
+
+response body - 3 :
+{
+    "lastTime": {"seconds": 1598800354,"nanoseconds": 695000000},
+    "profileData": {
+        "data": [{
+                "caption": "THIS IS A POST WITH NUMBER-18","cooments": 2,"likes": 1,
+                "postUserType": "faculty","ownerUid": "H3KOr0tq8Wcg5cK8HIY6AeRRZj73","ownerName": "Sharan",
+                "ownerPhotoUrl": "https://firebasestorage.googleapis.com/v0/b/bridge-fd58f.appspot.com/o/DummyPost%2FWIN_20191024_15_45_00_Pro.jpg?alt=media&token=9d061db8-c7db-4dbd-85ea-48faaddb93d4",
+                "photoUrl": "https://images.unsplash.com/photo-1573331519317-30b24326bb9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+                "scope": {"branch": false,"groups": ["abcd","wer"],"batch": false},
+                "timeStamp": {"seconds": 1598800354,"nanoseconds": 695000000}
+            }
+        ]
+    }
+}
