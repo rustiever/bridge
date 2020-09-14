@@ -1,5 +1,6 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
+import 'package:Bridge/models/comments.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -227,8 +228,10 @@ class _PostStats extends GetView<HomeController> {
 
                 if (controller.user != null) {
                   // controller.index = index;
-                  // Get.bottomSheet(_CommentBuild(),
-                  //     isScrollControlled: true, ignoreSafeArea: false);
+                  Get.bottomSheet(_CommentBuild(),
+                      isScrollControlled: true,
+                      ignoreSafeArea: false,
+                      enableDrag: true);
                 }
               },
             ),
@@ -288,112 +291,127 @@ class _PostButton extends StatelessWidget {
 class _CommentBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        ListView.builder(
-            itemCount: HomeController.to.feeds.length,
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  ProfileAvatar(
-                    imageUrl: HomeController.to.feeds[index].ownerPhotoUrl,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${HomeController.to.feeds[index].caption}",
-                        style: Theme.of(context).textTheme.caption,
-                      ),
-                      Container(
-                        constraints: BoxConstraints(
-                            maxWidth: MediaQuery.of(context).size.width * .6),
-                        padding: const EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                          color: Color(0xfff9f9f9),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(25),
-                            bottomLeft: Radius.circular(25),
-                            bottomRight: Radius.circular(25),
+    return GetBuilder<HomeController>(
+      builder: (_) => Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          ListView.builder(
+              itemCount: HomeController.to.feeds.length,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    ProfileAvatar(
+                      imageUrl: HomeController.to.feeds[index].ownerPhotoUrl,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${HomeController.to.feeds[index].caption}",
+                          style: Theme.of(context).textTheme.caption,
+                        ),
+                        Container(
+                          constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * .6),
+                          padding: const EdgeInsets.all(15.0),
+                          decoration: BoxDecoration(
+                            color: Color(0xfff9f9f9),
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(25),
+                              bottomLeft: Radius.circular(25),
+                              bottomRight: Radius.circular(25),
+                            ),
+                          ),
+                          child: Text(
+                            "${HomeController.to.feeds[index].caption}",
+                            style: Theme.of(context).textTheme.bodyText1.apply(
+                                  color: Colors.black87,
+                                ),
                           ),
                         ),
-                        child: Text(
-                          "${HomeController.to.feeds[index].caption}",
-                          style: Theme.of(context).textTheme.bodyText1.apply(
-                                color: Colors.black87,
-                              ),
+                      ],
+                    ),
+                    SizedBox(width: 15),
+                    Text(
+                      "{messages}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .apply(color: Colors.grey),
+                    ),
+                  ],
+                );
+              }),
+          Container(
+            margin: EdgeInsets.all(15.0),
+            height: 61,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(35.0),
+                      boxShadow: [
+                        BoxShadow(
+                            offset: Offset(0, 3),
+                            blurRadius: 5,
+                            color: Colors.grey)
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        IconButton(icon: Icon(Icons.face), onPressed: () {}),
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText:
+                                    "Type Something...${HomeController.to.comments.length}",
+                                border: InputBorder.none),
+                          ),
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          icon: Icon(Icons.photo_camera),
+                          onPressed: () {
+                            print('hh');
+                            HomeController.to.clearComments();
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.attach_file),
+                          onPressed: () {
+                            HomeController.to.comments.add(CommentDatum(
+                                id: null,
+                                time: null,
+                                edited: null,
+                                name: null));
+                          },
+                        )
+                      ],
+                    ),
                   ),
-                  SizedBox(width: 15),
-                  Text(
-                    "{messages}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .apply(color: Colors.grey),
-                  ),
-                ],
-              );
-            }),
-        Container(
-          margin: EdgeInsets.all(15.0),
-          height: 61,
-          child: Row(
-            children: [
-              Expanded(
-                child: Container(
+                ),
+                SizedBox(width: 15),
+                Container(
+                  padding: const EdgeInsets.all(15.0),
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(35.0),
-                    boxShadow: [
-                      BoxShadow(
-                          offset: Offset(0, 3),
-                          blurRadius: 5,
-                          color: Colors.grey)
-                    ],
+                      color: Colors.green, shape: BoxShape.circle),
+                  child: InkWell(
+                    child: Icon(
+                      Icons.keyboard_voice,
+                      color: Colors.white,
+                    ),
+                    onLongPress: () {
+                      // HomeController.to.clearComments();
+                      Get.back();
+                    },
                   ),
-                  child: Row(
-                    children: [
-                      IconButton(icon: Icon(Icons.face), onPressed: () {}),
-                      Expanded(
-                        child: TextField(
-                          decoration: InputDecoration(
-                              hintText: "Type Something...",
-                              border: InputBorder.none),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.photo_camera),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.attach_file),
-                        onPressed: () {},
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 15),
-              Container(
-                padding: const EdgeInsets.all(15.0),
-                decoration:
-                    BoxDecoration(color: Colors.green, shape: BoxShape.circle),
-                child: InkWell(
-                  child: Icon(
-                    Icons.keyboard_voice,
-                    color: Colors.white,
-                  ),
-                  onLongPress: () {},
-                ),
-              )
-            ],
-          ),
-        )
-      ],
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

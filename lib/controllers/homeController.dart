@@ -114,6 +114,9 @@ class HomeController extends GetxController {
   User user;
   TrackingScrollController trackingScrollController;
   ScrollController commentScrollController;
+  RxList<FeedDatum> feed = List<FeedDatum>().obs;
+  Rx v;
+  Rx<FeedModel> ff = FeedModel().obs;
   FeedModel feedModel;
   List<FeedDatum> feeds = [];
   CommentModel commentModel;
@@ -136,6 +139,12 @@ class HomeController extends GetxController {
     update();
   }
 
+  clearComments() {
+    comments.clear();
+    print(comments.length);
+    update();
+  }
+
   @override
   void onInit() {
     print('oninit ');
@@ -148,7 +157,7 @@ class HomeController extends GetxController {
         if (trackingScrollController.position.pixels >=
             trackingScrollController.position.maxScrollExtent) {
           print('hello');
-          _fetchFeeds();
+          fetchFeeds();
         }
       });
     commentScrollController = ScrollController()
@@ -162,7 +171,7 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  _fetchFeeds() {
+  fetchFeeds() {
     if (!isFeedLoading && isFeedMoreAvailable) {
       print('feeds');
       _getFeeds();
@@ -192,7 +201,6 @@ class HomeController extends GetxController {
         (!isCommentLoading && isCommentMoreAvailable)) {
       _fetchComments();
     }
-    // if (Get.isBottomSheetOpen) _fetchComments();
   }
 
   _fetchComments() async {
@@ -216,6 +224,8 @@ class HomeController extends GetxController {
     if (this.isFeedMoreAvailable) {
       isFeedLoading = true;
       this.feedModel = await repository.getFeeds(time: feedTime, user: user);
+      ff.value = feedModel;
+      feed.addAll(ff.value.feedData);
       this.feedTime = feedModel.lastTime;
       print(feedTime);
       if (feedTime == null) {

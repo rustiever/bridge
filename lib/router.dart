@@ -1,7 +1,6 @@
 import 'package:Bridge/screens/errorScreen.dart';
 import 'package:get/get.dart';
 import 'bindings/bindings.dart';
-import 'controllers/controllers.dart';
 import 'views/views.dart';
 
 const String Authroute = '/';
@@ -22,7 +21,7 @@ List<GetPage> routes() {
       page: () => HomeView(),
       bindings: [
         AuthBinding(),
-        BindingsBuilder(() => {Get.lazyPut(() => PagesController())}),
+        // BindingsBuilder(() => {Get.lazyPut(() => PagesController())}),
         HomeBinding()
       ],
     ),
