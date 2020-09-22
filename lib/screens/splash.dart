@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(bottom: 30.0),
-                child: Text('FROM SWAPRUSTS'),
+                child: Text('FROM SWAPRUST'),
               )
             ],
           ),

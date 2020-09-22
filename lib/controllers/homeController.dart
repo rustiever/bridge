@@ -129,7 +129,9 @@ class HomeController extends GetxController {
   var feedTime, commentTime;
   int feedIndex;
 
-  set index(int index) => {this.feedIndex = index};
+  set index(int index) => {
+        this.feedIndex = index,
+      };
 
   int count = 0;
 
@@ -165,7 +167,7 @@ class HomeController extends GetxController {
         if (commentScrollController.position.pixels >=
             commentScrollController.position.maxScrollExtent) {
           print('comments scroll end  ');
-          _fetchComments();
+          // _fetchComments();
         }
       });
     super.onInit();
@@ -186,7 +188,7 @@ class HomeController extends GetxController {
     return super.onClose();
   }
 
-  getLikes() async {
+  Future getLikes() async {
     feeds[feedIndex].likes = (await repository.getLike(
         postId: feeds[feedIndex].postId,
         authorizeToken: user.authorizeToken))['likes'];
@@ -195,30 +197,34 @@ class HomeController extends GetxController {
     print(feeds[feedIndex].likes.toString());
   }
 
-  getComments() {
-    print('comments $isCommentMoreAvailable ${Get.isBottomSheetOpen}');
-    if (!Get.isBottomSheetOpen ||
-        (!isCommentLoading && isCommentMoreAvailable)) {
-      _fetchComments();
-    }
-  }
+  // getComments() async {
+  //   print('comments $isCommentMoreAvailable ${Get.isBottomSheetOpen}');
+  //   if (!Get.isBottomSheetOpen) {
+  //     feeds.clear();
+  //     print(feeds.length);
+  //   }
+  //   if (!isCommentLoading && isCommentMoreAvailable) {
+  //     await _fetchComments();
+  //   }
+  // }
 
-  _fetchComments() async {
-    isCommentLoading = true;
-    this.commentModel = await repository.getComments(
-        time: commentTime,
-        authorizeToken: user.authorizeToken,
-        postId: feeds[feedIndex].postId);
-    if (commentTime == null) isCommentMoreAvailable = false;
-    comments.addAll(commentModel.commentData);
+  // Future<void> _fetchComments() async {
+  //   print(feeds[feedIndex].postId);
+  //   isCommentLoading = true;
+  //   // this.commentModel = await repository.getComments(
+  //   //     time: commentTime,
+  //   //     authorizeToken: user.authorizeToken,
+  //   //     postId: feeds[feedIndex].postId);
+  //   // if (commentTime == null) isCommentMoreAvailable = false;
+  //   // comments.addAll(commentModel.commentData);
 
-    comments.forEach((element) {
-      print(element.id);
-    });
-    isCommentLoading = false;
+  //   // comments.forEach((element) {
+  //   //   print(element.id);
+  //   // });
+  //   isCommentLoading = false;
 
-    update();
-  }
+  //   update();
+  // }
 
   _getFeeds() async {
     if (this.isFeedMoreAvailable) {

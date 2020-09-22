@@ -5,21 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
-class My {
-  int ss;
-  String sd;
-
-  My({this.ss, this.sd});
-}
-
-class MyController extends GetxController {
-  final ll = [].obs;
-
-  ups(s) {
-    ll[0] = My(ss: s++, sd: 'mhh');
-  }
-}
-
 class Home extends StatelessWidget {
   final controller = Get.put<HomeControllers>(HomeControllers(
       repository: Repository(service: ApiService(httpClient: Client()))));

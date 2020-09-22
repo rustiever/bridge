@@ -1,6 +1,7 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/models/comments.dart';
+import 'package:Bridge/models/repository/repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class PostContainer extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
-    controller.index = index;
+    // controller.index(index);
     return GetBuilder<HomeController>(
       builder: (_) {
         // if (controller.status == Status.LOADING) {
@@ -190,7 +191,7 @@ class _PostStats extends GetView<HomeController> {
             ),
             const SizedBox(width: 8.0),
             Text(
-              '${controller.feeds[index].comments} Shares',
+              '${controller.feedIndex.toString()} Shares',
               style: TextStyle(
                 color: Colors.grey[600],
               ),
@@ -207,11 +208,11 @@ class _PostStats extends GetView<HomeController> {
                 size: 20.0,
               ),
               label: 'Like',
-              onTap: () {
+              onTap: () async {
                 print('Like');
                 if (controller.user != null) {
                   controller.index = index;
-                  controller.getLikes();
+                  await controller.getLikes();
                 }
               },
             ),
@@ -224,10 +225,9 @@ class _PostStats extends GetView<HomeController> {
               label: 'Comment',
               onTap: () async {
                 print('Comment');
-                controller.getComments();
-
                 if (controller.user != null) {
-                  // controller.index = index;
+                  controller.index = index;
+                  // controller.getComments();
                   Get.bottomSheet(_CommentBuild(),
                       isScrollControlled: true,
                       ignoreSafeArea: false,
@@ -291,7 +291,8 @@ class _PostButton extends StatelessWidget {
 class _CommentBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
+    return GetBuilder<CommentController>(
+      init: CommentController(repository: Repository(service: Get.find())),
       builder: (_) => Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -307,7 +308,7 @@ class _CommentBuild extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "${HomeController.to.feeds[index].caption}",
+                          "{HomeController.to.feeds[index].caption}",
                           style: Theme.of(context).textTheme.caption,
                         ),
                         Container(
@@ -323,7 +324,7 @@ class _CommentBuild extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            "${HomeController.to.feeds[index].caption}",
+                            "{HomeController.to.feeds[index].caption}",
                             style: Theme.of(context).textTheme.bodyText1.apply(
                                   color: Colors.black87,
                                 ),
@@ -366,7 +367,7 @@ class _CommentBuild extends StatelessWidget {
                           child: TextField(
                             decoration: InputDecoration(
                                 hintText:
-                                    "Type Something...${HomeController.to.comments.length}",
+                                    "Type Something...{HomeController.to.comments.length}",
                                 border: InputBorder.none),
                           ),
                         ),
@@ -401,7 +402,7 @@ class _CommentBuild extends StatelessWidget {
                       Icons.keyboard_voice,
                       color: Colors.white,
                     ),
-                    onLongPress: () {
+                    onTap: () {
                       // HomeController.to.clearComments();
                       Get.back();
                     },
