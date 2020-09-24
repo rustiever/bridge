@@ -1,6 +1,5 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
-import 'package:Bridge/models/comments.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,7 +20,7 @@ class PostContainer extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
-    // controller.index(index);
+    controller.index = index;
     return GetBuilder<HomeController>(
       builder: (_) {
         // if (controller.status == Status.LOADING) {
@@ -385,13 +384,7 @@ class _CommentBuild extends StatelessWidget {
                         ),
                         IconButton(
                           icon: const Icon(Icons.attach_file),
-                          onPressed: () {
-                            HomeController.to.comments.add(CommentDatum(
-                                id: null,
-                                time: null,
-                                edited: null,
-                                name: null));
-                          },
+                          onPressed: () {},
                         )
                       ],
                     ),

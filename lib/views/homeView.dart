@@ -22,6 +22,7 @@ class HomeView extends StatelessWidget {
         child: Scaffold(
           body: IndexedStack(
             index: value,
+            // children: [SettingsView(), ProfileView(), SettingsView()],
             children: [FeedView(), ProfileView(), SettingsView()],
           ),
           bottomNavigationBar: CustomTabBar(

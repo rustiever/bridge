@@ -12,6 +12,6 @@ class HomeBinding implements Bindings {
       Get.put(ApiService(httpClient: Get.find()));
       Get.put(Repository(service: Get.find()));
       return HomeController(repository: Get.find());
-    }, fenix: true);
+    });
   }
 }
