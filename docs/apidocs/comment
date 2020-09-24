@@ -6,9 +6,10 @@ URL              : https://us-central1-bridge-fd58f.cloudfunctions.net/home/comm
 
 request body : 
 {
-    "postId":<feed ID>,
+    	"postId":<feed ID>,
 	"data":"Super Post",
-	"name":"Sharan"
+	"name":"Sharan",
+	"photoUrl" : "https://lh4.googleusercontent.com/-EP-LaOAFpdA/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucnqdg6lYPf7P-CRiuSyY_8b3SMqeA/s96-c/photo.jpg"
 }
 
 
