@@ -2,8 +2,9 @@
 //
 //     final commentModel = commentModelFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 
 class CommentModel {
   CommentModel({
@@ -15,24 +16,18 @@ class CommentModel {
   List<CommentDatum> commentData;
 
   factory CommentModel.fromRawJson(String str) =>
-      CommentModel.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
+      CommentModel.fromJson(json.decode(str) as Map<String, dynamic>);
 
   factory CommentModel.fromJson(Map<String, dynamic> json) => CommentModel(
         lastTime: json["lastTime"],
         commentData: json["commentData"] == null
             ? null
             : List<CommentDatum>.from(
-                json["commentData"].map((x) => CommentDatum.fromJson(x))),
+                json["commentData"].map(
+                  (Map<String, dynamic> x) => CommentDatum.fromJson(x),
+                ) as List<Iterable>,
+              ),
       );
-
-  Map<String, dynamic> toJson() => {
-        "lastTime": lastTime,
-        "commentData": commentData == null
-            ? null
-            : List<dynamic>.from(commentData.map((x) => x.toJson())),
-      };
 }
 
 class CommentDatum {
@@ -49,21 +44,13 @@ class CommentDatum {
   String name;
 
   factory CommentDatum.fromRawJson(String str) =>
-      CommentDatum.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
+      CommentDatum.fromJson(json.decode(str) as Map<String, dynamic>);
 
   factory CommentDatum.fromJson(Map<String, dynamic> json) => CommentDatum(
-        id: json["id"] == null ? null : json["id"],
-        time: json["time"] == null ? null : json["time"],
-        edited: json["edited"] == null ? null : json["edited"],
-        name: json["name"] == null ? null : json["name"],
+        id: json['id'] as String,
+        // id: json["id"] == null ? null : json["id"],
+        time: json["time"],
+        edited: json["edited"] as bool,
+        name: json["name"] as String,
       );
-
-  Map<String, dynamic> toJson() => {
-        "id": id == null ? null : id,
-        "time": time == null ? null : time.toJson(),
-        "edited": edited == null ? null : edited,
-        "name": name == null ? null : name,
-      };
 }

@@ -34,6 +34,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  test:
+  lint:
+  effective_dart:
   flutter_launcher_icons: "^0.7.5"
   flutter_launcher_name: "^0.0.1" 
 

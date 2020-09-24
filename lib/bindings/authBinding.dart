@@ -1,8 +1,9 @@
-import 'package:Bridge/controllers/authController.dart';
-import 'package:Bridge/models/repository/repository.dart';
-import 'package:Bridge/services/Service.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+
+import '../controllers/authController.dart';
+import '../models/repository/repository.dart';
+import '../services/Service.dart';
 
 class AuthBinding implements Bindings {
   @override

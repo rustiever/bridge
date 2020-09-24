@@ -1,120 +1,121 @@
-import 'package:Bridge/constants/constants.dart';
-import 'package:Bridge/models/comments.dart';
-import 'package:Bridge/models/models.dart';
-import 'package:Bridge/models/repository/repository.dart';
+import 'dart:async';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-class HomeControllers extends GetxController {
-  static HomeControllers get to => Get.find();
-  final Repository repository;
-  HomeControllers({@required this.repository}) : assert(repository != null);
+import '../models/comments.dart';
+import '../models/models.dart';
+import '../models/repository/repository.dart';
 
-  var selectedIndex = 0.obs; // tab index used to navigate the tabs
-  final Rx<User> user = User().obs;
-  final Rx<FeedModel> feeds = Rx<FeedModel>();
-  final feedList = [].obs;
-  final RxInt likes = 0.obs;
-  TrackingScrollController trackingScrollController;
-  ScrollController commentScrollController;
-  var time;
-  final isLoading = false.obs;
-  FeedModel v = FeedModel();
+// class HomeControllers extends GetxController {
+//   static HomeControllers get to => Get.find();
+//   final Repository repository;
+//   HomeControllers({@required this.repository}) : assert(repository != null);
 
-  @override
-  void onInit() {
-    time = null;
-    trackingScrollController = TrackingScrollController();
-    trackingScrollController.addListener(() {
-      if (trackingScrollController.position.pixels >=
-          trackingScrollController.position.maxScrollExtent) {
-        // fetchFeeds();
-        // print(feeds.value.length);
-        getMe();
-      }
-    });
+//   var selectedIndex = 0.obs; // tab index used to navigate the tabs
+//   final Rx<User> user = User().obs;
+//   final Rx<FeedModel> feeds = Rx<FeedModel>();
+//   final feedList = [].obs;
+//   final RxInt likes = 0.obs;
+//   TrackingScrollController trackingScrollController;
+//   ScrollController commentScrollController;
+//   var time;
+//   final isLoading = false.obs;
+//   FeedModel v = FeedModel();
 
-    getUser();
-    fetchFeeds();
-    // ever(, (d) {});
-    debugPrint('on init of HomeController');
-    super.onInit();
-  }
+//   @override
+//   void onInit() {
+//     time = null;
+//     trackingScrollController = TrackingScrollController();
+//     trackingScrollController.addListener(() {
+//       if (trackingScrollController.position.pixels >=
+//           trackingScrollController.position.maxScrollExtent) {
+//         // fetchFeeds();
+//         // print(feeds.value.length);
+//         getMe();
+//       }
+//     });
 
-  Future getLikes(int index) async {
-    // enhance the like method
-    // var like = await repository.getLike(feedList[index].postId);
-    // feedList[index].likes = like['likes'];
-    feedList[index].likes++;
-// feedList
-    // likes.value = feedList[index].likes;
-    // print(like);
-    print(feedList[index].likes.toString());
-    likes.value++;
-    update();
-  }
+//     getUser();
+//     fetchFeeds();
+//     // ever(, (d) {});
+//     debugPrint('on init of HomeController');
+//     super.onInit();
+//   }
 
-  var ff = 2;
-  getMe() async {
-    // feedList.add(ff++);
-    if (!isLoading.value && isMoreAvailable.value)
-      fetchFeeds();
-    else
-      print('done');
-    print(ff);
-  }
+//   Future getLikes(int index) async {
+//     // enhance the like method
+//     // var like = await repository.getLike(feedList[index].postId);
+//     // feedList[index].likes = like['likes'];
+//     feedList[index].likes++;
+// // feedList
+//     // likes.value = feedList[index].likes;
+//     // print(like);
+//     print(feedList[index].likes.toString());
+//     likes.value++;
+//     update();
+//   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+//   var ff = 2;
+//   getMe() async {
+//     // feedList.add(ff++);
+//     if (!isLoading.value && isMoreAvailable.value)
+//       fetchFeeds();
+//     else
+//       print('done');
+//     print(ff);
+//   }
 
-  @override
-  //// ignore: missing_return
-  onClose() {
-    // print('on close ');
-    trackingScrollController?.dispose();
-    super.onClose();
-    return null;
-  }
+//   @override
+//   void onReady() {
+//     super.onReady();
+//   }
 
-  Future<bool> login(UserType userType) async =>
-      await repository.login(userType);
+//   @override
+//   //// ignore: missing_return
+//   onClose() {
+//     // print('on close ');
+//     trackingScrollController?.dispose();
+//     super.onClose();
+//     return null;
+//   }
 
-  // Future<bool> logout() async => await repository.logout();
+//   Future<bool> login(UserType userType) async =>
+//       await repository.login(userType);
 
-  void getUser() {
-    user.value = repository.getUser();
-    // print(user?.value?.userData?.usn);
-  }
+//   // Future<bool> logout() async => await repository.logout();
 
-  var isMoreAvailable = true.obs;
-  void fetchFeeds({inot}) async {
-    if (isMoreAvailable.value) {
-      isLoading.value = true;
-      // feeds.value = await repository.getFeeds(time);
-      time = feeds.value.lastTime;
-      if (time == null) {
-        isMoreAvailable.value = false;
-      }
-      feedList.addAll(feeds.value.feedData);
-      if (feeds.value == null) {
-        Get.snackbar("Error", "Can't connect to server");
-      }
-      isLoading.value = false;
-    }
-    update();
-  }
-}
+//   void getUser() {
+//     user.value = repository.getUser();
+//     // print(user?.value?.userData?.usn);
+//   }
+
+//   var isMoreAvailable = true.obs;
+//   void fetchFeeds({inot}) async {
+//     if (isMoreAvailable.value) {
+//       isLoading.value = true;
+//       // feeds.value = await repository.getFeeds(time);
+//       time = feeds.value.lastTime;
+//       if (time == null) {
+//         isMoreAvailable.value = false;
+//       }
+//       feedList.addAll(feeds.value.feedData);
+//       if (feeds.value == null) {
+//         Get.snackbar("Error", "Can't connect to server");
+//       }
+//       isLoading.value = false;
+//     }
+//     update();
+//   }
+// }
 
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
   final Repository repository;
-  HomeController({@required this.repository}) : assert(repository != null);
   User user;
   TrackingScrollController trackingScrollController;
   ScrollController commentScrollController;
-  RxList<FeedDatum> feed = List<FeedDatum>().obs;
+  RxList<FeedDatum> feed = <FeedDatum>[].obs;
   Rx v;
   Rx<FeedModel> ff = FeedModel().obs;
   FeedModel feedModel;
@@ -125,77 +126,53 @@ class HomeController extends GetxController {
       isCommentMoreAvailable = true,
       isFeedLoading = true,
       isCommentLoading = false;
+  dynamic feedTime, commentTime;
 
-  var feedTime, commentTime;
   int feedIndex;
-
-  set index(int index) => {
-        this.feedIndex = index,
-      };
-
   int count = 0;
 
-  inc() {
-    count++;
-    isFeedMoreAvailable = !isFeedMoreAvailable;
-    update();
-  }
+  HomeController({@required this.repository}) : assert(repository != null);
 
-  clearComments() {
+  int get index => feedIndex;
+
+  set index(int index) => {
+        feedIndex = index,
+      };
+
+  // inc() {
+  //   count++;
+  //   isFeedMoreAvailable = !isFeedMoreAvailable;
+  //   update();
+  // }
+
+  void clearComments() {
     comments.clear();
-    print(comments.length);
+    // print(comments.length);
     update();
   }
 
-  @override
-  void onInit() {
-    print('oninit ');
-    feedTime = commentTime = null;
-
-    getUser();
-    _getFeeds();
-    trackingScrollController = TrackingScrollController()
-      ..addListener(() {
-        if (trackingScrollController.position.pixels >=
-            trackingScrollController.position.maxScrollExtent) {
-          print('hello');
-          fetchFeeds();
-        }
-      });
-    commentScrollController = ScrollController()
-      ..addListener(() {
-        if (commentScrollController.position.pixels >=
-            commentScrollController.position.maxScrollExtent) {
-          print('comments scroll end  ');
-          // _fetchComments();
-        }
-      });
-    super.onInit();
-  }
-
-  fetchFeeds() {
+  void fetchFeeds() {
     if (!isFeedLoading && isFeedMoreAvailable) {
-      print('feeds');
+      // print('feeds');
       _getFeeds();
     }
-  }
-
-  @override
-  Future<void> onClose() {
-    // print('on close ');
-    trackingScrollController?.dispose();
-    commentScrollController?.dispose();
-    return super.onClose();
   }
 
   Future getLikes() async {
     feeds[feedIndex].likes = (await repository.getLike(
         postId: feeds[feedIndex].postId,
-        authorizeToken: user.authorizeToken))['likes'];
+        authorizeToken: user.authorizeToken))['likes'] as int;
 
     update();
-    print(feeds[feedIndex].likes.toString());
+    // print(feeds[feedIndex].likes.toString());
   }
+
+  void getUser() {
+    user = repository.getUser();
+    update();
+  }
+
+  Future<bool> logout() => repository.logout(user.authorizeToken);
 
   // getComments() async {
   //   print('comments $isCommentMoreAvailable ${Get.isBottomSheetOpen}');
@@ -226,29 +203,56 @@ class HomeController extends GetxController {
   //   update();
   // }
 
-  _getFeeds() async {
-    if (this.isFeedMoreAvailable) {
+  @override
+  FutureOr onClose() {
+    // print('on close ');
+    trackingScrollController?.dispose();
+    commentScrollController?.dispose();
+    return super.onClose();
+  }
+
+  @override
+  void onInit() {
+    // print('oninit ');
+    feedTime = commentTime = null;
+
+    getUser();
+    _getFeeds();
+    trackingScrollController = TrackingScrollController()
+      ..addListener(() {
+        if (trackingScrollController.position.pixels >=
+            trackingScrollController.position.maxScrollExtent) {
+          // print('hello');
+          fetchFeeds();
+        }
+      });
+    commentScrollController = ScrollController()
+      ..addListener(() {
+        if (commentScrollController.position.pixels >=
+            commentScrollController.position.maxScrollExtent) {
+          // print('comments scroll end  ');
+          // _fetchComments();
+        }
+      });
+    super.onInit();
+  }
+
+  Future<void> _getFeeds() async {
+    if (isFeedMoreAvailable) {
       isFeedLoading = true;
-      this.feedModel = await repository.getFeeds(time: feedTime, user: user);
+      feedModel = await repository.getFeeds(time: feedTime, user: user);
       ff.value = feedModel;
       feed.addAll(ff.value.feedData);
-      this.feedTime = feedModel.lastTime;
-      print(feedTime);
+      feedTime = feedModel.lastTime;
+      // print(feedTime);
       if (feedTime == null) {
         isFeedMoreAvailable = false;
       }
-      this.feeds.addAll(feedModel.feedData);
+      feeds.addAll(feedModel.feedData);
       isFeedLoading = false;
     } else {
-      print('nothing');
+      // print('nothing');
     }
     update();
   }
-
-  getUser() {
-    this.user = repository.getUser();
-    update();
-  }
-
-  Future<bool> logout() => repository.logout(user.authorizeToken);
 }

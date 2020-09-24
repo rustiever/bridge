@@ -1,7 +1,6 @@
 import 'package:Bridge/constants/constants.dart';
 import 'package:Bridge/controllers/controllers.dart';
 import 'package:Bridge/models/comments.dart';
-import 'package:Bridge/models/repository/repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -141,6 +140,7 @@ class _PostHeader extends GetView<HomeController> {
         ),
         IconButton(
           icon: const Icon(Icons.more_horiz),
+          // ignore: avoid_print
           onPressed: () => print('More'),
         ),
       ],
@@ -164,7 +164,7 @@ class _PostStats extends GetView<HomeController> {
           children: [
             Container(
               padding: const EdgeInsets.all(4.0),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Palette.facebookBlue,
                 shape: BoxShape.circle,
               ),
@@ -209,6 +209,7 @@ class _PostStats extends GetView<HomeController> {
               ),
               label: 'Like',
               onTap: () async {
+                // ignore: avoid_print
                 print('Like');
                 if (controller.user != null) {
                   controller.index = index;
@@ -242,7 +243,10 @@ class _PostStats extends GetView<HomeController> {
                 size: 25.0,
               ),
               label: 'Share',
-              onTap: () => print('Share'),
+              onTap: () {
+                // ignore: avoid_print
+                print('Share');
+              },
             )
           ],
         ),
@@ -254,7 +258,7 @@ class _PostStats extends GetView<HomeController> {
 class _PostButton extends StatelessWidget {
   final Icon icon;
   final String label;
-  final Function onTap;
+  final void Function() onTap;
 
   const _PostButton({
     Key key,
@@ -292,12 +296,12 @@ class _CommentBuild extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CommentController>(
-      init: CommentController(repository: Repository(service: Get.find())),
+      init: CommentController(repository: Get.find()),
       builder: (_) => Stack(
         alignment: Alignment.bottomCenter,
         children: [
           ListView.builder(
-              itemCount: HomeController.to.feeds.length,
+              itemCount: _.comments.length,
               itemBuilder: (context, index) {
                 return Row(
                   children: [
@@ -308,7 +312,7 @@ class _CommentBuild extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "{HomeController.to.feeds[index].caption}",
+                          "${_.comments[index].name}",
                           style: Theme.of(context).textTheme.caption,
                         ),
                         Container(
@@ -324,7 +328,7 @@ class _CommentBuild extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            "{HomeController.to.feeds[index].caption}",
+                            "${_.comments[index].id}",
                             style: Theme.of(context).textTheme.bodyText1.apply(
                                   color: Colors.black87,
                                 ),
@@ -332,7 +336,7 @@ class _CommentBuild extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(width: 15),
+                    const SizedBox(width: 15),
                     Text(
                       "{messages}",
                       style: Theme.of(context)
@@ -344,7 +348,7 @@ class _CommentBuild extends StatelessWidget {
                 );
               }),
           Container(
-            margin: EdgeInsets.all(15.0),
+            margin: const EdgeInsets.all(15.0),
             height: 61,
             child: Row(
               children: [
@@ -354,7 +358,7 @@ class _CommentBuild extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(35.0),
                       boxShadow: [
-                        BoxShadow(
+                        const BoxShadow(
                             offset: Offset(0, 3),
                             blurRadius: 5,
                             color: Colors.grey)
@@ -362,8 +366,9 @@ class _CommentBuild extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        IconButton(icon: Icon(Icons.face), onPressed: () {}),
-                        Expanded(
+                        IconButton(
+                            icon: const Icon(Icons.face), onPressed: () {}),
+                        const Expanded(
                           child: TextField(
                             decoration: InputDecoration(
                                 hintText:
@@ -372,14 +377,14 @@ class _CommentBuild extends StatelessWidget {
                           ),
                         ),
                         IconButton(
-                          icon: Icon(Icons.photo_camera),
+                          icon: const Icon(Icons.photo_camera),
                           onPressed: () {
-                            print('hh');
+                            // print('hh');
                             HomeController.to.clearComments();
                           },
                         ),
                         IconButton(
-                          icon: Icon(Icons.attach_file),
+                          icon: const Icon(Icons.attach_file),
                           onPressed: () {
                             HomeController.to.comments.add(CommentDatum(
                                 id: null,
@@ -392,20 +397,20 @@ class _CommentBuild extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Container(
                   padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.green, shape: BoxShape.circle),
                   child: InkWell(
-                    child: Icon(
-                      Icons.keyboard_voice,
-                      color: Colors.white,
-                    ),
                     onTap: () {
                       // HomeController.to.clearComments();
                       Get.back();
                     },
+                    child: const Icon(
+                      Icons.keyboard_voice,
+                      color: Colors.white,
+                    ),
                   ),
                 )
               ],

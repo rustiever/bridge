@@ -16,8 +16,8 @@ void main() async {
   runApp(MyApp());
 }
 
-initServices() async {
-  print('starting services ...');
+Future<void> initServices() async {
+  // print('starting services ...');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await GetStorage.init();
@@ -27,7 +27,7 @@ initServices() async {
   Get.put(Client());
   Get.put(ApiService(httpClient: Get.find()));
   Get.put(Repository(service: Get.find()));
-  print('All services started...');
+  // print('All services started...');
 }
 
 class MyApp extends StatelessWidget {

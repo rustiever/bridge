@@ -7,19 +7,6 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 
 class FeedDatum {
-  final String usertype;
-
-  String ownerPhotoUrl;
-  Time timeStamp;
-  String ownerName;
-  int comlen;
-  String caption;
-  String photoUrl;
-  int likes;
-  String ownerUid;
-  dynamic scope;
-  String postId;
-  int comments;
   FeedDatum({
     this.usertype,
     this.ownerPhotoUrl,
@@ -34,6 +21,18 @@ class FeedDatum {
     this.postId,
     this.comments,
   });
+  final String usertype;
+  String ownerPhotoUrl;
+  Time timeStamp;
+  String ownerName;
+  int comlen;
+  String caption;
+  String photoUrl;
+  int likes;
+  String ownerUid;
+  dynamic scope;
+  String postId;
+  int comments;
 
   factory FeedDatum.fromJson(Map<String, dynamic> json) => FeedDatum(
         usertype: json["usertype"] == null ? null : json["usertype"],
@@ -51,53 +50,7 @@ class FeedDatum {
       );
 
   factory FeedDatum.fromRawJson(String str) =>
-      FeedDatum.fromJson(json.decode(str));
-
-  FeedDatum copyWith({
-    String usertype,
-    String ownerPhotoUrl,
-    Time timeStamp,
-    String ownerName,
-    int comlen,
-    String caption,
-    String photoUrl,
-    int likes,
-    String ownerUid,
-    dynamic scope,
-    String postId,
-    int comments,
-  }) =>
-      FeedDatum(
-        usertype: usertype ?? this.usertype,
-        ownerPhotoUrl: ownerPhotoUrl ?? this.ownerPhotoUrl,
-        timeStamp: timeStamp ?? this.timeStamp,
-        ownerName: ownerName ?? this.ownerName,
-        comlen: comlen ?? this.comlen,
-        caption: caption ?? this.caption,
-        photoUrl: photoUrl ?? this.photoUrl,
-        likes: likes ?? this.likes,
-        ownerUid: ownerUid ?? this.ownerUid,
-        scope: scope ?? this.scope,
-        postId: postId ?? this.postId,
-        comments: comments ?? this.comments,
-      );
-
-  Map<String, dynamic> toJson() => {
-        "usertype": usertype == null ? null : usertype,
-        "ownerPhotoUrl": ownerPhotoUrl,
-        "timeStamp": timeStamp.toJson(),
-        "ownerName": ownerName,
-        "comlen": comlen,
-        "caption": caption == null ? null : caption,
-        "photoUrl": photoUrl == null ? null : photoUrl,
-        "likes": likes,
-        "ownerUid": ownerUid,
-        "scope": scope,
-        "postId": postId,
-        "comments": comments,
-      };
-
-  String toRawJson() => json.encode(toJson());
+      FeedDatum.fromJson(json.decode(str) as Map<String, dynamic>);
 }
 
 class FeedModel {
@@ -126,13 +79,6 @@ class FeedModel {
         lastTime: lastTime ?? this.lastTime,
         feedData: feedData ?? this.feedData,
       );
-
-  Map<String, dynamic> toJson() => {
-        "lastTime": lastTime,
-        "feedData": List<dynamic>.from(feedData.map((x) => x.toJson())),
-      };
-
-  String toRawJson() => json.encode(toJson());
 }
 
 class ScopeClass {
