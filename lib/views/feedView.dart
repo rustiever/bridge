@@ -121,7 +121,6 @@ class PostCon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDesktop = Responsive.isDesktop(context);
-    HomeController.to.feedIndex = index;
     // print(HomeController.to.feedIndex);
     return Card(
       margin: EdgeInsets.symmetric(
@@ -144,7 +143,6 @@ class PostCon extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      // ProfileAvatar(imageUrl: post.ownerPhotoUrl),
                       ProfileAvatar(
                           imageUrl:
                               HomeController.to.feeds[index].ownerPhotoUrl),
@@ -205,14 +203,10 @@ class PostCon extends StatelessWidget {
                       placeholderFadeInDuration: Duration(milliseconds: 400),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
-                    // child: Image.network(post.photoUrl),
                   )
                 : const SizedBox.shrink(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              // child: _PostStats(
-              //   index: index,
-              // ),
               child: Column(
                 children: [
                   Row(
@@ -283,17 +277,12 @@ class PostCon extends StatelessWidget {
                           print('Comment');
                           if (HomeController.to.user != null) {
                             HomeController.to.index = index;
-                            // controller.getComments();
-                            // Get.bottomSheet(
-                            //     Container(
-                            //       // height: 1200,
-                            //       color: Colors.lightBlueAccent,
-                            //     ),
-                            //     isScrollControlled: true);
-                            Get.bottomSheet(CommentBuild(),
-                                isScrollControlled: true,
-                                ignoreSafeArea: false,
-                                enableDrag: true);
+                            Get.bottomSheet(
+                              CommentBuild(),
+                              isScrollControlled: true,
+                              useRootNavigator: true,
+                              ignoreSafeArea: false,
+                            );
                           }
                         },
                       ),
@@ -404,20 +393,34 @@ class CommentBuild extends StatelessWidget {
                 ),
                 Expanded(
                   child: Container(
+                    color: Colors.white,
                     child: ListView.separated(
+                        controller: _.commentScrollController,
                         itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              ReceivedMessageWidget(
-                                content: _.comments[index].comment,
-                                time: '11:23',
-                              ),
-                              SendedMessageWidget(
-                                content: _.comments[index].comment,
-                                time: '11:23',
-                              ),
-                            ],
-                          );
+                          if (_.comments[1].id ==
+                              HomeController.to.user.userData.uid) {
+                            return CommentMessageWidget(
+                              name: _.comments[index].name,
+                              comment: _.comments[index].comment,
+                              imgUrl: _.comments[index].photoUrl,
+                              leading: false,
+                              time: timeago.format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      _.comments[index].time.seconds * 1000),
+                                  locale: 'en_short'),
+                            );
+                          } else {
+                            return CommentMessageWidget(
+                              time: timeago.format(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                      _.comments[index].time.seconds * 1000),
+                                  locale: 'en_short'),
+                              name: _.comments[index].name,
+                              comment: _.comments[index].comment,
+                              imgUrl: _.comments[index].photoUrl,
+                              leading: true,
+                            );
+                          }
                         },
                         separatorBuilder: (context, index) {
                           return Divider();
@@ -452,231 +455,52 @@ class CommentBuild extends StatelessWidget {
   }
 }
 
-class SendedMessageWidget extends StatelessWidget {
-  final String content;
+class CommentMessageWidget extends StatelessWidget {
+  final String imgUrl;
   final String time;
-  const SendedMessageWidget({
+  final bool leading;
+  final String comment;
+  final String name;
+  const CommentMessageWidget({
     Key key,
-    this.content,
-    this.time,
+    @required this.imgUrl,
+    @required this.time,
+    @required this.leading,
+    @required this.comment,
+    @required this.name,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.only(
-            right: 8.0, left: 50.0, top: 4.0, bottom: 4.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15),
-              bottomRight: Radius.circular(0),
-              topLeft: Radius.circular(15),
-              topRight: Radius.circular(15)),
-          child: Container(
-            color: Colors.blue[500],
-            // margin: const EdgeInsets.only(left: 10.0),
-            child: Stack(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(
-                    right: 12.0, left: 23.0, top: 8.0, bottom: 15.0),
-                child: Text(
-                  content,
-                ),
-              ),
-              Positioned(
-                bottom: 1,
-                left: 10,
-                child: Text(
-                  time,
-                  style: TextStyle(
-                      fontSize: 10, color: Colors.black.withOpacity(0.6)),
-                ),
-              )
-            ]),
+    return ListTile(
+      trailing: !leading ? ProfileAvatar(imageUrl: imgUrl) : null,
+      leading: leading
+          ? ProfileAvatar(
+              imageUrl: imgUrl,
+            )
+          : null,
+      subtitle: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [Text(name ?? ''), Spacer(), Text(time)],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class ReceivedMessageWidget extends StatelessWidget {
-  final String content;
-  final String time;
-  const ReceivedMessageWidget({
-    Key key,
-    this.content,
-    this.time,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        child: Padding(
-      padding:
-          const EdgeInsets.only(right: 75.0, left: 8.0, top: 8.0, bottom: 8.0),
-      child: ClipRRect(
-        borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(0),
-            bottomRight: Radius.circular(15),
-            topLeft: Radius.circular(15),
-            topRight: Radius.circular(15)),
-        child: Container(
-          color: Colors.orange[700],
-          child: Stack(children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(
-                  right: 8.0, left: 8.0, top: 8.0, bottom: 15.0),
-              child: Text(
-                content,
-              ),
-            ),
-            Positioned(
-              bottom: 1,
-              right: 10,
-              child: Text(
-                time,
-                style: TextStyle(
-                    fontSize: 10, color: Colors.black.withOpacity(0.6)),
-              ),
-            )
-          ]),
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.only(bottomRight: Radius.circular(15)),
         ),
       ),
-    ));
-  }
-}
-
-class CommentBuilds extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<CommentController>(
-      init: CommentController(repository: Get.find()),
-      builder: (_) {
-        if (_.isCommentLoading) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-        return Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            ListView.builder(
-                itemCount: _.comments.length,
-                itemBuilder: (context, index) {
-                  return Row(
-                    children: [
-                      ProfileAvatar(
-                        imageUrl: _.comments[index].photoUrl,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${_.comments[index].name}",
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                          Container(
-                            constraints: BoxConstraints(
-                                maxWidth:
-                                    MediaQuery.of(context).size.width * .6),
-                            padding: const EdgeInsets.all(15.0),
-                            decoration: const BoxDecoration(
-                              color: Color(0xfff9f9f9),
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(25),
-                                bottomLeft: Radius.circular(25),
-                                bottomRight: Radius.circular(25),
-                              ),
-                            ),
-                            child: Text(
-                              "${_.comments[index].id}",
-                              style:
-                                  Theme.of(context).textTheme.bodyText1.apply(
-                                        color: Colors.black87,
-                                      ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(width: 15),
-                      Text(
-                        "{messages}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            .apply(color: Colors.grey),
-                      ),
-                    ],
-                  );
-                }),
-            Container(
-              margin: const EdgeInsets.all(15.0),
-              height: 61,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(35.0),
-                        boxShadow: [
-                          const BoxShadow(
-                              offset: Offset(0, 3),
-                              blurRadius: 5,
-                              color: Colors.grey)
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          IconButton(
-                              icon: const Icon(Icons.face), onPressed: () {}),
-                          const Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                  hintText:
-                                      "Type Something...{HomeController.to.comments.length}",
-                                  border: InputBorder.none),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.photo_camera),
-                            onPressed: () {
-                              // print('hh');
-                              HomeController.to.clearComments();
-                            },
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.attach_file),
-                            onPressed: () {},
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: const BoxDecoration(
-                        color: Colors.green, shape: BoxShape.circle),
-                    child: InkWell(
-                      onTap: () {
-                        // HomeController.to.clearComments();
-                        Get.back();
-                      },
-                      child: const Icon(
-                        Icons.keyboard_voice,
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        );
-      },
+      title: Container(
+        decoration: BoxDecoration(
+          color: Colors.grey[200],
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(comment ?? ''),
+        ),
+      ),
     );
   }
 }

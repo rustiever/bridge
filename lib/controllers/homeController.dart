@@ -38,22 +38,10 @@ class HomeController extends GetxController {
         feedIndex = index,
       };
 
-  // inc() {
-  //   count++;
-  //   isFeedMoreAvailable = !isFeedMoreAvailable;
-  //   update();
-  // }
-
-  void clearComments() {
-    comments.clear();
-    // print(comments.length);
-    update();
-  }
-
-  void fetchFeeds() {
+  Future<void> fetchFeeds() async {
     if (!isFeedLoading && isFeedMoreAvailable) {
       // print('feeds');
-      _getFeeds();
+      await _getFeeds();
     }
   }
 
@@ -73,40 +61,10 @@ class HomeController extends GetxController {
 
   Future<bool> logout() => repository.logout(user.authorizeToken);
 
-  // getComments() async {
-  //   print('comments $isCommentMoreAvailable ${Get.isBottomSheetOpen}');
-  //   if (!Get.isBottomSheetOpen) {
-  //     feeds.clear();
-  //     print(feeds.length);
-  //   }
-  //   if (!isCommentLoading && isCommentMoreAvailable) {
-  //     await _fetchComments();
-  //   }
-  // }
-
-  // Future<void> _fetchComments() async {
-  //   print(feeds[feedIndex].postId);
-  //   isCommentLoading = true;
-  //   // this.commentModel = await repository.getComments(
-  //   //     time: commentTime,
-  //   //     authorizeToken: user.authorizeToken,
-  //   //     postId: feeds[feedIndex].postId);
-  //   // if (commentTime == null) isCommentMoreAvailable = false;
-  //   // comments.addAll(commentModel.commentData);
-
-  //   // comments.forEach((element) {
-  //   //   print(element.id);
-  //   // });
-  //   isCommentLoading = false;
-
-  //   update();
-  // }
-
   @override
   FutureOr onClose() {
     // print('on close ');
     trackingScrollController?.dispose();
-    commentScrollController?.dispose();
     return super.onClose();
   }
 
@@ -124,14 +82,7 @@ class HomeController extends GetxController {
           fetchFeeds();
         }
       });
-    commentScrollController = ScrollController()
-      ..addListener(() {
-        if (commentScrollController.position.pixels >=
-            commentScrollController.position.maxScrollExtent) {
-          // print('comments scroll end  ');
-          // _fetchComments();
-        }
-      });
+
     super.onInit();
   }
 

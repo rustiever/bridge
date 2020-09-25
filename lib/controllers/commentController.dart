@@ -24,12 +24,12 @@ class CommentController extends GetxController {
   void onInit() {
     comments.clear();
     commentTime = null;
-    getComments();
+    _getComments();
     commentScrollController = ScrollController()
       ..addListener(() {
         if (commentScrollController.position.pixels >=
             commentScrollController.position.maxScrollExtent) {
-          getComments();
+          _getComments();
         }
       });
     super.onInit();
@@ -42,7 +42,7 @@ class CommentController extends GetxController {
     return super.onClose();
   }
 
-  getComments() async {
+  _getComments() async {
     // print('comments $isCommentMoreAvailable ${Get.isBottomSheetOpen}');
     if (!isCommentLoading && isCommentMoreAvailable) {
       await _fetchComments();
@@ -50,19 +50,18 @@ class CommentController extends GetxController {
   }
 
   Future<void> _fetchComments() async {
-    // print(homeController.feeds[homeController.feedIndex].postId);
-    isCommentLoading = true;
-    commentModel = await repository.getComments(
-        time: commentTime,
-        authorizeToken: homeController.user.authorizeToken,
-        postId: homeController.feeds[homeController.feedIndex].postId);
-    if (commentTime == null) isCommentMoreAvailable = false;
-    comments.addAll(commentModel.commentData);
+    if (isCommentMoreAvailable) {
+      isCommentLoading = true;
+      commentModel = await repository.getComments(
+          time: commentTime,
+          authorizeToken: homeController.user.authorizeToken,
+          postId: homeController.feeds[homeController.feedIndex].postId);
+      commentTime = commentModel.lastTime;
+      if (commentTime == null) isCommentMoreAvailable = false;
+      comments.addAll(commentModel.commentData);
+      isCommentLoading = false;
+    } else {}
 
-    // comments.forEach((element) {
-    //   print(element.id);
-    // });
-    isCommentLoading = false;
     update();
   }
 }
