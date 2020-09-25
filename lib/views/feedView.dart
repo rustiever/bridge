@@ -284,7 +284,13 @@ class PostCon extends StatelessWidget {
                           if (HomeController.to.user != null) {
                             HomeController.to.index = index;
                             // controller.getComments();
-                            Get.bottomSheet(_CommentBuild(),
+                            // Get.bottomSheet(
+                            //     Container(
+                            //       // height: 1200,
+                            //       color: Colors.lightBlueAccent,
+                            //     ),
+                            //     isScrollControlled: true);
+                            Get.bottomSheet(CommentBuild(),
                                 isScrollControlled: true,
                                 ignoreSafeArea: false,
                                 enableDrag: true);
@@ -364,126 +370,313 @@ class FeedDesktop extends StatelessWidget {
   }
 }
 
-class _CommentBuild extends StatelessWidget {
+class CommentBuild extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<CommentController>(
+        init: CommentController(repository: Get.find()),
+        builder: (_) {
+          if (_.isCommentLoading) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return SafeArea(
+            child: Column(
+              children: [
+                Container(
+                  // height: 60,
+                  width: context.width,
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back_ios_rounded),
+                        onPressed: () => Get.back(),
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(MdiIcons.thumbUpOutline),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              ReceivedMessageWidget(
+                                content: _.comments[index].comment,
+                                time: '11:23',
+                              ),
+                              SendedMessageWidget(
+                                content: _.comments[index].comment,
+                                time: '11:23',
+                              ),
+                            ],
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Divider();
+                        },
+                        itemCount: _.comments.length),
+                  ),
+                ),
+                Container(
+                  color: Colors.white,
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: TextField(
+                      maxLines: 20,
+                      // controller: _text,
+                      decoration: InputDecoration(
+                        // contentPadding: const EdgeInsets.symmetric(horizontal: 5.0),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.send),
+                          onPressed: () {},
+                        ),
+                        border: InputBorder.none,
+                        hintText: "enter your message",
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+}
+
+class SendedMessageWidget extends StatelessWidget {
+  final String content;
+  final String time;
+  const SendedMessageWidget({
+    Key key,
+    this.content,
+    this.time,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(
+            right: 8.0, left: 50.0, top: 4.0, bottom: 4.0),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(0),
+              topLeft: Radius.circular(15),
+              topRight: Radius.circular(15)),
+          child: Container(
+            color: Colors.blue[500],
+            // margin: const EdgeInsets.only(left: 10.0),
+            child: Stack(children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(
+                    right: 12.0, left: 23.0, top: 8.0, bottom: 15.0),
+                child: Text(
+                  content,
+                ),
+              ),
+              Positioned(
+                bottom: 1,
+                left: 10,
+                child: Text(
+                  time,
+                  style: TextStyle(
+                      fontSize: 10, color: Colors.black.withOpacity(0.6)),
+                ),
+              )
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ReceivedMessageWidget extends StatelessWidget {
+  final String content;
+  final String time;
+  const ReceivedMessageWidget({
+    Key key,
+    this.content,
+    this.time,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        child: Padding(
+      padding:
+          const EdgeInsets.only(right: 75.0, left: 8.0, top: 8.0, bottom: 8.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(15),
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15)),
+        child: Container(
+          color: Colors.orange[700],
+          child: Stack(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(
+                  right: 8.0, left: 8.0, top: 8.0, bottom: 15.0),
+              child: Text(
+                content,
+              ),
+            ),
+            Positioned(
+              bottom: 1,
+              right: 10,
+              child: Text(
+                time,
+                style: TextStyle(
+                    fontSize: 10, color: Colors.black.withOpacity(0.6)),
+              ),
+            )
+          ]),
+        ),
+      ),
+    ));
+  }
+}
+
+class CommentBuilds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CommentController>(
       init: CommentController(repository: Get.find()),
-      builder: (_) => Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          ListView.builder(
-              itemCount: _.comments.length,
-              itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    ProfileAvatar(
-                      imageUrl: HomeController.to.feeds[index].ownerPhotoUrl,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${_.comments[index].name}",
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        Container(
-                          constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * .6),
-                          padding: const EdgeInsets.all(15.0),
-                          decoration: BoxDecoration(
-                            color: Color(0xfff9f9f9),
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(25),
-                              bottomLeft: Radius.circular(25),
-                              bottomRight: Radius.circular(25),
+      builder: (_) {
+        if (_.isCommentLoading) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            ListView.builder(
+                itemCount: _.comments.length,
+                itemBuilder: (context, index) {
+                  return Row(
+                    children: [
+                      ProfileAvatar(
+                        imageUrl: _.comments[index].photoUrl,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "${_.comments[index].name}",
+                            style: Theme.of(context).textTheme.caption,
+                          ),
+                          Container(
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * .6),
+                            padding: const EdgeInsets.all(15.0),
+                            decoration: const BoxDecoration(
+                              color: Color(0xfff9f9f9),
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(25),
+                                bottomLeft: Radius.circular(25),
+                                bottomRight: Radius.circular(25),
+                              ),
+                            ),
+                            child: Text(
+                              "${_.comments[index].id}",
+                              style:
+                                  Theme.of(context).textTheme.bodyText1.apply(
+                                        color: Colors.black87,
+                                      ),
                             ),
                           ),
-                          child: Text(
-                            "${_.comments[index].id}",
-                            style: Theme.of(context).textTheme.bodyText1.apply(
-                                  color: Colors.black87,
-                                ),
+                        ],
+                      ),
+                      const SizedBox(width: 15),
+                      Text(
+                        "{messages}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .apply(color: Colors.grey),
+                      ),
+                    ],
+                  );
+                }),
+            Container(
+              margin: const EdgeInsets.all(15.0),
+              height: 61,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(35.0),
+                        boxShadow: [
+                          const BoxShadow(
+                              offset: Offset(0, 3),
+                              blurRadius: 5,
+                              color: Colors.grey)
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          IconButton(
+                              icon: const Icon(Icons.face), onPressed: () {}),
+                          const Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                  hintText:
+                                      "Type Something...{HomeController.to.comments.length}",
+                                  border: InputBorder.none),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 15),
-                    Text(
-                      "{messages}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .apply(color: Colors.grey),
-                    ),
-                  ],
-                );
-              }),
-          Container(
-            margin: const EdgeInsets.all(15.0),
-            height: 61,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(35.0),
-                      boxShadow: [
-                        const BoxShadow(
-                            offset: Offset(0, 3),
-                            blurRadius: 5,
-                            color: Colors.grey)
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        IconButton(
-                            icon: const Icon(Icons.face), onPressed: () {}),
-                        const Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText:
-                                    "Type Something...{HomeController.to.comments.length}",
-                                border: InputBorder.none),
+                          IconButton(
+                            icon: const Icon(Icons.photo_camera),
+                            onPressed: () {
+                              // print('hh');
+                              HomeController.to.clearComments();
+                            },
                           ),
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.photo_camera),
-                          onPressed: () {
-                            // print('hh');
-                            HomeController.to.clearComments();
-                          },
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.attach_file),
-                          onPressed: () {},
-                        )
-                      ],
+                          IconButton(
+                            icon: const Icon(Icons.attach_file),
+                            onPressed: () {},
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 15),
-                Container(
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: const BoxDecoration(
-                      color: Colors.green, shape: BoxShape.circle),
-                  child: InkWell(
-                    onTap: () {
-                      // HomeController.to.clearComments();
-                      Get.back();
-                    },
-                    child: const Icon(
-                      Icons.keyboard_voice,
-                      color: Colors.white,
+                  const SizedBox(width: 15),
+                  Container(
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: const BoxDecoration(
+                        color: Colors.green, shape: BoxShape.circle),
+                    child: InkWell(
+                      onTap: () {
+                        // HomeController.to.clearComments();
+                        Get.back();
+                      },
+                      child: const Icon(
+                        Icons.keyboard_voice,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
-      ),
+                  )
+                ],
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 }
